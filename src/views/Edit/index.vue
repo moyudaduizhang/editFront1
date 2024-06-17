@@ -1,33 +1,16 @@
 <template>
-  <div class="person">
-    <h2>当前求和为:{{ sum }}</h2>
-    <button @click="changeSum">点我</button>
-    <h2>
-      name:{{ person.name }}
-    </h2>
-    <h2>
-      age:{{ person.age }}
-    </h2>
-  </div>
+  <editor-content :editor="editor"/>
 </template>
 
-<script lang="ts" setup name="">
-import {ref, watch} from "vue"
+<script setup>
+import {useEditor, EditorContent} from '@tiptap/vue-3'
+import StarterKit from '@tiptap/starter-kit'
+import {defineComponent} from "vue";
 
-let sum = ref(0)
-let person = ref({
-  name: "zhanghsan",
-  age: 18
-})
-
-function changeSum() {
-  sum.value++;
-}
-
-//监视
-watch(sum, () => {
-  console.log('sum changed')
+const editor = useEditor({
+  content: '<p>I’m running Tiptap with Vue.js. 🎉</p>',
+  extensions: [
+    StarterKit,
+  ]
 })
 </script>
-<style scoped>
-</style>
