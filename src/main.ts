@@ -9,7 +9,9 @@ import 'element-plus/dist/index.css'
 import 'virtual:svg-icons-register'
 import 'uno.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+
 import '@/styles/index.scss'
+
 const pinia = createPinia()
 const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {

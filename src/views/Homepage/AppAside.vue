@@ -13,8 +13,8 @@
                 <template #title>
                 <el-icon><DocumentAdd /></el-icon><span>新建</span>
               </template>
-                <el-menu-item>
-                <el-icon><Document /></el-icon><span>docs格式文件</span>
+                <el-menu-item index="/Editor">
+                <el-icon ><Document /></el-icon><span>docs格式文件</span>
               </el-menu-item>
                  <el-menu-item>
                 <el-icon><Document /></el-icon><span>pdf格式文件</span>
@@ -22,7 +22,7 @@
               </el-sub-menu>
 
             <el-menu-item index="">
-             <el-icon><Folder /></el-icon><span>打开文件夹</span>
+             <el-icon><Folder /></el-icon><span>知识库</span>
             </el-menu-item>
 
           </el-menu>

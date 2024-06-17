@@ -1,5 +1,5 @@
 <template>
- <router-view></router-view>
+<RouterView/>
 </template>
 
 <script setup lang="ts">
@@ -7,7 +7,7 @@ import {RouterView} from "vue-router"
 import request from "./utils/request"
 request({
   method:"GET",
-  url:"/front/"
+  url:"/"
 }).then((res)=>{
   console.log(res)
 })

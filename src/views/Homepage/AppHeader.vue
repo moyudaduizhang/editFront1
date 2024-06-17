@@ -1,6 +1,6 @@
 <template>
 
-  <el-header>
+  <el-header >
     <el-icon @click="isCollapse=!isCollapse">
       <Expand v-show="isCollapse"/>
       <Fold v-show="!isCollapse"/>
@@ -49,8 +49,9 @@ import {Expand, Fold} from "@element-plus/icons-vue";
 .el-header {
   display: flex;
   align-items: center;
-  background-color: white;
-
+  background-color: rgb(165, 162, 231);
+  justify-content: space-between;
+  
   .el-icon {
     margin-right: 17px;
     color: #1a1a1a;
