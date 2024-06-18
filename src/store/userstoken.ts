@@ -17,6 +17,7 @@ export const useTokenStore=defineStore('userstoken',()=>{
     })
     function saveToken(data:string){
         tokenJson.value=data
+        window.localStorage.setItem("TokenInfo",data)
     }
     return {token,saveToken}
 })
