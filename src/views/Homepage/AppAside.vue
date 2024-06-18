@@ -12,9 +12,11 @@
             <el-menu-item index="/document">
              <el-icon><DocumentAdd /></el-icon><span>新建</span>
             </el-menu-item>
-
-            <el-menu-item index="/database">
-             <el-icon><Folder /></el-icon><span>模板库</span>
+            <el-menu-item index="/wangEditor">
+             <el-icon><Folder /></el-icon><span>wangEditor</span>
+            </el-menu-item>
+            <el-menu-item index="/Editor">
+             <el-icon><Folder /></el-icon><span>tiptapEditor</span>
             </el-menu-item>
 
           </el-menu>

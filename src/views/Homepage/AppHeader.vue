@@ -1,24 +1,18 @@
 <template>
-
-  <el-header >
-    <el-icon @click="isCollapse=!isCollapse">
-      <Expand v-show="isCollapse"/>
-      <Fold v-show="!isCollapse"/>
-    </el-icon>
-    <!--面包屑-->
-    <el-breadcrumb separator="/">
-      <el-breadcrumb-item :to="{ path: '/' }">homepage</el-breadcrumb-item>
-      <el-breadcrumb-item>
-        <a href="/">promotion management</a>
-      </el-breadcrumb-item>
-      <el-breadcrumb-item>promotion list</el-breadcrumb-item>
-      <el-breadcrumb-item>promotion detail</el-breadcrumb-item>
-    </el-breadcrumb>
-    <!--下拉菜单-->
-    <el-dropdown>
+  <el-header class="header">
+    <div class="header-left">
+      <el-icon @click="isCollapse=!isCollapse" class="collapse-icon">
+        <Expand v-show="isCollapse" />
+        <Fold v-show="!isCollapse" />
+      </el-icon>
+      <el-breadcrumb separator="/" class="breadcrumb">
+        <h2>{{ greeting }}</h2>
+      </el-breadcrumb>
+    </div>
+    <el-dropdown class="header-right">
       <span class="el-dropdown-link">
         <el-avatar :size="50" :src="circleUrl"/>
-        <el-icon class="el-icon--right">
+        <el-icon class="arrow-down-icon">
           <arrow-down/>
         </el-icon>
       </span>
@@ -28,37 +22,94 @@
             个人主页
           </el-dropdown-item>
           <el-dropdown-item>
-            logout
+            退出登录
           </el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
   </el-header>
-
-
 </template>
-
 <script setup lang="ts">
-import {ref} from "vue"
-import {isCollapse} from "@/components/layout/isCollapse.ts";
-import {Expand, Fold} from "@element-plus/icons-vue";
+import { ref, computed, onMounted } from "vue";
+import { Expand, Fold } from "@element-plus/icons-vue";
+import { isCollapse } from "@/components/layout/isCollapse";
 
+const circleUrl = ref("path/to/avatar.jpg"); // Replace with actual URL
+
+const currentTime = ref(new Date());
+const greeting = computed(() => {
+  const hour = currentTime.value.getHours();
+  if (hour < 6) {
+    return "凌晨好";
+  } else if (hour < 9) {
+    return "早上好";
+  } else if (hour < 12) {
+    return "上午好";
+  } else if (hour < 14) {
+    return "中午好";
+  } else if (hour < 18) {
+    return "下午好";
+  } else {
+    return "晚上好";
+  }
+});
+
+const updateTime = () => {
+  currentTime.value = new Date();
+  setTimeout(updateTime, 60000); // 每分钟更新一次时间
+};
+
+onMounted(() => {
+  updateTime();
+});
 </script>
-
 <style lang="scss" scoped>
-.el-header {
+.header {
   display: flex;
   align-items: center;
-  background-color: rgb(165, 162, 231);
+  background-color: rgb(248, 251, 251);
   justify-content: space-between;
-  
-  .el-icon {
-    margin-right: 17px;
-    color: #1a1a1a;
-  }
-}
+  padding: 0 20px;
+  height: 64px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
-.el-dropdown {
-  margin-left: auto;
+  .header-left {
+    display: flex;
+    align-items: center;
+
+    .collapse-icon {
+      margin-right: 20px;
+      cursor: pointer;
+      font-size: 24px;
+    }
+
+    .breadcrumb {
+      h2 {
+        margin: 0;
+        font-size: 18px;
+        color: #4b82e7;
+      }
+    }
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+
+    .el-dropdown-link {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      
+      .el-avatar {
+        margin-right: 10px;
+      }
+
+      .arrow-down-icon {
+        font-size: 16px;
+        color: #fff;
+      }
+    }
+  }
 }
 </style>
