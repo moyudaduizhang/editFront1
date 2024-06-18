@@ -24,9 +24,9 @@
     import {register} from '@/api/users'
     // 测试注册的数据表单
     const form = reactive({ 
-      user: '',
-      password: '',
-      password2:'',
+      user: 'admin',
+      password: '123456',
+      password2:'123456',
     })
     
     //注册事件处理
@@ -56,6 +56,10 @@
           {pattern:/^\d{10}$/}
       ],
       password:[
+          {required:true,message:"密码不能为空",trigger:"blur"},
+          {min:6,max:18}   
+      ],
+      password2:[
           {required:true,message:"密码不能为空",trigger:"blur"},
           {min:6,max:18}   
       ]

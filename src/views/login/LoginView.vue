@@ -52,7 +52,7 @@
     isLoading.value=false
     
   }
-  //手机号和密码的格式验证
+  //用户名和密码的格式验证
   const rules=reactive<FormRules>({
     user:[
         {required:true,message:"请输入用户名",trigger:"blur"},
