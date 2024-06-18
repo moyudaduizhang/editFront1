@@ -63,15 +63,16 @@ export function resetRouter() {
     router.replace({path: '/login'});
     location.reload();
 }
+//每次路由位置发生变化时要做的事：验证token
 
-// router.beforeEach((to,from,next)=>{
-//         if(to.matched.some(r=>r.meta?.requiresAuth)){
-//             const store=useTokenStore()
-//             if(store.token){
-//                 next()
-//             }else{
-//                 next({path:'/login',query:{redirect:to.fullPath}})
-//             }
-//         }
-// })
+router.beforeEach((to,from,next)=>{
+        if(to.matched.some(r=>r.meta?.requiresAuth)){
+            const store=useTokenStore()
+            if(store.token){
+                next()
+            }else{
+                next({path:'/login',query:{redirect:to.fullPath}})
+            }
+        }
+})
 export default router

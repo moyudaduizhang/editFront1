@@ -25,6 +25,8 @@
   import { reactive,ref } from 'vue'
   import {login} from '@/api/users'
   import { useRouter } from 'vue-router'
+  import {useTokenStore} from '@/store/userstoken'
+  const store=useTokenStore()
   const router=useRouter()
   
   // do not use same name with ref
@@ -52,6 +54,7 @@
     })
 
     console.log(data)
+    store.saveToken(data.content)
     isLoading.value=false
     ElMessage.success("登录成功")
     router.push('/')
