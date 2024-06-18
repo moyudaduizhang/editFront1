@@ -18,6 +18,7 @@
 import '@wangeditor/editor/dist/css/style.css' // import css
 import { onBeforeUnmount, ref, shallowRef, onMounted } from 'vue'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+
     // editor instance, use `shallowRef`
     const editorRef = shallowRef()
 
