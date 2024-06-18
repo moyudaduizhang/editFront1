@@ -40,6 +40,3 @@ export const register=(registerInfo:RegisterInfo)=>{
         data:'user=${registerInfo.phone}&password=${registerInfo.password}&password2=${registerInfo.password2}'
     })
 }
-export const logout=(()=>{
-    
-})

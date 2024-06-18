@@ -64,14 +64,14 @@ export function resetRouter() {
     location.reload();
 }
 
-router.beforeEach((to,from,next)=>{
-        if(to.matched.some(r=>r.meta?.requiresAuth)){
-            const store=useTokenStore()
-            if(store.token){
-                next()
-            }else{
-                next({path:'/login',query:{redirect:to.fullPath}})
-            }
-        }
-})
+// router.beforeEach((to,from,next)=>{
+//         if(to.matched.some(r=>r.meta?.requiresAuth)){
+//             const store=useTokenStore()
+//             if(store.token){
+//                 next()
+//             }else{
+//                 next({path:'/login',query:{redirect:to.fullPath}})
+//             }
+//         }
+// })
 export default router
