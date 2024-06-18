@@ -1,6 +1,8 @@
 import {createRouter, createWebHistory, type RouteRecordRaw} from 'vue-router'
 
 import IndexView from "@/views/indexView.vue"
+import { useTokenStore } from '@/store/userstoken';
+
 const router=createRouter({
     history: createWebHistory(),
     routes: [
@@ -8,14 +10,25 @@ const router=createRouter({
             path: '/',
             name: "home",
             component: ()=>import('@/views/Homepage/Applayout.vue'),
+            meta:{requiresAuth:true},
             children:[
                 {
                     path:'',
                     component:IndexView,
+                },
+                {
+                    path:'/database',
+                    name:'database',
+                    component:()=>import('@/views/list/Knowedge.vue')
+                },
+                {
+                    path:'/document',
+                    name:'document',
+                    component:()=>import('@/views/list/Document.vue')
                 }
             ]
         },
-
+        
         {
             path:'/login',
             name:'login',
@@ -51,4 +64,14 @@ export function resetRouter() {
     location.reload();
 }
 
+router.beforeEach((to,from,next)=>{
+        if(to.matched.some(r=>r.meta?.requiresAuth)){
+            const store=useTokenStore()
+            if(store.token){
+                next()
+            }else{
+                next({path:'/login',query:{redirect:to.fullPath}})
+            }
+        }
+})
 export default router

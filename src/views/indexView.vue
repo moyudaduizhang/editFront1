@@ -1,60 +1,49 @@
 <template>
-  <el-table-v2
-    v-model:sort-state="sortState"
-    :columns="columns"
-    :data="data"
-    :width="700"
-    :height="400"
-    fixed
-    @column-sort="onSort"
-  />
+  <div>
+    <button @click="switchViewMode">切换视图模式</button>
+    <div v-if="viewMode === 'list'">
+      <ul>
+        <li v-for="document in documents" :key="document.id">{{ document.name }}</li>
+      </ul>
+    </div>
+    <div v-else-if="viewMode === 'grid'">
+      <div class="grid-container">
+        <div class="grid-item" v-for="document in documents" :key="document.id">{{ document.name }}</div>
+      </div>
+    </div>
+  </div>
 </template>
 
-<script lang="ts" setup>
-import { ref } from 'vue'
-import { TableV2SortOrder } from 'element-plus'
-import type { SortBy, SortState } from 'element-plus'
-
-const generateColumns = (length = 10, prefix = 'column-', props?: any) =>
-  Array.from({ length }).map((_, columnIndex) => ({
-    ...props,
-    key: `${prefix}${columnIndex}`,
-    dataKey: `${prefix}${columnIndex}`,
-    title: `Column ${columnIndex}`,
-    width: 150,
-  }))
-
-const generateData = (
-  columns: ReturnType<typeof generateColumns>,
-  length = 200,
-  prefix = 'row-'
-) =>
-  Array.from({ length }).map((_, rowIndex) => {
-    return columns.reduce(
-      (rowData, column, columnIndex) => {
-        rowData[column.dataKey] = `Row ${rowIndex} - Col ${columnIndex}`
-        return rowData
-      },
-      {
-        id: `${prefix}${rowIndex}`,
-        parentId: null,
-      }
-    )
-  })
-
-const columns = generateColumns(10)
-const data = ref(generateData(columns, 200))
-
-columns[0].sortable = true
-columns[1].sortable = true
-
-const sortState = ref<SortState>({
-  'column-0': TableV2SortOrder.DESC,
-  'column-1': TableV2SortOrder.ASC,
-})
-
-const onSort = ({ key, order }: SortBy) => {
-  sortState.value[key] = order
-  data.value = data.value.reverse()
-}
+<script>
+export default {
+  data() {
+    return {
+      viewMode: 'list',
+      documents: [
+        { id: 1, name: 'Document 1' },
+        { id: 2, name: 'Document 2' },
+        { id: 3, name: 'Document 3' }
+      ]
+    };
+  },
+  methods: {
+    switchViewMode() {
+      this.viewMode = this.viewMode === 'list' ? 'grid' : 'list';
+    }
+  }
+};
 </script>
+
+<style lang="scss">
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-gap: 20px;
+  }
+
+  .grid-item {
+    background-color: #f2f2f2;
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+</style>

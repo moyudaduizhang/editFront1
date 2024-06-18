@@ -43,6 +43,7 @@
    const data=await login(form).then((res)=>{
       if (res.data.success=="false"){
         ElMessage.error("登录信息有误")
+        isLoading.value=false
         throw new Error("登录信息有误")
       }
       return res.data

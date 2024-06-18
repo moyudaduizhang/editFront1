@@ -7,7 +7,8 @@ import {RouterView} from "vue-router"
 import request from "./utils/request"
 request({
   method:"GET",
-  url:"/"
+
+ 
 }).then((res)=>{
   console.log(res)
 })

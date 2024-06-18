@@ -1,28 +1,20 @@
 <template>
-        <el-aside>
+        <el-aside >
           <el-menu router unique-opened :collapse="isCollapse">
             <a href="/" class="logo">
               <img src="@/assets/vue.svg" alt=""/>
               <h2>AiEditor</h2>
             </a>
-            <el-menu-item index="/">
+            <el-menu-item  index="/">
              <el-icon><HomeFilled /></el-icon><span>开始</span>
             </el-menu-item>
 
-              <el-sub-menu>
-                <template #title>
-                <el-icon><DocumentAdd /></el-icon><span>新建</span>
-              </template>
-                <el-menu-item index="/Editor">
-                <el-icon ><Document /></el-icon><span>docs格式文件</span>
-              </el-menu-item>
-                 <el-menu-item>
-                <el-icon><Document /></el-icon><span>pdf格式文件</span>
-              </el-menu-item>
-              </el-sub-menu>
+            <el-menu-item index="/document">
+             <el-icon><DocumentAdd /></el-icon><span>新建</span>
+            </el-menu-item>
 
-            <el-menu-item index="">
-             <el-icon><Folder /></el-icon><span>知识库</span>
+            <el-menu-item index="/database">
+             <el-icon><Folder /></el-icon><span>模板库</span>
             </el-menu-item>
 
           </el-menu>
