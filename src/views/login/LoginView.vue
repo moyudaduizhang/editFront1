@@ -24,6 +24,8 @@
   import { ElMessage, FormInstance, FormRules } from 'element-plus';
   import { reactive,ref } from 'vue'
   import {login} from '@/api/users'
+  import { useRouter } from 'vue-router';
+  const router=useRouter()
   
   // do not use same name with ref
   const form = reactive({
@@ -44,8 +46,11 @@
       if (res.data.success=="false"){
         ElMessage.error("登录信息有误")
         isLoading.value=false
-        throw new Error("登录信息有误")
+        throw new Error(res.data.message)
       }
+
+      ElMessage.success("登录成功")
+      router.push('/'); 
       return res.data
     })
     console.log(data)

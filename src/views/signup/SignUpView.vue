@@ -42,7 +42,7 @@
         if (res.data.success=="false"&&res.data.message=="发生异常，注册失败"){
           console.log(res.data)
           ElMessage.error("注册信息有误")
-          throw new Error("注册信息有误")
+          throw new Error(res.data.message)
         }
         return res.data
       })

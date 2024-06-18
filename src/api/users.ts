@@ -30,8 +30,7 @@ export const login=(loginInfo:LoginInfo)=>{
     return request<LoginResult>({
         method:"POST",
         url:"/login",
-        data:'user=${loginInfo.user}&password=${loginInfo.password}'
-    })
+        data:loginInfo})
 }
 export const register=(registerInfo:RegisterInfo)=>{
     return request<RegisterResult>({
