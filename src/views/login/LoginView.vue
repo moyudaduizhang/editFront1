@@ -24,7 +24,7 @@
   import { ElMessage, FormInstance, FormRules } from 'element-plus';
   import { reactive,ref } from 'vue'
   import {login} from '@/api/users'
-  import { useRouter } from 'vue-router';
+  import { useRouter } from 'vue-router'
   const router=useRouter()
   
   // do not use same name with ref
@@ -48,13 +48,13 @@
         isLoading.value=false
         throw new Error(res.data.message)
       }
-
-      ElMessage.success("登录成功")
-      router.push('/'); 
       return res.data
     })
+
     console.log(data)
     isLoading.value=false
+    ElMessage.success("登录成功")
+    router.push('/')
     
   }
   //用户名和密码的格式验证
