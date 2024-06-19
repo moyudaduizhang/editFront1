@@ -18,7 +18,7 @@
       </span>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item>
+          <el-dropdown-item @click="$router.push({name:'person'})">
             个人主页
           </el-dropdown-item>
           <el-dropdown-item @click="logoutbutton">

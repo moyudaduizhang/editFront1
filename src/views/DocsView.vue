@@ -2,7 +2,7 @@
  <el-card style="max-width: auto">
     <template #header>
       <div class="card-header">
-        <el-button type="primary" @click="router1.push({name: "/wangEditor"})">新建</el-button>
+        <el-button type="primary" @click="router1.push({name:'wangEditor'})">新建</el-button>
       </div>
     </template>
     
