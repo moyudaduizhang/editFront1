@@ -75,4 +75,21 @@ export function resetRouter() {
 //             }
 //         }
 // })
+router.beforeEach((to, from, next) => {
+  const store = useTokenStore();
+  
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    console.log(store.token.access_token )
+    if (!store.token.access_token ) {
+     
+        next({ name: 'login', query: { redirect: to.fullPath } });
+    } 
+    else {next();
+         
+    }
+  } 
+   
+    next();
+  
+});
 export default router
