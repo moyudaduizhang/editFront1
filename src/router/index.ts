@@ -22,7 +22,7 @@ const router=createRouter({
                 {
                     path:'/wangEditor',
                     name:'wangEditor',
-                    component:()=>import('@/views/markmap/markmap.vue')
+                    component:()=>import('@/views/Editor/Editor.vue')
                 }
             ]
         },

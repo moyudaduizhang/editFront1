@@ -3,7 +3,7 @@
           <el-menu router unique-opened :collapse="isCollapse">
             <a href="/" class="logo">
               <img src="@/assets/vue.svg" alt=""/>
-              <h2>AiEditor</h2>
+              <h2>智能文档</h2>
             </a>
             <el-menu-item  index="/">
              <el-icon><HomeFilled /></el-icon><span>开始</span>
