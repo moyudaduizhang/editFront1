@@ -15,10 +15,6 @@
             <el-menu-item index="/wangEditor">
              <el-icon><Folder /></el-icon><span>wangEditor</span>
             </el-menu-item>
-            <el-menu-item index="/Editor">
-             <el-icon><Folder /></el-icon><span>tiptapEditor</span>
-            </el-menu-item>
-
           </el-menu>
         </el-aside>
 </template>

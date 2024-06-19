@@ -20,14 +20,9 @@ const router=createRouter({
                     component:()=>import('@/views/list/Document.vue')
                 },
                 {
-                    path:'/Editor',
-                    name:'Editor',
-                    component:()=>import('@/views/Edit/index.vue')
-                },
-                {
                     path:'/wangEditor',
                     name:'wangEditor',
-                    component:()=>import('@/components/MyEditor.vue')
+                    component:()=>import('@/views/markmap/markmap.vue')
                 }
             ]
         },
@@ -47,7 +42,6 @@ const router=createRouter({
             name:'register',
             component:()=>import('@/views/signup/SignUpView.vue')
         },
-
         {
             path:"/:xxx(.*)*",
             name:"ErrorPage",
