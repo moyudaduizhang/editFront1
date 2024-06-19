@@ -50,13 +50,7 @@
   import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
   import axios from 'axios'
 import { Boot } from '@wangeditor/editor';
- const menu1={
-  key:"menu1",
-  factory(){
-    return new MyButtonMenu()
-  }
- }
- Boot.registerMenu(menu1)
+import { DomEditor } from '@wangeditor/editor'
   //进行润色的函数
   const polish=()=>{
     visiblemenu.value = false;
