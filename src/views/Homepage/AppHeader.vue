@@ -21,7 +21,7 @@
           <el-dropdown-item>
             个人主页
           </el-dropdown-item>
-          <el-dropdown-item>
+          <el-dropdown-item @click="logoutbutton">
             退出登录
           </el-dropdown-item>
         </el-dropdown-menu>
@@ -33,9 +33,11 @@
 import { ref, computed, onMounted } from "vue";
 import { Expand, Fold } from "@element-plus/icons-vue";
 import { isCollapse } from "@/components/layout/isCollapse";
-
+import { ElMessageBox,ElMessage } from "element-plus";
+import { useRouter } from "vue-router";
+import { useTokenStore } from "@/store/userstoken";
+import { logout } from "@/api/users";
 const circleUrl = ref("path/to/avatar.jpg"); // Replace with actual URL
-
 const currentTime = ref(new Date());
 const greeting = computed(() => {
   const hour = currentTime.value.getHours();
@@ -53,7 +55,24 @@ const greeting = computed(() => {
     return "晚上好";
   }
 });
-
+const router1 = useRouter();
+//退出
+const logoutbutton=async ()=>{
+ await ElMessageBox.confirm("确定要退出吗？", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  }).catch(() => {
+    ElMessage.error("取消退出")
+    return new Promise(() => {})
+  });
+  await logout().catch(() => {
+    ElMessage.error("退出失败");
+  });
+    ElMessage.success("退出成功"),
+    useTokenStore().saveToken(""),
+    router1.push("/login")
+}
 const updateTime = () => {
   currentTime.value = new Date();
   setTimeout(updateTime, 60000); // 每分钟更新一次时间

@@ -26,6 +26,10 @@ type LoginResult={
     message:string
     content:string
 }
+//获取用户信息返回类型
+type UserInfo={
+   
+}
 export const login=(loginInfo:LoginInfo)=>{
     return request<LoginResult>({
         method:"POST",
@@ -38,5 +42,20 @@ export const register=(registerInfo:RegisterInfo)=>{
         url:"/registuser",
         //data:'user=${registerInfo.phone}&password=${registerInfo.password}&password2=${registerInfo.password2}'
         data:registerInfo
+    })
+}
+
+export const getInfo=()=>{
+    return request<UserInfo>({
+        method:"GET",
+        url:"/userinfo"
+    })
+}
+
+export const logout=()=>{
+    return request ({
+        method:"POST",
+        url:"/logout",
+        //data:
     })
 }

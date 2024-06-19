@@ -23,6 +23,9 @@
 </template>
 
 <script>
+import { ref } from 'vue'
+import { getalldocs } from '@/api/doc';
+const alldocs = ref([]);
 export default {
   data() {
     return {
