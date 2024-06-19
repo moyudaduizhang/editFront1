@@ -67,7 +67,7 @@ const logoutbutton=async ()=>{
     return new Promise(() => {})
   });
   await logout().catch(() => {
-    ElMessage.error("退出失败");
+   // ElMessage.error("退出失败");
   });
     ElMessage.success("退出成功"),
     useTokenStore().saveToken(""),

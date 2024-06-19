@@ -7,7 +7,7 @@
           <el-scrollbar>
             <RouterView/>
           </el-scrollbar>
-        <el-main>Main</el-main>
+        
 
         </el-container>
     </el-container>

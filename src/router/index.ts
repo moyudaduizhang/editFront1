@@ -1,6 +1,4 @@
 import {createRouter, createWebHistory, type RouteRecordRaw} from 'vue-router'
-
-import IndexView from "@/views/indexView.vue"
 import { useTokenStore } from '@/store/userstoken';
 
 const router=createRouter({
@@ -14,9 +12,8 @@ const router=createRouter({
             children:[
                 {
                     path:'',
-                    component:IndexView,
+                    component:()=>import('@/views/DocsView.vue'),
                 },
-                
                 {
                     path:'/document',
                     name:'document',
@@ -65,14 +62,22 @@ export function resetRouter() {
 }
 //每次路由位置发生变化时要做的事：验证token
 
-// router.beforeEach((to,from,next)=>{
-//         if(to.matched.some(r=>r.meta?.requiresAuth)){
-//             const store=useTokenStore()
-//             if(store.token?.access_token){
-//                 next()
-//             }else{
-//                 next({path:'/login',query:{redirect:to.fullPath}})
-//             }
-//         }
-// })
+
+// router.beforeEach((to, from, next) => {
+//       const store = useTokenStore();
+//       
+//       if (to.matched.some(record => record.meta.requiresAuth)) {
+//         console.log(store.token.access_token )
+//         if (!store.token.access_token ) {
+//          
+//             next({ name: 'login', query: { redirect: to.fullPath } });
+//         } 
+//         else {next();
+//              
+//         }
+//       } 
+//        
+//         next();
+//       
+//     });
 export default router

@@ -1,10 +1,10 @@
 import request from "@/utils/request";
 type Doc={
-    // id:number,
-    // title:string,
-    // content:string,
-    // createTime:string,
-    // updateTime:string
+    id:number,
+    title:string,
+    content:string,
+    createTime:string,
+    updateTime:string
 }
 export const getalldocs=()=>{
     return request<Doc[]>({
