@@ -1,48 +1,32 @@
 <template>
-  <div aria-label="A complete example of page header">
+  <div :class="personClass" aria-label="A complete example of page header">
     <el-page-header @back="onBack">
       <template #extra>
         <div class="flex items-center">
-          <el-button  @click="$router.push({path:'/EditPerson'})" type="primary" class="ml-2">Edit</el-button>
+          <el-button @click="$router.push({path:'/EditPerson'})" type="primary" class="ml-2">Edit</el-button>
         </div>
       </template>
 
-      <el-descriptions :column="1" size="large" class="mt-4">
-        <el-descriptions-item >
-          <div class="flex items-center">
-          <el-avatar
-            class="mr-3"
-            :size="100"
-            :src="`${avatarstore.avatarUrl}`"
-          />
-          <div class="tags">
-            <span class="text-large font-600 mr-3"> {{nickname}} </span>
-       <span
-       class="text-sm mr-2"
-       style="color: var(--el-text-color-regular)"
-      >
-       {{ account }}
-    </span>
-          </div>
-          
+      <div :class="personClass">
+        <div class="avatar-container">
+          <el-avatar :class="avatarClass" :src="`${avatarstore.avatarUrl}`" />
         </div>
-        </el-descriptions-item>
-        <el-descriptions-item   label="账号">
-          {{ account }}
-        </el-descriptions-item>
-        <el-descriptions-item label="密码">
-          {{ password }}
-        </el-descriptions-item>
-        <el-descriptions-item label="电话号码">
-          {{ phone }}
-        </el-descriptions-item>
-        <el-descriptions-item label="所在地">中国 湖南</el-descriptions-item>
-        <el-descriptions-item label="电子邮箱">{{ email }}</el-descriptions-item>
-        <el-descriptions-item label="百度飞桨token">{{ token }}</el-descriptions-item>
-      </el-descriptions>
-      <p class="mt-4 text-sm">
-        自我介绍
-      </p>
+        <div class="info-container">
+          <div class="tags">
+            <span class="text-large font-600 mr-3"> {{ nickname }} </span>
+            <span class="text-sm mr-2" style="color: var(--el-text-color-regular)">{{ account }}</span>
+          </div>
+          <el-descriptions :column="1" size="large" class="mt-4">
+            <el-descriptions-item label="账号">{{ account }}</el-descriptions-item>
+            <el-descriptions-item label="密码">{{ password }}</el-descriptions-item>
+            <el-descriptions-item label="电话号码">{{ phone }}</el-descriptions-item>
+            <el-descriptions-item label="所在地">中国 湖南</el-descriptions-item>
+            <el-descriptions-item label="电子邮箱">{{ email }}</el-descriptions-item>
+            <el-descriptions-item label="百度飞桨token">{{ token }}</el-descriptions-item>
+          </el-descriptions>
+        </div>
+      </div>
+      <p class="mt-4 text-sm">自我介绍测试</p>
     </el-page-header>
   </div>
   <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
@@ -54,65 +38,80 @@
 </template>
 
 <script setup lang="ts">
-import { ElNotification as notify } from 'element-plus'
-import { onMounted, ref } from 'vue'
-import type { TabsPaneContext } from 'element-plus'
-import { useTokenStore, useUserAvatarStore} from '@/store/userstoken'
+import { ElNotification as notify } from 'element-plus';
+import { onMounted, ref } from 'vue';
+import type { TabsPaneContext } from 'element-plus';
+import { useTokenStore, useUserAvatarStore } from '@/store/userstoken';
 import axios from 'axios';
-const store=useTokenStore()
-const avatarstore=useUserAvatarStore()
-console.log("个人界面调用了：",avatarstore.avatarUrl)
-const defaultValues = {
-    account: '默认账号',
-    password: '默认密码',
-    email: 'example@example.com',
-    phone: '1234567890',
-    token: '默认Token',
-    pet_name: 'test昵称',
-  };
-  
-  const account = ref(defaultValues.account);
-  const password = ref(defaultValues.password);
-  const email = ref(defaultValues.email);
-  const phone = ref(defaultValues.phone);
-  const token = ref(defaultValues.token);
-  const nickname = ref(defaultValues.pet_name);
 
-  const fetchPersonalPageData = async () => {
-    try {
-      
-      const response = await axios.post('http://127.0.0.1:5000/personal_page', { user: store.token.access_token });
-      if (response.data.success === 'true' && response.data.data.length > 0) {
-        const data = response.data.data[0];
-        account.value = data.account ?? defaultValues.account;
-        password.value = data.password ?? defaultValues.password;
-        email.value = data.email ?? defaultValues.email;
-        phone.value = data.phone ?? defaultValues.phone;
-        token.value = data.token ?? defaultValues.token;
-        nickname.value = data.pet_name ?? defaultValues.pet_name;
-      } else {
-        alert(`获取数据失败: ${response.data.message}`);
-      }
-    } catch (error) {
-      alert('发生错误: ' + error.message);
+const store = useTokenStore();
+const avatarstore = useUserAvatarStore();
+
+const defaultValues = {
+  account: '默认账号',
+  password: '默认密码',
+  email: 'example@example.com',
+  phone: '1234567890',
+  token: '默认Token',
+  pet_name: 'test昵称',
+};
+
+const account = ref(defaultValues.account);
+const password = ref(defaultValues.password);
+const email = ref(defaultValues.email);
+const phone = ref(defaultValues.phone);
+const token = ref(defaultValues.token);
+const nickname = ref(defaultValues.pet_name);
+const activeName = ref('first');
+
+const fetchPersonalPageData = async () => {
+  try {
+    const response = await axios.post('http://127.0.0.1:5000/personal_page', { user: store.token.access_token });
+    if (response.data.success === 'true' && response.data.data.length > 0) {
+      const data = response.data.data[0];
+      account.value = data.account ?? defaultValues.account;
+      password.value = data.password ?? defaultValues.password;
+      email.value = data.email ?? defaultValues.email;
+      phone.value = data.phone ?? defaultValues.phone;
+      token.value = data.token ?? defaultValues.token;
+      nickname.value = data.pet_name ?? defaultValues.pet_name;
+    } else {
+      alert(`获取数据失败: ${response.data.message}`);
     }
-  };
-  onMounted(() => {
-    // 确保组件初始化时从 store 获取最新的 avatarUrl
-    console.log("生命周期挂载时调用了：",avatarstore.avatarUrl)
-   avatarstore.avatarUrl = avatarstore.avatarUrl || 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png';
-    fetchPersonalPageData();
-    
-  });
-const activeName = ref('first')
+  } catch (error) {
+    alert('发生错误: ' + error.message);
+  }
+};
+
+const onBack = () => {
+  notify('Back');
+};
+
+const personClass = ref('');
+const avatarClass = ref('');
+
+const updatePersonClass = () => {
+  if (window.innerWidth <= 1024) {
+    personClass.value = 'person-small';
+    avatarClass.value = 'avatar';
+  } else {
+    personClass.value = 'person-large';
+    avatarClass.value = 'avatar';
+  }
+};
+
+onMounted(() => {
+  avatarstore.avatarUrl = avatarstore.avatarUrl || 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png';
+  fetchPersonalPageData();
+  updatePersonClass();
+  window.addEventListener('resize', updatePersonClass);
+});
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {
-  console.log(tab, event)
-}
-const onBack = () => {
-  notify('Back')
-}
+  console.log(tab, event);
+};
 </script>
+
 
 <style>
 .demo-tabs > .el-tabs__content {
@@ -125,4 +124,47 @@ const onBack = () => {
     display: flex;
     flex-direction: column;
 }
+.person{
+  
+}
+@media (min-width: 1024px) {
+  .person-large {
+    display: flex;
+    align-items: flex-start;
+  }
+  .person-large .avatar-container {
+    margin-right: 20px;
+  }
+  .person-large .avatar {
+    width: 250px;
+    height: 250px;
+  }
+  .person-large .info-container {
+    display: flex;
+    flex-direction: column;
+  }
+}
+@media (max-width: 1024px) {
+  .person-small {
+    display: block;
+    margin-left:-250px;
+  }
+  .person-small .avatar-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    margin-left:-180px;
+  }
+  .person-small .avatar {
+    width: 100px;
+    height: 100px;
+  }
+  .person-small .info-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
 </style>
+
+
