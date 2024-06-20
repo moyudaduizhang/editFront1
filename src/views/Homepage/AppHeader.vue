@@ -14,7 +14,7 @@
         <el-avatar
             class="mr-3"
             :size="32"
-            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+            :src="`${avatarstore.avatarUrl}`"
           />
         <el-icon class="arrow-down-icon">
           <arrow-down/>
@@ -39,9 +39,10 @@ import { Expand, Fold } from "@element-plus/icons-vue";
 import { isCollapse } from "@/components/layout/isCollapse";
 import { ElMessageBox,ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
-import { useTokenStore } from "@/store/userstoken";
+import { useTokenStore,useUserAvatarStore } from "@/store/userstoken";
 import { logout } from "@/api/users";
-const circleUrl = ref("path/to/avatar.jpg"); // Replace with actual URL
+const avatarstore=useUserAvatarStore()
+console.log("调用了：",avatarstore.avatarUrl)
 const currentTime = ref(new Date());
 const greeting = computed(() => {
   const hour = currentTime.value.getHours();
@@ -84,6 +85,8 @@ const updateTime = () => {
 
 onMounted(() => {
   updateTime();
+   // 确保组件初始化时从 store 获取最新的 avatarUrl
+   avatarstore.avatarUrl = avatarstore.avatarUrl || 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png';
 });
 </script>
 <style lang="scss" scoped>

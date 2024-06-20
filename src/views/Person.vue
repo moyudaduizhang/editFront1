@@ -13,7 +13,7 @@
           <el-avatar
             class="mr-3"
             :size="100"
-            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+            :src="`${avatarstore.avatarUrl}`"
           />
           <div class="tags">
             <span class="text-large font-600 mr-3"> {{nickname}} </span>
@@ -57,9 +57,11 @@
 import { ElNotification as notify } from 'element-plus'
 import { onMounted, ref } from 'vue'
 import type { TabsPaneContext } from 'element-plus'
-import { useTokenStore } from '@/store/userstoken'
+import { useTokenStore, useUserAvatarStore} from '@/store/userstoken'
 import axios from 'axios';
 const store=useTokenStore()
+const avatarstore=useUserAvatarStore()
+console.log("个人界面调用了：",avatarstore.avatarUrl)
 const defaultValues = {
     account: '默认账号',
     password: '默认密码',
@@ -96,7 +98,11 @@ const defaultValues = {
     }
   };
   onMounted(() => {
+    // 确保组件初始化时从 store 获取最新的 avatarUrl
+    console.log("生命周期挂载时调用了：",avatarstore.avatarUrl)
+   avatarstore.avatarUrl = avatarstore.avatarUrl || 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png';
     fetchPersonalPageData();
+    
   });
 const activeName = ref('first')
 
