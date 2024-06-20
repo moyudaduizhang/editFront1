@@ -1,42 +1,45 @@
 <template>
   <div class="container">
-    <el-page-header @back="onBack"></el-page-header>
+   
     <div class="flex items-center">
-      <el-avatar class="mr-3" :size="200" :src="avatarUrl" />
-      <el-button type="primary" @click="openFileDialog">修改头像</el-button>
+      <el-avatar class="mr-3" :size="250" :src="avatarUrl" @click="openFileDialog" />
+      <span style="margin-left: -200px;margin-right: 200px;margin-top:-60px;">点击头像以编辑</span>
       <!-- 隐藏的文件输入框 -->
       <input type="file" ref="fileInput" @change="handleFileChange" style="display: none;" />
+      <div class="form-container">
+        <form @submit.prevent="handleSubmit">
+          <div class="form-group">
+            <label for="account">账号</label>
+            <input id="account" v-model="account" type="text" readonly required />
+          </div>
+          <div class="form-group">
+            <label for="password">密码</label>
+            <input id="password" v-model="password" type="text" readonly required />
+          </div>
+          <div class="form-group">
+            <label for="email">邮箱</label>
+            <input id="email" v-model="email" type="email" :readonly="!isEditing" required />
+          </div>
+          <div class="form-group">
+            <label for="phone">手机号</label>
+            <input id="phone" v-model="phone" type="tel" :readonly="!isEditing" required />
+          </div>
+          <div class="form-group">
+            <label for="token">百度秘钥token</label>
+            <input id="token" v-model="token" type="text" :readonly="!isEditing" required />
+          </div>
+          <div class="form-group">
+            <label for="nickname">昵称</label>
+            <input id="nickname" v-model="nickname" type="text" :readonly="!isEditing" required />
+          </div>
+          <button type="button" @click="cancelEdit">取消修改</button>
+          <button type="submit">保存修改</button>
+        </form>
+      </div>
     </div>
-    <form @submit.prevent="handleSubmit">
-      <div class="form-group">
-        <label for="account">账号</label>
-        <input id="account" v-model="account" type="text" readonly required />
-      </div>
-      <div class="form-group">
-        <label for="password">密码</label>
-        <input id="password" v-model="password" type="text" readonly required />
-      </div>
-      <div class="form-group">
-        <label for="email">邮箱</label>
-        <input id="email" v-model="email" type="email" :readonly="!isEditing" required />
-      </div>
-      <div class="form-group">
-        <label for="phone">手机号</label>
-        <input id="phone" v-model="phone" type="tel" :readonly="!isEditing" required />
-      </div>
-      <div class="form-group">
-        <label for="token">百度秘钥token</label>
-        <input id="token" v-model="token" type="text" :readonly="!isEditing" required />
-      </div>
-      <div class="form-group">
-        <label for="nickname">昵称</label>
-        <input id="nickname" v-model="nickname" type="text" :readonly="!isEditing" required />
-      </div>
-      <button type="button" @click="cancelEdit">取消修改</button>
-      <button type="submit">保存修改</button>
-    </form>
   </div>
 </template>
+
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
@@ -137,8 +140,6 @@ const handleFileChange = async () => {
   }
 };
 
-
-
 const openFileDialog = () => {
   fileInput.value?.click();
 };
@@ -158,7 +159,7 @@ onMounted(() => {
 
 <style scoped>
 .container {
-  max-width: 600px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
   text-align: center;
@@ -166,12 +167,18 @@ onMounted(() => {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   border-radius: 15px;
   font-family: 'Arial', sans-serif;
+  border: 1px solid #ccc; /* 设置边框 */
+  border-radius: 50px; /* 设置圆角 */
 }
 
-.name {
-  font-size: 2.5em;
-  color: #4a4a4a;
-  margin-bottom: 20px;
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form-container {
+  flex: 1;
 }
 
 .form-group {
@@ -181,13 +188,13 @@ onMounted(() => {
 
 label {
   display: block;
-  font-size: 1%;
+  font-size: 1em;
   margin-bottom: 8px;
   color: #333;
 }
 
 input {
-  width: 100%;
+  width: 90%;
   padding: 12px;
   font-size: 1em;
   border: 1px solid #ccc;
@@ -221,5 +228,10 @@ button:first-of-type {
 
 button:first-of-type:hover {
   background-color: #218838;
+}
+
+.el-avatar {
+  cursor: pointer;
+  margin-top: -400px; /* 调整为你希望的高度 */
 }
 </style>
