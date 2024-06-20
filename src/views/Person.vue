@@ -3,45 +3,42 @@
     <el-page-header @back="onBack">
       <template #extra>
         <div class="flex items-center">
-          <el-button>Print</el-button>
-          <el-button type="primary" class="ml-2">Edit</el-button>
+          <el-button  @click="$router.push({path:'/EditPerson'})" type="primary" class="ml-2">Edit</el-button>
         </div>
       </template>
 
-      <el-descriptions :column="1" size="small" class="mt-4">
+      <el-descriptions :column="1" size="large" class="mt-4">
         <el-descriptions-item >
           <div class="flex items-center">
           <el-avatar
             class="mr-3"
-            :size="128"
+            :size="100"
             src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
           />
           <div class="tags">
-            <span class="text-large font-600 mr-3"> 下雨 </span>
+            <span class="text-large font-600 mr-3"> {{nickname}} </span>
        <span
        class="text-sm mr-2"
        style="color: var(--el-text-color-regular)"
       >
-       admin
+       {{ account }}
     </span>
-     <el-tag>Default</el-tag>
           </div>
           
         </div>
         </el-descriptions-item>
-        <el-descriptions-item label="账号">
-         admin
+        <el-descriptions-item   label="账号">
+          {{ account }}
+        </el-descriptions-item>
+        <el-descriptions-item label="密码">
+          {{ password }}
         </el-descriptions-item>
         <el-descriptions-item label="电话号码">
-          18100000000
+          {{ phone }}
         </el-descriptions-item>
         <el-descriptions-item label="所在地">中国 湖南</el-descriptions-item>
-        <el-descriptions-item label="Remarks">
-          <el-tag size="small">School</el-tag>
-        </el-descriptions-item>
-        <el-descriptions-item label="Address">
-          No.1188, Wuzhong Avenue, Wuzhong District, Suzhou, Jiangsu Province
-        </el-descriptions-item>
+        <el-descriptions-item label="电子邮箱">{{ email }}</el-descriptions-item>
+        <el-descriptions-item label="百度飞桨token">{{ token }}</el-descriptions-item>
       </el-descriptions>
       <p class="mt-4 text-sm">
         自我介绍
@@ -60,7 +57,43 @@
 import { ElNotification as notify } from 'element-plus'
 import { ref } from 'vue'
 import type { TabsPaneContext } from 'element-plus'
+import { useTokenStore } from '@/store/userstoken'
+import axios from 'axios';
+const store=useTokenStore()
+const defaultValues = {
+    account: '默认账号',
+    password: '默认密码',
+    email: 'example@example.com',
+    phone: '1234567890',
+    token: '默认Token',
+    pet_name: 'test昵称',
+  };
+  
+  const account = ref(defaultValues.account);
+  const password = ref(defaultValues.password);
+  const email = ref(defaultValues.email);
+  const phone = ref(defaultValues.phone);
+  const token = ref(defaultValues.token);
+  const nickname = ref(defaultValues.pet_name);
 
+  const fetchPersonalPageData = async () => {
+    try {
+      const response = await axios.post('http://127.0.0.1:5000/personal_page', { user: store.token.access_token });
+      if (response.data.success === 'true' && response.data.data.length > 0) {
+        const data = response.data.data[0];
+        account.value = data.account ?? defaultValues.account;
+        password.value = data.password ?? defaultValues.password;
+        email.value = data.email ?? defaultValues.email;
+        phone.value = data.phone ?? defaultValues.phone;
+        token.value = data.token ?? defaultValues.token;
+        nickname.value = data.pet_name ?? defaultValues.pet_name;
+      } else {
+        alert(`获取数据失败: ${response.data.message}`);
+      }
+    } catch (error) {
+      alert('发生错误: ' + error.message);
+    }
+  };
 const activeName = ref('first')
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {
