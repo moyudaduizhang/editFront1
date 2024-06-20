@@ -17,9 +17,11 @@
 <script setup lang="ts">
 import AppAside from "@/views/Homepage/AppAside.vue";
 import AppHeader from "@/views/Homepage/AppHeader.vue";
+
 </script>
 
 <style lang="scss" scoped>
+
 .header-and-main{
   flex-direction: column;
   height:100vh;

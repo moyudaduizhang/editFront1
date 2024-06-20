@@ -4,9 +4,9 @@
       <div class="icon-section">
         <h3>文档格式</h3>
         <div class="icon-list">
-            <el-icon><HomeFilled /></el-icon>
-            <el-icon><HomeFilled /></el-icon>
-            <el-icon><HomeFilled /></el-icon>
+          <el-card style="max-width: auto">
+            
+  </el-card>
           <!-- 其他文档格式图标 -->
         </div>
       </div>

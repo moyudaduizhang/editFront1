@@ -23,14 +23,15 @@ const router=createRouter({
                     path:'/wangEditor',
                     name:'wangEditor',
                     component:()=>import('@/views/Editor/Editor.vue')
-                }
+                },
+                {
+                    path:'/person',
+                    name:'person',
+                    component:()=>import('@/views/Person.vue')
+                },
             ]
         },
-        {
-            path:'/person',
-            name:'person',
-            component:()=>import('@/views/Person.vue')
-        },
+       
         {
             path:'/login',
             name:'login',
