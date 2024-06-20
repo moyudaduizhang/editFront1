@@ -1,16 +1,29 @@
 <template>
     <div class="container">
-        <el-page-header @back="onBack">
-
+        <el-page-header @back="$router.push({name:'person'})">
         </el-page-header>
-        <div class="flex items-center">
-          <el-avatar
-            class="mr-3"
-            :size="200"
-            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-          />
-          <el-button type="primary">修改头像</el-button>
-        </div>
+        <el-upload
+          class="upload-demo rounded-border"
+          drag
+          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+          multiple
+        >
+          <div class="el-upload__text">
+            <el-avatar
+               class="mr-3"
+                :size="200"
+                src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+            />
+
+          拖动文件到这或者<em>点击上传</em>
+          </div>
+    <template #tip>
+      <div class="el-upload__tip">
+        图片小于500kb
+      </div>
+    </template>
+  </el-upload>
+        
       <form @submit.prevent="handleSubmit">
         <div class="form-group">
           <label  for="account">账号</label>
@@ -37,9 +50,11 @@
           <input id="nickname" v-model="nickname" type="text" :readonly="!isEditing" required />
         </div>
 
-        <button>取消修改</button>
+        
         <button type="submit">保存修改</button>
+        
       </form>
+      <button  @click="$router.push({name:'person'})">取消修改</button>
     </div>
   </template>
   
@@ -47,17 +62,13 @@
   import { ref, onMounted } from 'vue';
   import axios from 'axios';
   import { useTokenStore } from '@/store/userstoken';
-  
-  const onBack=()=>{
-    
-  }
   const defaultValues = {
     account: '默认账号',
     password: '默认密码',
     email: 'example@example.com',
     phone: '1234567890',
     token: '默认Token',
-    pet_name: 'si马李昌霖',
+    pet_name: 'test name',
   };
   
   const account = ref(defaultValues.account);
@@ -156,7 +167,10 @@
     margin-bottom: 8px;
     color: #333;
   }
-  
+  .upload-demo  {
+  border-radius: 50%;
+}
+
   input {
     width: 100%;
     padding: 12px;

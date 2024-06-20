@@ -55,7 +55,7 @@
 
 <script setup lang="ts">
 import { ElNotification as notify } from 'element-plus'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import type { TabsPaneContext } from 'element-plus'
 import { useTokenStore } from '@/store/userstoken'
 import axios from 'axios';
@@ -78,6 +78,7 @@ const defaultValues = {
 
   const fetchPersonalPageData = async () => {
     try {
+      
       const response = await axios.post('http://127.0.0.1:5000/personal_page', { user: store.token.access_token });
       if (response.data.success === 'true' && response.data.data.length > 0) {
         const data = response.data.data[0];
@@ -94,6 +95,9 @@ const defaultValues = {
       alert('发生错误: ' + error.message);
     }
   };
+  onMounted(() => {
+    fetchPersonalPageData();
+  });
 const activeName = ref('first')
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {

@@ -17,15 +17,16 @@
       <Toolbar style="border-bottom: 1px solid #ccc" :editor="editorRef" :defaultConfig="toolbarConfig" />
       <el-button v-show="!isWindowvisible" type="primary" @click="openwindow">ai助手</el-button>
       <el-button v-show="isWindowvisible" type="primary" @click="closeWindow">ai助手</el-button>
-      <el-button type="primary" @click="saveDocument">保存</el-button>
+      <el-button type="submit" @click="saveDocument">保存</el-button>
       <el-button type="primary" @click="polish">润色</el-button>
       <el-button type="primary" @click="continuation">续写</el-button>
       <el-button type="primary" @click="zhaiyao">摘要</el-button>
+
       <div id="content">
         <div id="editor-container">
           <div id="title-container"></div>
           <Editor
-            style="height: 1000px; justify-content: space-between; overflow-y: hidden;"
+            style="height: 900px; justify-content: space-between; overflow-y: hidden;"
             v-model="valueHtml"
             :defaultConfig="editorConfig"
             @onCreated="handleCreated"
@@ -34,7 +35,7 @@
       </div>
       
     </div>
-  </div>
+  </div>     
 </template>
 
 <script setup>
@@ -45,7 +46,7 @@ import '@wangeditor/editor/dist/css/style.css';
 import { onBeforeUnmount, shallowRef, onMounted } from 'vue';
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
 import axios from 'axios';
-console.log("111")
+
 const polish=()=>{
   console.log("调用润色")
   let formData = new FormData();
@@ -80,8 +81,12 @@ const continuation=()=>{
     url,
     data: formData,
   }).then(res => {
-    alert(res.data.answer)
+    alert(res.data.answer);
     console.log(res.data.answer);
+  })
+  .catch(error => {
+    //alert("请求错误: ", error);
+    console.error("请求错误: ", error);
   });
 }
 
@@ -102,7 +107,7 @@ const zhaiyao=()=>{
     console.log(res.data.answer);
   });}
 const editorRef = shallowRef();
-const valueHtml = ref('<p>你好！！！</p>');
+const valueHtml = ref('<p></p>');
 const isWindowvisible = ref(false);
 const closeWindow = () => {
   isWindowvisible.value = false;
