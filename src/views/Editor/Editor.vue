@@ -15,8 +15,9 @@
   <div class="relative">
     <div class="editor-container mx-4">
       <Toolbar style="border-bottom: 1px solid #ccc" :editor="editorRef" :defaultConfig="toolbarConfig" />
-      <el-button v-show="!isWindowvisible" type="primary" @click="openwindow">ai助手</el-button>
-      <el-button v-show="isWindowvisible" type="primary" @click="closeWindow">ai助手</el-button>
+      <el-input v-model="documentName" placeholder="请输入文档名称" style="margin-bottom: 10px;" />
+      <el-button v-show="!isWindowvisible" type="primary" @click="openwindow">AI助手</el-button>
+      <el-button v-show="isWindowvisible" type="primary" @click="closeWindow">AI助手</el-button>
       <el-button type="submit" @click="saveDocument">保存</el-button>
       <el-button type="primary" @click="polish">润色</el-button>
       <el-button type="primary" @click="continuation">续写</el-button>
@@ -33,49 +34,46 @@
           />
         </div>
       </div>
-      
     </div>
   </div>     
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, shallowRef } from 'vue';
 import VueComposition from './vue-composition.vue';
 import VueLegacy from './vue-legacy.vue';
 import '@wangeditor/editor/dist/css/style.css';
-import { onBeforeUnmount, shallowRef, onMounted } from 'vue';
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
 import axios from 'axios';
+import { useRoute } from 'vue-router';
+import { useTokenStore } from '@/store/userstoken';
 
-const polish=()=>{
-  console.log("调用润色")
+const polish = () => {
+  console.log("调用润色");
   let formData = new FormData();
-  formData.append("username","xxxxxx");
-  formData.append("key","xxxxxx");
-  formData.append("cont",
-    "你是大帅哥"
-  );
-  let url = 'http://10.255.198.65:5500/getpolish' //访问后端接口的url
-  let method = 'post'
+  formData.append("username", "xxxxxx");
+  formData.append("key", "xxxxxx");
+  formData.append("cont", "你是大帅哥");
+  let url = 'http://10.255.198.65:5500/getpolish'; //访问后端接口的url
+  let method = 'post';
   axios({
     method,
     url,
     data: formData,
   }).then(res => {
-    alert(res.data.answer)
+    alert(res.data.answer);
     console.log(res.data.answer);
   });
-}
+};
 
-
-const continuation=()=>{
-  console.log("调用续写")
+const continuation = () => {
+  console.log("调用续写");
   let formData = new FormData();
-  formData.append("username","123456");
-  formData.append("key","xxxxxxx");
-  formData.append("cont","你是大帅哥");
-  let url = 'http://10.255.198.65:5500/getcontinuation' //访问后端接口的url
-  let method = 'post'
+  formData.append("username", "123456");
+  formData.append("key", "xxxxxxx");
+  formData.append("cont", "你是大帅哥");
+  let url = 'http://10.255.198.65:5500/getcontinuation'; //访问后端接口的url
+  let method = 'post';
   axios({
     method,
     url,
@@ -85,27 +83,28 @@ const continuation=()=>{
     console.log(res.data.answer);
   })
   .catch(error => {
-    //alert("请求错误: ", error);
     console.error("请求错误: ", error);
   });
-}
+};
 
-const zhaiyao=()=>{
-  console.log("调用摘要")
+const zhaiyao = () => {
+  console.log("调用摘要");
   let formData = new FormData();
-  formData.append("username","123456");
-  formData.append("key","xxxxxxx");
-  formData.append("cont","刘涛是帅哥");
-  let url = 'http://10.255.198.65:5500/getabstract' //访问后端接口的url
-  let method = 'post'
+  formData.append("username", "123456");
+  formData.append("key", "xxxxxxx");
+  formData.append("cont", "刘涛是帅哥");
+  let url = 'http://10.255.198.65:5500/getabstract'; //访问后端接口的url
+  let method = 'post';
   axios({
     method,
     url,
     data: formData,
   }).then(res => {
-    alert(res.data.answer)
+    alert(res.data.answer);
     console.log(res.data.answer);
-  });}
+  });
+};
+
 const editorRef = shallowRef();
 const valueHtml = ref('<p></p>');
 const isWindowvisible = ref(false);
@@ -115,7 +114,24 @@ const closeWindow = () => {
 const openwindow = () => {
   isWindowvisible.value = true;
 };
+
+const route = useRoute();
+const documentName = ref(route.query.documentName || '');
+const store = useTokenStore();
+
 onMounted(() => {
+  if (documentName.value) {
+    axios.post('/api/get_document', { name: documentName.value, user: store.token.access_token })
+      .then((response) => {
+        if (response.data.content) {
+          valueHtml.value = response.data.content;
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching document:', error);
+      });
+  }
+
   setTimeout(() => {
     valueHtml.value = '<p></p>';
   }, 1500);
@@ -135,14 +151,22 @@ const handleCreated = (editor) => {
 };
 
 const saveDocument = () => {
-  axios
-    .post('/api/save_document', { content: valueHtml.value })
-    .then((response) => {
-      alert('Document saved successfully!');
-    })
-    .catch((error) => {
-      console.error('Error saving document:', error);
-    });
+  if (!documentName.value) {
+    alert("请填写文档名称");
+    return;
+  }
+
+  axios.post('/api/save_document', {
+    name: documentName.value,
+    content: valueHtml.value,
+    user: store.token.access_token
+  })
+  .then((response) => {
+    alert('文档保存成功!');
+  })
+  .catch((error) => {
+    console.error('保存文档出错:', error);
+  });
 };
 
 const type = ref('composition');

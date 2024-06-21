@@ -147,7 +147,7 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 @media (max-width: 1024px) {
   .person-small {
     display: block;
-    margin-left:-250px;
+    margin-left:-180px;
   }
   .person-small .avatar-container {
     display: flex;
