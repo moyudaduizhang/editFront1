@@ -5,15 +5,13 @@
               <img src="@/assets/vue.svg" alt=""/>
               <h2>智能文档</h2>
             </a>
+            
             <el-menu-item  index="/">
-             <el-icon><HomeFilled /></el-icon><span>开始</span>
+             <el-icon style="font-size: 200px"><HomeFilled /></el-icon><span>开始</span>
             </el-menu-item>
 
             <el-menu-item index="/document">
-             <el-icon><DocumentAdd /></el-icon><span>新建</span>
-            </el-menu-item>
-            <el-menu-item index="/wangEditor">
-             <el-icon><Folder /></el-icon><span>wangEditor</span>
+             <el-icon style="font-size: 200px"><DocumentAdd /></el-icon><span>新建</span>
             </el-menu-item>
           </el-menu>
         </el-aside>

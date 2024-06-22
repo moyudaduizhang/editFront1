@@ -20,13 +20,17 @@
           <arrow-down/>
         </el-icon>
       </span>
+      
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item @click="$router.push({name:'person'})">
-            个人主页
+            <el-icon><User /></el-icon>个人主页
           </el-dropdown-item>
           <el-dropdown-item @click="logoutbutton">
-            退出登录
+            <el-icon><CloseBold /></el-icon>退出登录
+          </el-dropdown-item>
+          <el-dropdown-item @click="$router.push({name:'setting'})">
+            <el-icon><Setting /></el-icon>设置
           </el-dropdown-item>
         </el-dropdown-menu>
       </template>

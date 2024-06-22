@@ -11,13 +11,13 @@
     </div>
     <component :is="component" style="height: calc(100% - 40px);"></component>
   </div>
-
   <div class="relative">
     <div class="editor-container mx-4">
       <Toolbar style="border-bottom: 1px solid #ccc" :editor="editorRef" :defaultConfig="toolbarConfig" />
       <el-input v-model="documentName" placeholder="请输入文档名称" style="margin-bottom: 10px;" />
       <el-button v-show="!isWindowvisible" type="primary" @click="openwindow">AI助手</el-button>
       <el-button v-show="isWindowvisible" type="primary" @click="closeWindow">AI助手</el-button>
+      
       <el-button type="submit" @click="saveDocument">保存</el-button>
       <el-button type="primary" @click="polish">润色</el-button>
       <el-button type="primary" @click="continuation">续写</el-button>

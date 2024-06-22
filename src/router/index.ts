@@ -36,7 +36,11 @@ const router=createRouter({
                 },
             ]
         },
-       
+        {
+            path:'/setting',
+            name:'setting',
+            component:()=>import('@/views/Setting.vue')
+        },
         {
             path:'/login',
             name:'login',
@@ -67,21 +71,21 @@ export function resetRouter() {
 //每次路由位置发生变化时要做的事：验证token
 
 
-// router.beforeEach((to, from, next) => {
-//       const store = useTokenStore();
-//       
-//       if (to.matched.some(record => record.meta.requiresAuth)) {
-//         console.log(store.token.access_token )
-//         if (!store.token.access_token ) {
-//          
-//             next({ name: 'login', query: { redirect: to.fullPath } });
-//         } 
-//         else {next();
-//              
-//         }
-//       } 
-//        
-//         next();
-//       
-//     });
+/*router.beforeEach((to, from, next) => {
+      const store = useTokenStore();
+      
+      if (to.matched.some(record => record.meta.requiresAuth)) {
+        console.log(store.token.access_token )
+        if (!store.token.access_token ) {
+         
+            next({ name: 'login', query: { redirect: to.fullPath } });
+        } 
+        else {next();
+             
+        }
+      } 
+       
+        next();
+      
+    });*/
 export default router

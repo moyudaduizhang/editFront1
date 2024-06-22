@@ -1,21 +1,27 @@
 <template>
   <div :class="personClass" aria-label="A complete example of page header">
-    <el-page-header @back="onBack">
-      <template #extra>
-        <div class="flex items-center">
-          <el-button @click="$router.push({path:'/EditPerson'})" type="primary" class="ml-2">Edit</el-button>
+    <div class="custom-page-header">
+      <div class="header-extra">
+        <div class="button-container">
+          <el-button @click="$router.push({ path: '/EditPerson' })" type="" class="ml-2">
+            <el-icon><EditPen /></el-icon>Edit your public profile
+          </el-button>
+          <el-button type="" class="ml-2">your work</el-button>
         </div>
-      </template>
+        <el-button type="" class="ml-2 settings-button">
+          <el-icon><Setting /></el-icon>Settings
+        </el-button>
+      </div>
 
       <div :class="personClass">
         <div class="avatar-container">
           <el-avatar :class="avatarClass" :src="`${avatarstore.avatarUrl}`" />
+          <div class="tags">
+            <span class="text-large font-1000 mr-3">{{ nickname }}</span>
+            <span class="text-sm mr-3" style="color: var(--el-text-color-regular)">{{ account }}</span>
+          </div>
         </div>
         <div class="info-container">
-          <div class="tags">
-            <span class="text-large font-600 mr-3"> {{ nickname }} </span>
-            <span class="text-sm mr-2" style="color: var(--el-text-color-regular)">{{ account }}</span>
-          </div>
           <el-descriptions :column="1" size="large" class="mt-4">
             <el-descriptions-item label="账号">{{ account }}</el-descriptions-item>
             <el-descriptions-item label="密码">{{ password }}</el-descriptions-item>
@@ -26,11 +32,11 @@
           </el-descriptions>
         </div>
       </div>
-      <p class="mt-4 text-sm">自我介绍测试</p>
-    </el-page-header>
+    </div>
   </div>
+
   <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
-    <el-tab-pane label="User" name="first">User</el-tab-pane>
+    <el-tab-pane label="个人信息" name="first">User</el-tab-pane>
     <el-tab-pane label="Config" name="second">Config</el-tab-pane>
     <el-tab-pane label="Role" name="third">Role</el-tab-pane>
     <el-tab-pane label="Task" name="fourth">Task</el-tab-pane>
@@ -112,27 +118,66 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 };
 </script>
 
-
 <style>
+html, body, #app, .custom-page-header {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.custom-page-header {
+  padding: 16px;
+  background-color: #f5f7fa;
+  border-bottom: 1px solid #ebeef5;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  border: 1px solid #ebeef5;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.header-extra {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.settings-button {
+  margin-left: auto;
+}
+
 .demo-tabs > .el-tabs__content {
   padding: 32px;
   color: #6b778c;
   font-size: 32px;
   font-weight: 600;
 }
+
 .tags {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
-.person{
-  
+
+.person {
 }
+
 @media (min-width: 1024px) {
   .person-large {
     display: flex;
+    
     align-items: flex-start;
+    width: 100%;
   }
   .person-large .avatar-container {
+    display: flex;
+    align-items: center;
     margin-right: 20px;
   }
   .person-large .avatar {
@@ -142,29 +187,50 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
   .person-large .info-container {
     display: flex;
     flex-direction: column;
+    margin-left:50px;
+  }
+  .person-large .tags {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
   }
 }
+
 @media (max-width: 1024px) {
   .person-small {
-    display: block;
-    margin-left:-180px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 0;
+    width: 100%;
+  }
+  .person-small .header-extra {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 20px;
   }
   .person-small .avatar-container {
     display: flex;
-    justify-content: center;
+    align-items: center;
+    justify-content: flex-start;
     margin-bottom: 20px;
-    margin-left:-180px;
+    width: 100%;
   }
   .person-small .avatar {
     width: 100px;
     height: 100px;
   }
+  .person-small .tags {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-left: 10px;
+  }
   .person-small .info-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
   }
 }
 </style>
-
-
