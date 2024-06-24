@@ -1,28 +1,35 @@
 <template>
-  <div v-show="isWindowvisible" style="height:200px" class="floating-window absolute top-10 right-4 z-10 bg-white rounded-lg shadow-lg border border-gray-300"
-       :style="{ width: windowWidth + 'px', height: windowHeight + 'px' }"
+  <div v-show="isWindowVisible" style="height: 500px;" class="floating-window absolute top-10 right-4 z-10 bg-white rounded-lg shadow-lg border border-gray-300" 
+       :style="{ width: windowWidth + 'px', height: windowHeight + 'px' }" 
        ref="floatingWindow">
     <div class="flex justify-between items-center bg-gray-100 p-2 border-b border-gray-300">
-      <select class="border border-gray-400" v-model="type">
-        <option value="composition">Composition API</option>
-        <option value="legacy">Legacy</option>
-      </select>
+      <span>AI 助手</span>
       <button class="text-gray-500 hover:text-gray-800" @click="closeWindow">&times;</button>
     </div>
-    <component :is="component" style="height: calc(100% - 40px);"></component>
+    <div class="p-4 flex">
+      <div class="flex flex-col">
+        <el-input v-model="input" type="textarea" autosize placeholder="请输入文本" style="margin-bottom: 10px;" />
+        <div v-if="aiResponse" class="mt-4 bg-gray-100 p-2 rounded border border-gray-300">
+          {{ aiResponse }}
+        </div>
+      </div>
+      <div class="flex flex-col ml-4">
+        <el-button type="primary" @click="chat"><el-icon><Comment /></el-icon></el-button>
+        <el-button type="primary" @click="translate">翻译</el-button>
+        <el-button type="primary" @click="ocr">OCR</el-button>
+        <el-button type="primary" @click="polish" class="mt-2">润色</el-button>
+        <el-button type="primary" @click="continuation" class="mt-2">续写</el-button>
+        <el-button type="primary" @click="zhaiyao" class="mt-2">摘要</el-button>
+      </div>
+    </div>
   </div>
 
   <div class="relative">
     <div class="editor-container mx-4">
       <Toolbar style="border-bottom: 1px solid #ccc" :editor="editorRef" :defaultConfig="toolbarConfig" />
       <el-input v-model="documentName" placeholder="请输入文档名称" style="margin-bottom: 10px;" />
-      <el-button v-show="!isWindowvisible" type="primary" @click="openwindow">AI助手</el-button>
-      <el-button v-show="isWindowvisible" type="primary" @click="closeWindow">AI助手</el-button>
+      <el-button type="primary" @click="toggleWindow">{{ isWindowVisible ? '关闭' : 'AI 助手' }}</el-button>
       <el-button type="submit" @click="saveDocument">保存</el-button>
-      <el-button type="primary" @click="polish">润色</el-button>
-      <el-button type="primary" @click="continuation">续写</el-button>
-      <el-button type="primary" @click="zhaiyao">摘要</el-button>
-      <el-input v-model="input" style ="width:240px" placeholder="Please input"/>
 
       <div id="content">
         <div id="editor-container">
@@ -36,89 +43,79 @@
         </div>
       </div>
     </div>
-  </div>     
+  </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, shallowRef } from 'vue';
-import VueComposition from './vue-composition.vue';
-import VueLegacy from './vue-legacy.vue';
+import { ref, watch, computed, onMounted, onBeforeUnmount, shallowRef } from 'vue';
 import '@wangeditor/editor/dist/css/style.css';
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 import { useTokenStore } from '@/store/userstoken';
-const input=ref('');
+
+const input = ref('');
+const aiResponse = ref('');
+const isWindowVisible = ref(false);
+const documentName = ref('');
+const editorRef = shallowRef();
+const valueHtml = ref('<p></p>');
+const store = useTokenStore();
+
+
+const toggleWindow = () => {
+  isWindowVisible.value = !isWindowVisible.value;
+};
+
+const closeWindow = () => {
+  isWindowVisible.value = false;
+};
+
+const chat = () => {
+  // 默认聊天功能
+};
+
+const translate = () => {
+  // 翻译功能
+  
+};
+
+const ocr = () => {
+  // OCR 功能
+};
+
 const polish = () => {
-  console.log("调用润色");
-  let formData = new FormData();
-  formData.append("username", "xxxxxx");
-  formData.append("key", "xxxxxx");
-  formData.append("cont", input.value);
-  let url = 'http://10.255.198.65:5500/getpolish'; //访问后端接口的url
-  let method = 'post';
-  axios({
-    method,
-    url,
-    data: formData,
-  }).then(res => {
-    alert(res.data.answer);
-    console.log(res.data.answer);
-  });
+  sendRequest('http://10.255.198.65:5500/getpolish');
 };
 
 const continuation = () => {
-  console.log("调用续写");
+  sendRequest('http://10.255.198.65:5500/getcontinuation');
+};
+
+const zhaiyao = () => {
+  sendRequest('http://10.255.198.65:5500/getabstract');
+};
+
+const sendRequest = (url) => {
+  console.log(`调用${url}`);
   let formData = new FormData();
   formData.append("username", "123456");
   formData.append("key", "xxxxxxx");
   formData.append("cont", input.value);
-  let url = 'http://10.255.198.65:5500/getcontinuation'; //访问后端接口的url
-  let method = 'post';
   axios({
-    method,
+    method: 'post',
     url,
     data: formData,
   }).then(res => {
-    alert(res.data.answer);
+    aiResponse.value = res.data.answer;
     console.log(res.data.answer);
-  })
-  .catch(error => {
+  }).catch(error => {
     console.error("请求错误: ", error);
   });
 };
 
-const zhaiyao = () => {
-  console.log("调用摘要");
-  let formData = new FormData();
-  formData.append("username", "123456");
-  formData.append("key", "xxxxxxx");
-  formData.append("cont", input.value);
-  let url = 'http://10.255.198.65:5500/getabstract'; //访问后端接口的url
-  let method = 'post';
-  axios({
-    method,
-    url,
-    data: formData,
-  }).then(res => {
-    alert(res.data.answer);
-    console.log(res.data.answer);
-  });
-};
-
-const editorRef = shallowRef();
-const valueHtml = ref('<p></p>');
-const isWindowvisible = ref(false);
-const closeWindow = () => {
-  isWindowvisible.value = false;
-};
-const openwindow = () => {
-  isWindowvisible.value = true;
-};
-
 const route = useRoute();
-const documentName = ref(route.query.documentName || '');
-const store = useTokenStore();
+documentName.value = route.query.documentName || '';
 
 onMounted(() => {
   if (documentName.value) {
@@ -163,12 +160,12 @@ const saveDocument = () => {
   })
   .then((response) => {
     alert('文档保存成功!');
-    console.log(response.data); // 可以根据实际需要处理返回的数据
+    console.log(response.data);
   })
   .catch((error) => {
     if (error.response) {
       console.error('服务器返回错误:', error.response.data);
-      alert('保存文档出错: ' + error.response.data.message); // 显示具体的错误信息给用户
+      alert('保存文档出错: ' + error.response.data.message);
     } else if (error.request) {
       console.error('请求发送失败:', error.request);
     } else {
@@ -176,13 +173,6 @@ const saveDocument = () => {
     }
   });
 };
-
-
-const type = ref('composition');
-const component = computed(() => ({
-  composition: VueComposition,
-  legacy: VueLegacy,
-}[type.value]));
 </script>
 
 <style>
@@ -193,7 +183,7 @@ h1, p {
 }
 
 .floating-window {
-  z-index: 50; /* adjust as necessary */
+  z-index: 50;
 }
 
 #content {

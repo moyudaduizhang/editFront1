@@ -2,7 +2,7 @@
         <el-aside >
           <el-menu router unique-opened :collapse="isCollapse">
             <a href="/" class="logo">
-              <img src="@/assets/vue.svg" alt=""/>
+              <img src="@/assets/ai.svg" alt=""/>
               <h2>智能文档</h2>
             </a>
             
