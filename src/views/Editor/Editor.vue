@@ -11,13 +11,13 @@
     </div>
     <component :is="component" style="height: calc(100% - 40px);"></component>
   </div>
+
   <div class="relative">
     <div class="editor-container mx-4">
       <Toolbar style="border-bottom: 1px solid #ccc" :editor="editorRef" :defaultConfig="toolbarConfig" />
       <el-input v-model="documentName" placeholder="请输入文档名称" style="margin-bottom: 10px;" />
       <el-button v-show="!isWindowvisible" type="primary" @click="openwindow">AI助手</el-button>
       <el-button v-show="isWindowvisible" type="primary" @click="closeWindow">AI助手</el-button>
-      
       <el-button type="submit" @click="saveDocument">保存</el-button>
       <el-button type="primary" @click="polish">润色</el-button>
       <el-button type="primary" @click="continuation">续写</el-button>
@@ -155,19 +155,27 @@ const saveDocument = () => {
     alert("请填写文档名称");
     return;
   }
-
-  axios.post('/api/save_document', {
+  axios.post('http://127.0.0.1:5000/upload_file', {
     name: documentName.value,
     content: valueHtml.value,
     user: store.token.access_token
   })
   .then((response) => {
     alert('文档保存成功!');
+    console.log(response.data); // 可以根据实际需要处理返回的数据
   })
   .catch((error) => {
-    console.error('保存文档出错:', error);
+    if (error.response) {
+      console.error('服务器返回错误:', error.response.data);
+      alert('保存文档出错: ' + error.response.data.message); // 显示具体的错误信息给用户
+    } else if (error.request) {
+      console.error('请求发送失败:', error.request);
+    } else {
+      console.error('请求错误:', error.message);
+    }
   });
 };
+
 
 const type = ref('composition');
 const component = computed(() => ({

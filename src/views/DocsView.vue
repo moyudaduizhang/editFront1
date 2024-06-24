@@ -32,7 +32,7 @@
  
  const fetchdocsdata = async () => {
    try {
-     const response = await axios.post('http://127.0.0.1:5000/personal_page', { user: store.token.access_token });
+     const response = await axios.post('http://127.0.0.1:5000/show_file', { user: store.token.access_token });
      if (response.data.success === 'true' && response.data.data.length > 0) {
        alldocs.value = response.data.data;
      } else {

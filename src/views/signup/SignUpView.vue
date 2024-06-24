@@ -39,11 +39,12 @@
       })
     //注册请求
      const data=await register(form).then((res)=>{
-        if (res.data.success=="false"&&res.data.message=="发生异常，注册失败"){
+        if (res.data.success=="false"){
           console.log(res.data)
-          ElMessage.error("注册信息有误")
+          ElMessage.error(res.data.message)
           throw new Error(res.data.message)
         }
+        ElMessage.success(res.data.message)
         return res.data
       })
       console.log(data)

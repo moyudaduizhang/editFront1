@@ -71,7 +71,7 @@ export function resetRouter() {
 //每次路由位置发生变化时要做的事：验证token
 
 
-/*router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => {
       const store = useTokenStore();
       
       if (to.matched.some(record => record.meta.requiresAuth)) {
@@ -87,5 +87,5 @@ export function resetRouter() {
        
         next();
       
-    });*/
+    });
 export default router
