@@ -22,6 +22,7 @@
       <el-button type="primary" @click="polish">润色</el-button>
       <el-button type="primary" @click="continuation">续写</el-button>
       <el-button type="primary" @click="zhaiyao">摘要</el-button>
+      <el-input v-model="input" style ="width:240px" placeholder="Please input"/>
 
       <div id="content">
         <div id="editor-container">
@@ -47,13 +48,13 @@ import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 import { useTokenStore } from '@/store/userstoken';
-
+const input=ref('');
 const polish = () => {
   console.log("调用润色");
   let formData = new FormData();
   formData.append("username", "xxxxxx");
   formData.append("key", "xxxxxx");
-  formData.append("cont", "你是大帅哥");
+  formData.append("cont", input.value);
   let url = 'http://10.255.198.65:5500/getpolish'; //访问后端接口的url
   let method = 'post';
   axios({
@@ -71,7 +72,7 @@ const continuation = () => {
   let formData = new FormData();
   formData.append("username", "123456");
   formData.append("key", "xxxxxxx");
-  formData.append("cont", "你是大帅哥");
+  formData.append("cont", input.value);
   let url = 'http://10.255.198.65:5500/getcontinuation'; //访问后端接口的url
   let method = 'post';
   axios({
@@ -92,7 +93,7 @@ const zhaiyao = () => {
   let formData = new FormData();
   formData.append("username", "123456");
   formData.append("key", "xxxxxxx");
-  formData.append("cont", "刘涛是帅哥");
+  formData.append("cont", input.value);
   let url = 'http://10.255.198.65:5500/getabstract'; //访问后端接口的url
   let method = 'post';
   axios({
