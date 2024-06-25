@@ -119,10 +119,11 @@ documentName.value = route.query.documentName || '';
 
 onMounted(() => {
   if (documentName.value) {
-    axios.post('/api/get_document', { name: documentName.value, user: store.token.access_token })
+    axios.post('http://127.0.0.1:5000/get_document', { name: documentName.value, user: store.token.access_token })
       .then((response) => {
         if (response.data.content) {
           valueHtml.value = response.data.content;
+          console.log(valueHtml.value)
         }
       })
       .catch((error) => {
@@ -130,9 +131,7 @@ onMounted(() => {
       });
   }
 
-  setTimeout(() => {
-    valueHtml.value = '<p></p>';
-  }, 1500);
+ 
 });
 
 const toolbarConfig = {};
