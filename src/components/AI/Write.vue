@@ -8,6 +8,7 @@
       <el-button :class="{ selected: format === 'continue' }" @click="selectFormat('continue')">续写</el-button>
       <el-button :class="{ selected: format === 'polish' }" @click="selectFormat('polish')">润色</el-button>
       <el-button :class="{ selected: format === 'email' }" @click="selectFormat('email')">邮件</el-button>
+      <el-button :class="{ selected: format === 'outline' }" @click="selectFormat('abstrct')">摘要</el-button>
     </div>
 
     <h2>语气</h2>
@@ -23,6 +24,12 @@
       <el-button :class="{ selected: length === 'medium' }" @click="selectLength('medium')">中</el-button>
       <el-button :class="{ selected: length === 'long' }" @click="selectLength('long')">长</el-button>
     </div>
+    <h2>语言</h2>
+    <div class="write">
+      <el-button :class="{ selected: language === 'chinese' }" @click="selectLanguage('chinese')">中文</el-button>
+      <el-button :class="{ selected: language === 'english' }" @click="selectLanguage('english')">英文</el-button>
+      <el-button :class="{ selected:language === 'japanese' }" @click="selectLanguage('japanese')">日文</el-button>
+    </div>
 
     <el-button type="primary" @click="sendMessage">发送</el-button>
 
@@ -37,12 +44,12 @@ import axios from 'axios';
 import { ref } from 'vue';
 
 const input = ref('');
-const num = ref("1");
+const num = ref("4");
 const aiResponse = ref('');
 const format = ref('');
 const tone = ref('');
 const length = ref('');
-
+const language=ref('');
 const sendMessage = () => {
   if (input.value.trim() === '') return;
 
@@ -53,10 +60,10 @@ const sendMessage = () => {
   formData.append("format", format.value);
   formData.append("tone", tone.value);
   formData.append("length", length.value);
-
+  formData.append("language", language.value);
   axios({
     method: 'post',
-    url: "http://127.0.0.1:5500/getAI",
+    url: "http://127.0.0.1:5000/getAI",
     data: formData,
   }).then(res => {
     aiResponse.value = res.data.answer;
@@ -79,6 +86,9 @@ const selectTone = (selectedTone: string) => {
 
 const selectLength = (selectedLength: string) => {
   length.value = selectedLength;
+};
+const selectLanguage = (selectedLanguage: string) => {
+  language.value = selectedLanguage;
 };
 </script>
 

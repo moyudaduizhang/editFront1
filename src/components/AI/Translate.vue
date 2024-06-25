@@ -95,7 +95,7 @@ const sendMessage = () => {
   formData.append("cont", input.value);
   axios({
     method: 'post',
-    url: "http://127.0.0.1:5500/getAI",
+    url: "http://127.0.0.1:5000/getAI",
     data: formData,
   }).then(res => {
     aiResponse.value = res.data.answer;
