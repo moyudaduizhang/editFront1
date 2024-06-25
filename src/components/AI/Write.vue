@@ -2,14 +2,14 @@
     <el-input v-model="input" style="width: 240px" ></el-input>  
    <h2>格式</h2>
    <div class="write">
-    <el-button >续写</el-button>
-    <el-button >润色</el-button>
-    <el-button >摘要</el-button>
+    <el-button >大纲</el-button>
+    <el-button >文章</el-button>
+    <el-button >推特</el-button>
     <h2>语气</h2>
    <div class="write">
-    <el-button >续写</el-button>
-    <el-button >润色</el-button>
-    <el-button >摘要</el-button>
+    <el-button >正式的</el-button>
+    <el-button >随意的</el-button>
+    <el-button >专业的</el-button>
     </div>
     <h2>长度</h2>
    <div class="write">
@@ -25,28 +25,17 @@
   import axios from 'axios';
   import { ref } from 'vue';
   const input = ref('');
+  const num=ref(1);
 const aiResponse = ref('');
-  const polish = () => {
-  sendRequest('http://10.255.198.65:5500/getpolish');
-};
-
-const continuation = () => {
-  sendRequest('http://10.255.198.65:5500/getcontinuation');
-};
-
-const zhaiyao = () => {
-  sendRequest('http://10.255.198.65:5500/getabstract');
-};
-
 const sendRequest = (url) => {
   console.log(`调用${url}`);
   let formData = new FormData();
   formData.append("username", "123456");
-  formData.append("key", "xxxxxxx");
+  formData.append("number", num.value);
   formData.append("cont", input.value);
   axios({
     method: 'post',
-    url,
+    url: "http://127.0.0.1:5500/getAI",
     data: formData,
   }).then(res => {
     aiResponse.value = res.data.answer;
