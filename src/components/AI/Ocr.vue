@@ -5,9 +5,9 @@
     <el-upload
       class="upload-demo"
       drag
-      action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+      action=""
       multiple
-      :on-success="handleSuccess"
+      :http-request="uploadRequest"
       style="width: 240px"
     >
       <el-icon class="el-icon--upload"><upload-filled /></el-icon>
@@ -28,25 +28,35 @@
 import { UploadFilled } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 import axios from 'axios'
+import { useTokenStore } from '@/store/userstoken'
 
 const aiResponse = ref('');
-const sendfiled = (file: File) => {
+const store = useTokenStore();
+
+const uploadRequest = (options: any) => {
+  const file = options.file;
   let formData = new FormData();
   formData.append("file", file);
+  formData.append("number", "3");
+  formData.append("username", "admin");
+  formData.append("cont", "");
+
   axios({
     method: 'post',
-    url: "http://127.0.0.1:5500/",
+    url: "http://127.0.0.1:5000/getAI",
     data: formData,
   }).then(res => {
     aiResponse.value = res.data.answer;
-    console.log(res.data.answer);
+    options.onSuccess(res.data, file);
+    console.log('后端返回的消息：', res.data.answer); // 打印后端返回的消息
   }).catch(error => {
     console.error("请求错误: ", error);
+    options.onError(error);
   });
 };
 
 const handleSuccess = (response: any, file: File) => {
   console.log('上传成功:', response);
-  sendfiled(file);
+  // sendfiled 已经在 uploadRequest 内部调用
 };
 </script>
