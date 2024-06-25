@@ -35,7 +35,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import axios from 'axios'
-const num = ref(1)
+const num = ref("2")
 const value1 = ref('')
 const value2 = ref('');
 const input = ref('');
