@@ -18,7 +18,7 @@
   const documents = ref(['文档 1', '文档 2', '文档 3']);
   
   const createNewDocument = () => {
-    router.push('/edit');
+    router.push('/editppt');
   };
   </script>
   

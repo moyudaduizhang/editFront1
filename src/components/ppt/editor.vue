@@ -16,7 +16,7 @@
   
   <script setup lang="ts">
   import { ref } from 'vue';
-  import Slide from './Slide.vue';
+  import Slide from './slider.vue';
   
   const slides = ref([{ content: '幻灯片 1' }]);
   const currentSlideIndex = ref(0);

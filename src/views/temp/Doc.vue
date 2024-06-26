@@ -1,82 +1,140 @@
 <template>
+  <div class="container">
+    <!-- 搜索框和新建模块按钮 -->
+    <div class="top-section">
+      <el-input
+        placeholder="搜索模板"
+        v-model="searchQuery"
+        clearable
+        class="search-box"
+      ></el-input>
+      <el-button class="create-button" type="primary" icon="el-icon-plus" @click="createNew">新建模块</el-button>
+    </div>
+
     <div class="icon-grid-container">
       <!-- 上半部分：文档格式图标 -->
       <div class="icon-section">
         <h3>新建</h3>
         <div class="icon-list">
-          <el-card class="custom-card">
+          <el-card class="custom-card" v-for="item in filteredIcons" :key="item.id">
             <template #header>
-              <div class="card-header">蓝灰色简历</div>
+              <div class="card-header">{{ item.name }}</div>
             </template>
-            <img
-              src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-              style="width: 100%"
-            />
+            <img :src="item.imgSrc" style="width: 100%" />
           </el-card>
-          <!-- 继续添加更多 el-card 元素 -->
         </div>
       </div>
-  
+
       <!-- 下半部分：文档模板图标 -->
       <div class="icon-section">
         <h3>文档模板</h3>
         <div class="icon-list">
-          <el-card class="custom-card">
+          <el-card class="custom-card" v-for="item in filteredTemplates" :key="item.id">
             <template #header>
-              <div class="card-header">蓝灰色简历</div>
+              <div class="card-header">{{ item.name }}</div>
             </template>
-            <img
-              src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-              style="width: 100%"
-            />
+            <img :src="item.imgSrc" style="width: 100%" />
           </el-card>
-          <!-- 继续添加更多 el-card 元素 -->
         </div>
       </div>
     </div>
-  </template>
-  
-  <script setup>
-  import { ElCard } from 'element-plus';
-  import 'element-plus/dist/index.css';
-  
-  // 导入具体的图标组件
-  import { HomeFilled, Document, Edit } from '@element-plus/icons-vue';
-  </script>
-  
-  <style scoped>
-  .icon-grid-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .icon-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-  }
-  
-  .icon-list {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 15px;
-    justify-items: center;
-  }
-  
-  .icon-list > * {
-    font-size: 2rem;
-    cursor: pointer;
-  }
-  
-  .custom-card {
-    max-width: 200px;
-  }
-  
-  .card-header {
-    font-size: 0.675rem; /* 调整字体大小 */
-    text-align:center;
-  }
-  </style>
-  
+  </div>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue';
+import { ElCard, ElInput, ElButton } from 'element-plus';
+import 'element-plus/dist/index.css';
+import { useRouter } from 'vue-router';
+
+// 模拟数据
+const icons = ref([
+  { id: 1, name: '蓝灰色简历', imgSrc: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' },
+  // 添加更多图标数据
+]);
+
+const templates = ref([
+  { id: 1, name: '蓝灰色简历', imgSrc: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' },
+  // 添加更多模板数据
+]);
+
+const searchQuery = ref('');
+
+const filteredIcons = computed(() => {
+  return icons.value.filter(icon => icon.name.includes(searchQuery.value));
+});
+
+const filteredTemplates = computed(() => {
+  return templates.value.filter(template => template.name.includes(searchQuery.value));
+});
+
+const router = useRouter();
+
+const createNew = () => {
+  router.push("/wangEditor");
+};
+</script>
+
+<style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.top-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.search-box {
+  width: 300px;
+}
+
+.create-button {
+  position: absolute;
+  right: 0;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-grid-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.icon-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.icon-list {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 15px;
+  justify-items: center;
+}
+
+.icon-list > * {
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.custom-card {
+  max-width: 200px;
+}
+
+.card-header {
+  font-size: 0.675rem;
+  text-align: center;
+}
+</style>
