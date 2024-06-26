@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AiSidebar: typeof import('./src/components/AI/AiSidebar.vue')['default']
     Chat: typeof import('./src/components/AI/Chat.vue')['default']
+    Editor: typeof import('./src/components/ppt/editor.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
@@ -40,6 +41,7 @@ declare module 'vue' {
     Ocr: typeof import('./src/components/AI/Ocr.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Slider: typeof import('./src/components/ppt/slider.vue')['default']
     Translate: typeof import('./src/components/AI/Translate.vue')['default']
     Write: typeof import('./src/components/AI/Write.vue')['default']
   }

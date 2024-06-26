@@ -3,7 +3,7 @@
     <el-menu router unique-opened :collapse="isCollapse">
       <a class="logo">
         <img src="@/assets/ai.svg" alt="" />
-        <h2>智能文档</h2>
+        <h2 style="margin-left:10px;">智能文档</h2>
       </a>
       
       <router-link to="/" class="el-menu-item">
@@ -52,7 +52,7 @@ import Newfileshow from "@/views/Homepage/Newfileshow.vue";
   display: flex;
   align-items: center;
   text-decoration: none;
-  justify-content: center;
+  margin-left: 15px;
   color: black;
   height: 60px;
   img {

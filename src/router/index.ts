@@ -12,12 +12,17 @@ const router=createRouter({
             children:[
                 {
                     path:'',
-                    component:()=>import('@/views/DocsView.vue'),
+                    component:()=>import('@/views/Homepage/DocsView.vue'),
                 },
                 {
-                    path:'/document',
-                    name:'document',
-                    component:()=>import('@/views/list/Document.vue')
+                    path:'/doc',
+                    name:'doctemp',
+                    component:()=>import('@/views/temp/Doc.vue')
+                },
+                {
+                    path:'/ppt',
+                    name:'ttemp',
+                    component:()=>import('@/views/temp/ppt.vue')
                 },
                 {
                     path:'/wangEditor',
@@ -33,6 +38,11 @@ const router=createRouter({
                     path:'/EditPerson',
                     name:'EditPerson',
                     component:()=>import('@/views/EditPerson.vue')
+                },
+                {
+                    path:'/Editppt',
+                    name:'Editppt',
+                    component:()=>import('@/views/Editor/ppt.vue')
                 },
             ]
         },
