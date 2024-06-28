@@ -11,10 +11,6 @@ const router=createRouter({
             meta:{requiresAuth:true},
             children:[
                 {
-                    path:'',
-                    component:()=>import('@/views/Homepage/DocsView.vue'),
-                },
-                {
                     path:'/doc',
                     name:'doctemp',
                     component:()=>import('@/views/temp/Doc.vue')
@@ -25,9 +21,18 @@ const router=createRouter({
                     component:()=>import('@/views/temp/ppt.vue')
                 },
                 {
+                    path:'',
+                    component:()=>import('@/views/Homepage/DocsView.vue'),
+                },
+                {
                     path:'/wangEditor',
                     name:'wangEditor',
                     component:()=>import('@/views/Editor/Editor.vue')
+                },
+                {
+                    path:'/pptEditor',
+                    name:'pptEditor',
+                    component:()=>import('@/views/Editor/ppt.vue')
                 },
                 {
                     path:'/person',

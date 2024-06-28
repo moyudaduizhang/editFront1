@@ -46,7 +46,7 @@ import { useRouter } from "vue-router";
 import { useTokenStore,useUserAvatarStore } from "@/store/userstoken";
 import { logout } from "@/api/users";
 const avatarstore=useUserAvatarStore()
-console.log("调用了：",avatarstore.avatarUrl)
+
 const currentTime = ref(new Date());
 const greeting = computed(() => {
   const hour = currentTime.value.getHours();

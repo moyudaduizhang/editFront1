@@ -14,6 +14,7 @@
           <Ocr v-if="isocrvisible"/>
           <Write v-if="iswritevisible"/>
       </div>
+      
         <div class="flex flex-col fixed-right">
           <img src="@/assets/talk.svg" class="ocr" @click="showChat"/>
           <img src="@/assets/translate1.svg" class="ocr" @click="showTranslate"/>

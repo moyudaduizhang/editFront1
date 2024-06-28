@@ -1,9 +1,24 @@
 <template>
-  <div class="chat-container" style="width: 240px">
+  <div class="chat-container">
+    <!-- 添加条件渲染，当没有消息时显示图片 -->
+    <div v-if="messages.length === 0" class="image-container">
+      <img class="img" src="@/assets/AIlogo.svg" alt="Placeholder Image">
+      <h1 style="font-size: 20px;">我今天能帮你什么？</h1>
+    </div>
     <div class="message-container">
       <!-- 这里放聊天消息的显示区域，可以根据需要自行设计 -->
-      <div v-for="(message, index) in messages" :key="index" :class="['message-bubble', message.sender]">
-        <div class="message-content">{{ message.content }}</div>
+      <div v-for="(message, index) in messages" :key="index" class="message-wrapper">
+        <div class="message-header">
+          <el-avatar
+            class="mr-3"
+            :size="32"
+            :src="message.sender === 'user' ? avatarstore.avatarUrl : aiAvatar"
+          />
+          <span class="sender-name">{{ message.sender === 'user' ? '用户' : 'AI' }}</span>
+        </div>
+        <div :class="['message-bubble', message.sender]">
+          <div class="message-content">{{ message.content }}</div>
+        </div>
       </div>
     </div>
     <div class="input-container">
@@ -21,10 +36,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import axios from 'axios';
+import { useTokenStore, useUserAvatarStore } from "@/store/userstoken";
 
 const input = ref('');
 const num = ref("1");
 const messages = ref<{ sender: string, content: string }[]>([]);
+const avatarstore = useUserAvatarStore();
+const aiAvatar = 'path/to/ai/avatar.png'; // AI头像路径
 
 const sendMessage = () => {
   if (input.value.trim() === '') return;
@@ -65,6 +83,18 @@ const handleKeyPress = (event: KeyboardEvent) => {
   display: flex;
   flex-direction: column;
   height: 90vh; /* 让聊天界面占满整个页面高度 */
+  width: 100%; /* 让聊天界面占满整个页面宽度 */
+}
+
+.image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1; /* 占据剩余的空间 */
+  .img{
+    width: 40%;
+  }
 }
 
 .message-container {
@@ -81,24 +111,46 @@ const handleKeyPress = (event: KeyboardEvent) => {
   background-color: #ffffff;
 }
 
+.message-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.message-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
 .message-bubble {
   max-width: 70%;
   padding: 10px;
-  margin-bottom: 10px;
   border-radius: 10px;
   word-wrap: break-word;
+  position: relative;
 }
 
 .message-bubble.user {
-  align-self: flex-end;
   background-color: #9fe7a4;
   color: #000;
 }
 
 .message-bubble.ai {
-  align-self: flex-start;
   background-color: #e0e0e0;
   color: #000;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.sender-name {
+  font-weight: bold;
 }
 
 .message-content {

@@ -1,30 +1,144 @@
 <template>
-    <div class="document-manager">
-      <h1>文档管理</h1>
-      <button @click="createNewDocument">新建</button>
-      <ul>
-        <li v-for="(doc, index) in documents" :key="index">
-          文档 {{ index + 1 }}
-        </li>
-      </ul>
+  <div class="container">
+    <!-- 搜索框和新建模块按钮 -->
+    <div class="top-section">
+      <el-input
+        placeholder="搜索模板"
+        v-model="searchQuery"
+        clearable
+        class="search-box"
+      ></el-input>
+      <el-button class="create-button" type="primary" icon="el-icon-plus" @click="createNew">新建模块</el-button>
     </div>
-  </template>
-  
-  <script setup lang="ts">
-  import { ref } from 'vue';
-  import { useRouter } from 'vue-router';
-  
-  const router = useRouter();
-  const documents = ref(['文档 1', '文档 2', '文档 3']);
-  
-  const createNewDocument = () => {
-    router.push('/editppt');
-  };
-  </script>
-  
-  <style scoped>
-  .document-manager {
-    padding: 20px;
-  }
-  </style>
-  
+
+    <div class="icon-grid-container">
+      <!-- 上半部分：文档格式图标 -->
+      <div class="icon-section">
+        <h3>新建</h3>
+        <div class="icon-list">
+          <el-card class="custom-card" v-for="item in filteredIcons" :key="item.id">
+            <template #header>
+              <div class="card-header">{{ item.name }}</div>
+            </template>
+            <img :src="item.imgSrc" style="width: 100%" />
+          </el-card>
+        </div>
+      </div>
+
+      <!-- 下半部分：文档模板图标 -->
+      <div class="icon-section">
+        <h3>文档模板</h3>
+        <div class="icon-list">
+          <el-card class="custom-card" v-for="item in filteredTemplates" :key="item.id">
+            <template #header>
+              <div class="card-header">{{ item.name }}</div>
+            </template>
+            <img :src="item.imgSrc" style="width: 100%" />
+          </el-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue';
+import { ElCard, ElInput, ElButton } from 'element-plus';
+import 'element-plus/dist/index.css';
+import { useRouter } from 'vue-router';
+
+// 模拟数据
+const icons = ref([
+  { id: 1, name: '蓝灰色简历', imgSrc: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' },
+  { id: 1, name: '蓝灰色简历', imgSrc: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' },
+  { id: 1, name: '蓝灰色简历', imgSrc: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' },
+  { id: 1, name: '蓝灰色简历', imgSrc: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' },
+  { id: 1, name: '蓝灰色简历', imgSrc: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' },
+  // 添加更多图标数据
+]);
+
+const templates = ref([
+  { id: 1, name: '蓝灰色简历', imgSrc: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' },
+  // 添加更多模板数据
+]);
+
+const searchQuery = ref('');
+
+const filteredIcons = computed(() => {
+  return icons.value.filter(icon => icon.name.includes(searchQuery.value));
+});
+
+const filteredTemplates = computed(() => {
+  return templates.value.filter(template => template.name.includes(searchQuery.value));
+});
+
+const router = useRouter();
+
+const createNew = () => {
+  router.push("/Editppt");
+};
+</script>
+
+<style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.top-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.search-box {
+  width: 300px;
+}
+
+.create-button {
+  position: absolute;
+  right: 0;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-grid-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.icon-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.icon-list {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 15px;
+  justify-items: center;
+}
+
+.icon-list > * {
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.custom-card {
+  max-width: 200px;
+}
+
+.card-header {
+  font-size: 0.675rem;
+  text-align: center;
+}
+</style>

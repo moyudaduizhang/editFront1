@@ -1,21 +1,57 @@
 <template>
-    <div id="app">
-      <Editor />
-    </div>
-  </template>
-  
-  <script setup lang="ts">
-  import Editor from '@/components/ppt/editor.vue';
-  </script>
-  
-  <style>
-  #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
-  }
-  </style>
-  
+  <DocumentEditor 
+      id="docEditor" 
+      documentServerUrl="http://documentserver/"
+      :config="config"
+      :events_onDocumentReady="onDocumentReady"
+      :onLoadComponentError="onLoadComponentError"
+  /> 
+</template>
+
+<script lang="ts">
+import { defineComponent } from 'vue';
+import { DocumentEditor } from "@onlyoffice/document-editor-vue";
+
+export default defineComponent({
+  name: 'ExampleComponent',
+  components: {
+      DocumentEditor
+  },
+  data() {
+      return {
+          config: {
+              document: {
+                  fileType: "docx",
+                  key: "Khirz6zTPdfd7",
+                  title: "Example Document Title.docx",
+                  url: "https://example.com/url-to-example-document.docx"
+              },
+              documentType: "word",
+              editorConfig: {
+                  callbackUrl: "https://example.com/url-to-callback.ashx"
+              }
+          }
+      }
+  },
+  methods: {
+      onDocumentReady() {
+          console.log("Document is loaded");
+      },
+      onLoadComponentError (errorCode, errorDescription) {
+          switch(errorCode) {
+              case -1: // Unknown error loading component
+                  console.log(errorDescription);
+                  break;
+
+              case -2: // Error load DocsAPI from http://documentserver/
+                  console.log(errorDescription);
+                  break;
+
+              case -3: // DocsAPI is not defined
+                  console.log(errorDescription);
+                  break;
+          }
+      }
+  },
+});
+</script>
