@@ -1,7 +1,15 @@
 <template>
   <div class="container">
-    <h1 style="font-size: 40px; border-bottom: 2px solid black; padding-bottom: 10px;">新建</h1>
-    <h2 style="font-size: 20px;">基础文档</h2>
+    <h1
+      style="
+        font-size: 40px;
+        border-bottom: 2px solid black;
+        padding-bottom: 10px;
+      "
+    >
+      新建
+    </h1>
+    <h2 style="font-size: 20px">基础文档</h2>
     <div class="icons">
       <div class="icon-item">
         <img @click="navigateTo('doc')" src="@/assets/WORD.svg" />
@@ -20,7 +28,7 @@
         <div class="icon-text">PDF</div>
       </div>
     </div>
-    <h2 style="font-size: 20px;">应用服务</h2>
+    <h2 style="font-size: 20px">应用服务</h2>
     <div class="icons">
       <div class="icon-item">
         <img @click="navigateTo('mindmap')" src="@/assets/思维导图.svg" />
@@ -39,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 const router = useRouter();
 
 const navigateTo = (type: string) => {

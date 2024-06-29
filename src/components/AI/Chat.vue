@@ -57,7 +57,7 @@ const sendMessage = () => {
 
   axios({
     method: 'post',
-    url: "http://127.0.0.1:5000/getAI",
+    url: "http://3b6b09fb.r20.cpolar.top/getAI",
     data: formData,
   }).then(res => {
     messages.value.push({ sender: 'ai', content: res.data.answer });

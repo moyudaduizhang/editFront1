@@ -8,7 +8,6 @@
         clearable
         class="search-box"
       ></el-input>
-      <el-button class="create-button" type="primary" icon="el-icon-plus" @click="createNew">新建模块</el-button>
     </div>
 
     <div class="icon-grid-container">
@@ -16,12 +15,20 @@
       <div class="icon-section">
         <h3>新建</h3>
         <div class="icon-list">
+          <!-- 新建模块按钮 -->
+          <div class="custom-card new-card" @click="createNew">
+            <i class="el-icon-plus">
+              <el-icon><Plus /></el-icon>
+            </i>
+            
+          </div>
           <el-card class="custom-card" v-for="item in filteredIcons" :key="item.id">
             <template #header>
               <div class="card-header">{{ item.name }}</div>
             </template>
             <img :src="item.imgSrc" style="width: 100%" />
           </el-card>
+          
         </div>
       </div>
 
@@ -43,7 +50,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { ElCard, ElInput, ElButton } from 'element-plus';
+import { ElCard, ElInput } from 'element-plus';
 import 'element-plus/dist/index.css';
 import { useRouter } from 'vue-router';
 
@@ -84,10 +91,9 @@ const createNew = () => {
 
 .top-section {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-  position: relative;
 }
 
 .search-box {
@@ -95,13 +101,14 @@ const createNew = () => {
 }
 
 .create-button {
-  position: absolute;
-  right: 0;
   width: 50px;
   height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .icon-grid-container {
@@ -124,14 +131,32 @@ const createNew = () => {
   justify-items: center;
 }
 
-.icon-list > * {
-  font-size: 2rem;
-  cursor: pointer;
-}
-
 .custom-card {
   max-width: 200px;
+  width: 100%;
+  height: 100%;
 }
+
+.new-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #dcdfe6; /* 加粗边框 */
+  border-radius: 5px; /* 圆角边框 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加阴影 */
+  cursor: pointer;
+  transition: box-shadow 0.3s ease; /* 平滑过渡效果 */
+}
+
+.new-card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* 鼠标悬停时增加阴影 */
+}
+
+.el-icon-plus {
+  font-size: 24px; /* 调整图标大小 */
+  color: #409eff; /* 调整图标颜色 */
+}
+
 
 .card-header {
   font-size: 0.675rem;

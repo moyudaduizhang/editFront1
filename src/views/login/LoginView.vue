@@ -1,24 +1,9 @@
 <template>
-  <!-- 做过改动login-container -> container -->
   <div class="out-container">
     <div class="container">
       <!-- 删去login-form -->
       <el-form :rules="rules" :ref="formRef" :model="form" label-width="auto" > 
-        <!-- <h2 class="form-title">用户登录</h2>
-        <el-form-item label="用户名" prop="user">
-          <el-input v-model="form.user" placeholder="请输用户名" />
-        </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="form.password" type="password" placeholder="请输入密码" />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="onSubmit" :loading="isLoading" class="login-button">登录</el-button>
-        </el-form-item>
-        <el-form-item> 
-          <RouterLink to="/register">
-            <el-button  class="register-button">注册</el-button> 
-          </RouterLink>
-        </el-form-item> -->
+       
 
         <!-- <div class="small-background"></div> -->
         <h1 class="form-title">用户登录</h1>
@@ -72,8 +57,8 @@
   
   // do not use same name with ref
   const form = reactive({
-    user: '',
-    password: '',
+    user: 'admin',
+    password: '123456',
   })
   
   //登录事件处理
@@ -127,50 +112,6 @@
 
 
 <style lang="scss" scoped>
-// .login{
-//     background-color:beige;
-
-// }
-// .el-form{
-//     width:600px;
-//     background-color:beige;
-// }
-// .login-container {
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   height: 100vh;
-// }
-
-// .login-form {
-//   max-width: 400px;
-//   width: 100%;
-//   padding: 20px;
-//   border: 1px solid #ccc;
-//   border-radius: 5px;
-//   background: #f5f5f5;
-// }
-
-// .form-title {
-//   text-align: center;
-//   margin-bottom: 20px;
-//   color:black;
-// }
-
-// .login-button {
-//   width: 100%;
-// }
-
-// .register-link {
-//   display: flex;
-//   justify-content: center;
-// }
-
-// .register-button {
-//   width:100%;
- 
-// }
-
 //新增
 * {
   margin: 0;

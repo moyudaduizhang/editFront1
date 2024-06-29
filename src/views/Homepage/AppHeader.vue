@@ -1,7 +1,7 @@
 <template>
   <el-header class="header">
     <div class="header-left">
-      <el-icon @click="isCollapse=!isCollapse" class="collapse-icon">
+      <el-icon @click="isCollapse = !isCollapse" class="collapse-icon">
         <Expand v-show="isCollapse" />
         <Fold v-show="!isCollapse" />
       </el-icon>
@@ -11,25 +11,21 @@
     </div>
     <el-dropdown class="header-right">
       <span class="el-dropdown-link">
-        <el-avatar
-            class="mr-3"
-            :size="32"
-            :src="`${avatarstore.avatarUrl}`"
-          />
+        <el-avatar class="mr-3" :size="32" :src="`${avatarstore.avatarUrl}`" />
         <el-icon class="arrow-down-icon">
-          <arrow-down/>
+          <arrow-down />
         </el-icon>
       </span>
-      
+
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item @click="$router.push({name:'person'})">
+          <el-dropdown-item @click="$router.push({ name: 'person' })">
             <el-icon><User /></el-icon>个人主页
           </el-dropdown-item>
           <el-dropdown-item @click="logoutbutton">
             <el-icon><CloseBold /></el-icon>退出登录
           </el-dropdown-item>
-          <el-dropdown-item @click="$router.push({name:'setting'})">
+          <el-dropdown-item @click="$router.push({ name: 'setting' })">
             <el-icon><Setting /></el-icon>设置
           </el-dropdown-item>
         </el-dropdown-menu>
@@ -41,11 +37,11 @@
 import { ref, computed, onMounted } from "vue";
 import { Expand, Fold } from "@element-plus/icons-vue";
 import { isCollapse } from "@/components/layout/isCollapse";
-import { ElMessageBox,ElMessage } from "element-plus";
+import { ElMessageBox, ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
-import { useTokenStore,useUserAvatarStore } from "@/store/userstoken";
+import { useTokenStore, useUserAvatarStore } from "@/store/userstoken";
 import { logout } from "@/api/users";
-const avatarstore=useUserAvatarStore()
+const avatarstore = useUserAvatarStore();
 
 const currentTime = ref(new Date());
 const greeting = computed(() => {
@@ -66,22 +62,22 @@ const greeting = computed(() => {
 });
 const router1 = useRouter();
 //退出
-const logoutbutton=async ()=>{
- await ElMessageBox.confirm("确定要退出吗？", "提示", {
+const logoutbutton = async () => {
+  await ElMessageBox.confirm("确定要退出吗？", "提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning",
   }).catch(() => {
-    ElMessage.error("取消退出")
-    return new Promise(() => {})
+    ElMessage.error("取消退出");
+    return new Promise(() => {});
   });
   await logout().catch(() => {
-   // ElMessage.error("退出失败");
+    // ElMessage.error("退出失败");
   });
-    ElMessage.success("退出成功"),
+  ElMessage.success("退出成功"),
     useTokenStore().saveToken(""),
-    router1.push("/login")
-}
+    router1.push("/login");
+};
 const updateTime = () => {
   currentTime.value = new Date();
   setTimeout(updateTime, 60000); // 每分钟更新一次时间
@@ -89,8 +85,10 @@ const updateTime = () => {
 
 onMounted(() => {
   updateTime();
-   // 确保组件初始化时从 store 获取最新的 avatarUrl
-   avatarstore.avatarUrl = avatarstore.avatarUrl || 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png';
+  // 确保组件初始化时从 store 获取最新的 avatarUrl
+  avatarstore.avatarUrl =
+    avatarstore.avatarUrl ||
+    "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png";
 });
 </script>
 <style lang="scss" scoped>
@@ -130,7 +128,7 @@ onMounted(() => {
       display: flex;
       align-items: center;
       cursor: pointer;
-      
+
       .el-avatar {
         margin-right: 10px;
       }
