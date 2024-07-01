@@ -10,7 +10,7 @@
           <div class="dataValue">{{ item.value }}</div>
         </div>
       </div>
-      <div class="desc">如果你是使用者：ai Editor提供了一个完整的思维导图软件，支持在线和客户端两种使用方式，所有功能完全免费。</div>
+      <div class="desc">IT先疯</div>
       <div class="functionList">
         <div class="functionItem" v-for="(item, index) in functionList" :key="index">
           <div class="icon iconfont" :class="[item.icon]"></div>
@@ -25,116 +25,93 @@
 </template>
 
 <script setup>
-const dataList = [
+import { ref } from 'vue'
+const dataList = ref([
   {
     icon: 'iconstar',
-    value: 'Github star数量600+'
+    value: 'Github star数量0+'
   },
   {
     icon: 'iconfork',
-    value: 'Github fork数量150+'
-  },
-  {
-    icon: 'iconxiazai',
-    value: 'npm总下载次数10000+'
+    value: 'Github fork数量0+'
   },
   {
     icon: 'iconteamwork',
-    value: '代码贡献者8+'
+    value: '代码贡献者0+'
   }
-]
-const functionList = [
+])
+const functionList = ref([
   {
     icon: 'iconjingzi',
-    name: '多文档格式编辑',
-    value: '支持常见的word，ppt，excel，pdf，markdown等格式的文档。'
+    name: 'OCR（光学字符识别）',
+    value: '能够识别图片中的文字并转换为可编辑的文本格式。'
   },
   {
     icon: 'iconjiegou',
-    name: '排版',
-    value: '支持ai一键排版'
+    name: '智能聊天',
+    value: '集成了自然语言处理功能，可以进行智能对话和回答问题。'
   },
   {
     icon: 'iconjianpan',
-    name: '贴心助手',
-    value: '24小时在线的ai助手，帮你解答使用方面的问题'
+    name: '多模态RAG',
+    value: '图片、音频、视频等多种格式的编辑和处理。'
   },
   {
     icon: 'iconzitixiahuaxian',
-    name: '富文本',
-    value: '节点支持普通文本和富文本两种类型，通过富文本可以创建样式丰富的节点文本内容。'
+    name: '语音识别',
+    value: '可以将语音输入转换为文本格式。'
   },
   {
     icon: 'iconimage',
-    name: '图片',
-    value: '选中任一节点，选择上传图片，让内容达到图文并茂。'
+    name: '多文档格式编辑',
+    value: '支持多种文档格式的编辑和转换。'
   },
   {
     icon: 'icongaikuozonglan',
-    name: '概要',
-    value: '补充表述几个节点之间的关系。'
+    name: '智能排版',
+    value: '自动调整文字和页面布局，提高文档的整体美观度'
   },
   {
     icon: 'iconxiaolian',
-    name: '图标',
-    value: '通过添加图标来让节点内容更丰富。'
+    name: '智能生成',
+    value: '利用AI技术自动生成编辑内容，提高编辑效率。'
   },
   {
     icon: 'iconchaolianjie',
-    name: '超链接',
-    value: '节点可插入超链接，鼠标点击即可实现跳转。'
+    name: '实时协同编辑',
+    value: '支持多人同时在线编辑一个文档，能够实时同步各位编辑者的操作，提高团队协作效率。'
   },
   {
     icon: 'iconflow-Mark',
-    name: '备注',
-    value: '详细的内容可以放在备注中，节点内显得更简单明了。'
+    name: '智能推荐',
+    value: '根据用户的编辑历史和偏好，为用户推荐适合的文章、图片、视频等内容，提供编辑灵感。'
   },
   {
     icon: 'iconbiaoqian',
-    name: '标签',
-    value: '如果添加带颜色的标签，来突出要表达的重点。'
+    name: '语法检查',
+    value: '集成了语法检查功能，能够自动识别和纠正文本中的语法错误，提高文档的专业度和准确性。'
   },
   {
     icon: 'iconlianjiexian',
-    name: '关联线',
-    value: '通过添加关联线来表明节点之间的关联关系。'
+    name: '文件版本管理',
+    value: '自动保存文件历史版本，支持用户查看、恢复、比对不同版本的文档，确保编辑过程的安全和有序性。'
   },
   {
     icon: 'iconmouseL',
-    name: '拖动',
-    value: '画布和节点都可以进行拖动。'
+    name: '智能搜索',
+    value: '集成了智能搜索引擎，可以通过关键词快速定位文档中的内容，提高编辑效率和检索速度。'
   },
   {
     icon: 'icondaohang',
-    name: '导航器',
-    value: '通过导航器可以方便知道当前画布处于思维导图的哪个部分。'
-  },
-  {
-    icon: 'icondaochu',
-    name: '导入导出',
-    value: '支持多种文件格式的导入和导出。'
-  },
-  {
-    icon: 'iconshuiyin',
-    name: '水印',
-    value: '内置支持水印功能，防止隐私泄露。'
-  },
-  {
-    icon: 'iconwithdraw',
-    name: '前进后退',
-    value: '不小心误操作删除或修改内容支持一键撤回或恢复。'
-  },
-  {
-    icon: 'iconfuhao-dagangshu',
-    name: '大纲',
-    value: '根据大纲编辑思维导图，让内容更详细也不容易出错。'
+    name: '智能提醒',
+    value: '根据用户设定的提醒时间和内容，智能编辑器能够及时提醒用户完成任务或者重要事件。'
   },
   {
     icon: 'iconshezhi',
-    name: '丰富的设置',
-    value: '提供了丰富的功能设置，可以选择合适你的操作行为。'
+    name: '自动备份',
+    value: '定期自动备份用户编辑的文档，确保文档数据的安全性和可靠性，避免意外数据丢失。'
   }
-]
+])
 </script>
 
 <style lang="less" scoped>

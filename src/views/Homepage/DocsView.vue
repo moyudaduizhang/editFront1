@@ -32,7 +32,7 @@
  
  const fetchdocsdata = async () => {
    try {
-     const response = await axios.post('http://3b6b09fb.r20.cpolar.top/show_file', { user: store.token.access_token });
+     const response = await axios.post('http://73e2836a.r15.cpolar.top/show_file', { user: store.token.access_token });
      if (response.data.success === 'true' && response.data.data.length > 0) {
        alldocs.value = response.data.data;
      } else {

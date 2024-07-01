@@ -1,7 +1,14 @@
 <script setup>
 import { ref, watch, onMounted, shallowRef } from "vue";
 import MindMap from "simple-mind-map";
-import Toolbar from "./components/Toolbar.vue";
+import THeme from "@/views/Editor/mindmap/components/Theme.vue";
+import Toolbar from "@/views/Editor/mindmap/components/Toolbar.vue";
+import Export from 'simple-mind-map/src/plugins/Export.js'
+import ExportXMind from 'simple-mind-map/src/plugins/ExportXMind.js'
+import ExportPDF from 'simple-mind-map/src/plugins/ExportPDF.js'
+MindMap.usePlugin(ExportPDF)
+MindMap.usePlugin(Export)
+MindMap.usePlugin(ExportXMind)
 let mindMap = null;
 //记录前进回退
 const isStart = ref(true);
@@ -69,6 +76,7 @@ const inserImage = () => {
     });
   });
 };
+
 const cut = () => {
   mindMap.renderer.cut();
 };
@@ -121,8 +129,8 @@ const insertLine = () => {
 };
 const Theme = ref("");
 // 切换主题
-const changeTheme = () => {
-  mindMap.setTheme("classic");
+const changeTheme = (themeName) => {
+  mindMap.setTheme(themeName);
 };
 
 // 注册并使用新主题
@@ -385,6 +393,129 @@ const hideMenu = () => {
   show.value = false;
 };
 
+// 导入文件
+const onInput = (e) => {
+  let file = e.target.files[0]
+  let reg = /\.(smm|xmind|json|xlsx|md)$/
+  if (!reg.test(file.name)) {
+    alert('请选择.smm、.json、.xmind、.xlsx、.md文件')
+    return
+  }
+  if (/\.(smm|json)$/.test(file.name)) {
+    handleSmm(file)
+  } else if (/\.xmind$/.test(file.name)) {
+    handleXmind(file)
+  } else if (/\.xlsx$/.test(file.name)) {
+    handleExcel(file)
+  } else if (/\.md$/.test(file.name)) {
+    handleMd(file)
+  }
+}
+
+// 处理.smm、.json文件
+const handleSmm = (file) => {
+  let fileReader = new FileReader()
+  fileReader.readAsText(file)
+  fileReader.onload = evt => {
+    try {
+      let data = JSON.parse(evt.target.result)
+      if (typeof data !== 'object') {
+        throw new Error('文件内容有误')
+      }
+      setData(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
+
+// 处理.xmind文件
+const handleXmind = async (file) => {
+  try {
+    let data = await MindMap.xmind.parseXmindFile(file)
+    setData(data)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+// 处理.xlsx文件
+const handleExcel = async (file) => {
+  // 略
+}
+
+// 处理markdown文件
+const handleMd = async (file) => {
+  let fileReader = new FileReader()
+  fileReader.readAsText(file)
+  fileReader.onload = async evt => {
+    try {
+      let data = await MindMap.markdown.transformMarkdownTo(evt.target.result)
+      setData(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
+
+// 导入数据
+const setData = (data) => {
+  if (data.root) {
+    mindMap.setFullData(data)
+  } else {
+    mindMap.setData(data)
+  }
+  mindMap.view.reset()
+}
+
+
+const Exportpng = () => {
+  // 导出为PNG
+mindMap.doExport.png().then((data) => {
+  // 创建下载链接并触发下载
+  let a = document.createElement('a')
+  a.href = data
+  a.download = 'filename.png'
+  a.click()
+})
+};
+const Exportjson = () => {
+  mindMap.doExport.json().then((data) => {
+  // 创建下载链接并触发下载
+  let a = document.createElement('a')
+  a.href = data
+  a.download = 'filename.json'
+  a.click()
+})
+};
+const Exportxmind = () => {
+  mindMap.doExport.xmind().then((data) => {
+  // 创建下载链接并触发下载
+  let a = document.createElement('a')
+  a.href = data
+  a.download = 'filename.xmind'
+  a.click()
+})
+};
+const Exporttxt = () => {
+  mindMap.doExport.txt().then((data) => {
+  // 创建下载链接并触发下载
+  let a = document.createElement('a')
+  a.href = data
+  a.download = 'filename.txt'
+  a.click()
+})
+};
+
+const Exportpdf = () => {
+  mindMap.doExport.pdf().then((data) => {
+  // 创建下载链接并触发下载
+  let a = document.createElement('a')
+  a.href = data
+  a.download = 'filename.pdf'
+  a.click()
+})
+};
 onMounted(() => {
   mindMap = new MindMap({
     el: document.getElementById("mindMapContainer"),
@@ -407,8 +538,8 @@ onMounted(() => {
         },
       ],
     },
+
     initRootNodePosition: ["left", "center"],
-    enableFreeDrag: false,
   });
   //监听右键点击事件
   mindMap.on("node_contextmenu", (e, node) => {
@@ -427,6 +558,12 @@ onMounted(() => {
     mousedownX.value = e.clientX;
     mousedownY.value = e.clientY;
     isMousedown.value = true;
+  });
+
+  mindMap.on("data_change", (data) => {
+    // data数据是不带节点对象的纯数据
+    // 如果你需要操作节点对象，可以使用mindMap.renderer.renderTree
+    console.log(data, mindMap.renderer.renderTree);
   });
 
   mindMap.on("mouseup", (e) => {
@@ -464,7 +601,8 @@ onMounted(() => {
 <template>
   <div class="mindMapDemo">
     <div id="mindMapContainer"></div>
-    <div class="toolbar" v-if="activeNodes.length > 0">
+
+    <div class="toolbar">
       <div class="toolbar-item" @click="back" v-if="!isStart">
         <el-icon><img src="@/assets/回退.svg" alt="切换主题" /></el-icon>
         <span>回退</span>
@@ -473,27 +611,15 @@ onMounted(() => {
         <el-icon><img src="@/assets/前进.svg" alt="切换主题" /></el-icon>
         <span>前进</span>
       </div>
-      <div
-        class="toolbar-item"
-        @click="insertNode"
-        v-if="activeNodes.length > 0"
-      >
+      <div class="toolbar-item" @click="insertNode">
         <el-icon><img src="@/assets/兄弟节点.svg" alt="切换主题" /></el-icon>
         <span>插入兄弟节点</span>
       </div>
-      <div
-        class="toolbar-item"
-        @click="insertChildNode"
-        v-if="activeNodes.length > 0"
-      >
+      <div class="toolbar-item" @click="insertChildNode">
         <el-icon><img src="@/assets/添加子节点.svg" alt="切换主题" /></el-icon>
         <span>插入子节点</span>
       </div>
-      <div
-        class="toolbar-item"
-        @click="deleteNode"
-        v-if="activeNodes.length > 0"
-      >
+      <div class="toolbar-item" @click="deleteNode">
         <el-icon><img src="@/assets/删除节点.svg" alt="切换主题" /></el-icon>
         <span>删除节点</span>
       </div>
@@ -528,15 +654,28 @@ onMounted(() => {
       </div>
     </div>
 
-    <div class="toolbar-2" v-if="activeNodes.length > 0">
+    <div class="toolbar-2">
+      <div class="toolbar-item" @click="changeLayout">
+        <el-icon><img src="@/assets/背景布.svg" alt="切换结构" /></el-icon>
+        <span>背景样式</span>
+      </div>
       <div class="toolbar-item" @click="changeLayout">
         <el-icon><img src="@/assets/全科.svg" alt="切换结构" /></el-icon>
         <span>结构</span>
       </div>
-      <div class="toolbar-item" @click="changeTheme">
-        <el-icon><img src="@/assets/mindmap主题.svg" alt="切换主题" /></el-icon>
-        <span>主题</span>
-      </div>
+
+      <el-popover :width="400" :height="100" trigger="click">
+        <template #reference>
+          <div class="toolbar-item">
+            <el-icon
+              ><img src="@/assets/mindmap主题.svg" alt="切换主题"
+            /></el-icon>
+            <span>主题</span>
+          </div>
+        </template>
+        <THeme @theme-selected="changeTheme"/>
+      </el-popover>
+
       <div class="toolbar-item" @click="defineTheme">
         <el-icon
           ><img src="@/assets/新建主题.svg" alt="注册并使用新主题"
@@ -545,10 +684,49 @@ onMounted(() => {
       </div>
     </div>
 
-    <div class="toolbar-3" v-if="activeNodes.length > 0">
+    <div class="toolbar-4">
+
+      <div class="toolbar-item" >
+        <el-icon><input type="file" @input="onInput" style="position: relative;"><img src="@/assets/导入.svg" ></el-icon>
+        <span>导入</span>
+      </div>
+
+      <el-popover :width="300" :height="100" trigger="click">
+        <template #reference>
+      <div class="toolbar-item">
+        <el-icon><img src="@/assets/导出.svg" alt="切换结构" /></el-icon>
+        <span>导出</span>
+      </div>
+      </template>
+      <div style="display:flex; border: 2px solid #333; border-radius: 10px;">
+  <el-icon style="font-size:32px" @click="Exportpdf"><img src="@/assets/pdf2.svg" /></el-icon>
+  <span>PDF</span>
+</div>
+    <div style="display:flex; border: 2px solid #333; border-radius: 10px;">
+      <el-icon style="font-size:32px" @click="Exportxmind"><img src="@/assets/xmind.svg"/></el-icon>
+      <span>XMIND</span>
+    </div>
+    <div style="display:flex; border: 2px solid #333; border-radius: 10px;">
+      <el-icon style="font-size:32px" @click="Exportpng"><img src="@/assets/png.svg"></el-icon>
+      <span>PNG</span>
+    </div>
+    <div style="display:flex; border: 2px solid #333; border-radius: 10px;">
+      <el-icon style="font-size:32px" @click="Exportjson"><img src="@/assets/json.svg"/></el-icon>
+      <span>JSON</span>
+    </div>
+    </el-popover>
+
+      <div class="toolbar-item" @click="changeTheme">
+        <el-icon><img src="@/assets/快捷键设置.svg" alt="切换主题" /></el-icon>
+        <span>快捷键设置</span>
+      </div>
+    </div>
+
+    <div class="toolbar-3" v-if="activeNodes.length">
       <h1>节点样式</h1>
       <div class="toolbar-item">
         <h1>文字</h1>
+
         <el-select
           v-model="fontFamily"
           placeholder="字体样式"
@@ -561,10 +739,11 @@ onMounted(() => {
             :value="item.value"
           />
         </el-select>
+
         <el-select
           v-model="fontSize"
           placeholder="字体大小"
-          style="width: 240px"
+          style="width: 120px"
         >
           <el-option
             v-for="item in fontSizeOptions"
@@ -573,39 +752,52 @@ onMounted(() => {
             :value="item.value"
           />
         </el-select>
-        <el-icon
-          ><img src="@/assets/字体加粗.svg" @click="setbold" alt="字体"
-        /></el-icon>
-        <el-select v-model="color" placeholder="字体颜色" style="width: 240px">
-          <el-option
-            v-for="item in colorOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-        <el-select v-model="lineHeight" placeholder="行高" style="width: 240px">
-          <el-option
-            v-for="item in lineHeightOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
+        <div style="display: flex">
+          <el-icon
+            ><img src="@/assets/字体加粗.svg" @click="setbold" alt="字体"
+          /></el-icon>
 
-        <el-select
-          v-model="textDecoration"
-          placeholder="划线"
-          style="width: 240px"
-        >
-          <el-option
-            v-for="item in textDecorationOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
+          <el-select
+            v-model="textDecoration"
+            placeholder="划线"
+            style="width: 120px"
+          >
+            <el-option
+              v-for="item in textDecorationOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </div>
+        <div style="display: flex">
+          <el-select
+            v-model="color"
+            placeholder="字体颜色"
+            style="width: 120px"
+          >
+            <el-option
+              v-for="item in colorOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+          <el-select
+            v-model="lineHeight"
+            placeholder="行高"
+            style="width: 120px"
+          >
+            <el-option
+              v-for="item in lineHeightOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </div>
       </div>
+
       <div class="toolbar-item">
         <h1>边框</h1>
         <el-select
@@ -732,7 +924,7 @@ onMounted(() => {
 
 .toolbar-2 {
   position: absolute;
-  left: 820px; /* Adjusted to be on the right side of toolbar */
+  left: 730px; /* Adjusted to be on the right side of toolbar */
   top: 10px;
   display: flex;
   flex-wrap: wrap;
@@ -743,6 +935,20 @@ onMounted(() => {
   border-radius: 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
+.toolbar-4 {
+  position: absolute;
+  left: 990px; /* Adjusted to be on the right side of toolbar */
+  top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
 .toolbar-3 {
   position: absolute;
   left: 1220px; /* Adjusted to be on the right side of toolbar */

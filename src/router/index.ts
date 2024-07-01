@@ -34,6 +34,11 @@ const router = createRouter({
           component: () => import("@/views/Editor/Editor.vue"),
         },
         {
+          path:"/drawing",
+          name: "mindmap",
+          component: () => import("@/views/temp/draw.vue"),
+        },
+        {
           path: "/mindmap",
           name: "mindmaptemp",
           component: () => import("@/views/temp/mindmap.vue"),
@@ -62,6 +67,11 @@ const router = createRouter({
           path: "/Editmindmap",
           name: "Editmindmap",
           component: () => import("@/views/Editor/mindmap/mindmap.vue"),
+        },
+        {
+          path:"/Editdraw",
+          name:"Editdraw",
+          component:()=>import("@/views/Editor/draw.vue"),
         },
       ],
     },
