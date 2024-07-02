@@ -104,7 +104,7 @@ const router = createRouter({
     {
       path: "/:xxx(.*)*",
       name: "ErrorPage",
-      component: () => import("@/views/ErrorPage.vue"),
+      component: () => import("@/views/404.vue"),
     },
   ],
 });

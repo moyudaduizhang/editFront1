@@ -7,7 +7,7 @@ import router from './router'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import 'virtual:svg-icons-register'
-import 'uno.css'
+
 import 'primevue/resources/primevue.min.css'; // Core CSS
 import 'primeicons/primeicons.css'; // Icons
 

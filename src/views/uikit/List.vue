@@ -31,7 +31,7 @@ const sortKey = ref(null);
 const sortOrder = ref(null);
 const sortField = ref(null);
 const sortOptions = ref([
-    { label: 'Price High to Low', value: '!price' },
+    { label: '修改时间', value: '!price' },
     { label: 'Price Low to High', value: 'price' }
 ]);
 

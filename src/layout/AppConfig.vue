@@ -119,7 +119,7 @@ const onFocusRingColorChange = (value) => {
     <button class="layout-config-button p-link" type="button" @click="onConfigButtonClick()">
         <i class="pi pi-cog"></i>
     </button>
-
+    
     <Sidebar v-model:visible="visible" position="right" class="layout-config-sidebar w-26rem" pt:closeButton="ml-auto">
         <div class="p-2">
             <section class="pb-4 flex align-items-center justify-content-between border-bottom-1 surface-border">

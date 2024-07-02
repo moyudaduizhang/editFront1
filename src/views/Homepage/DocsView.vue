@@ -1,12 +1,9 @@
 <template>
-  <el-card style="max-width: auto">
+  <el-card style="width: auto">
      <template #header>
-       <div class="card-header">
-         <el-button type="primary" @click="router1.push({name:'wangEditor'})">新建</el-button>
-       </div>
      </template>
      
-     <el-table :data="alldocs" border style="width: 100%">
+     <el-table :data="alldocs" border style="width: auto;display: flex ;">
        <el-table-column prop="date" label="修改日期" width="180" align="center" />
        <el-table-column prop="name" label="名称" width="400" align="center" />
        <el-table-column prop="address" label="操作" align="center">
@@ -24,22 +21,21 @@
  import { getalldocs } from '@/api/doc';
  import { useRouter } from 'vue-router';
  import { useTokenStore } from '@/store/userstoken';
+
  import axios from 'axios';
- 
  const router1 = useRouter();
  const store = useTokenStore();
  const alldocs = ref([]);
- 
  const fetchdocsdata = async () => {
    try {
      const response = await axios.post('http://132df498.r16.cpolar.top/show_file', { user: store.token.access_token });
      if (response.data.success === 'true' && response.data.data.length > 0) {
        alldocs.value = response.data.data;
      } else {
-       alert(`获取数据失败: ${response.data.message}`);
+       console.log(`获取数据失败: ${response.data.message}`);
      }
    } catch (error) {
-     alert('发生错误: ' + error.message);
+    console.log('发生错误: ' + error.message);
    }
  };
 // const fetchdocsdata = async () => {

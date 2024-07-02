@@ -1,4 +1,4 @@
-<template>
+i<template>
   <div class="chat-container">
     <!-- 添加条件渲染，当没有消息时显示图片 -->
     <div v-if="messages.length === 0" class="image-container">
@@ -21,18 +21,20 @@
         </div>
       </div>
     </div>
+    <div class="button-container">
+     <img src="@/assets/聊天历史.svg" @click="showChatHistory" />
+     <img src="@/assets/新聊天.svg" @click="startNewChat" />
+     <img src="@/assets/阅读.svg"  @click="readDocument" />
+     <img src="@/assets/已上传文件.svg"  @click="triggerFileUpload" />
+    </div>
     <div class="input-container">
-      <!-- PDF 上传图标按钮 -->
-      <el-button @click="triggerFileUpload">
-        <el-icon><UploadFilled /></el-icon>
-      </el-button>
       <!-- 隐藏的文件输入框 -->
       <input ref="fileInput" type="file" @change="handleFileUpload" style="display: none;" />
       <el-input 
         v-model="input" 
         type="textarea" 
-        :autosize="{ minRows: 4, maxRows: 5 }" 
-        placeholder="输入以聊天" 
+        :autosize="{ minRows: 5, maxRows: 10 }" 
+        placeholder="输入聊天..." 
         @keypress="handleKeyPress" 
       />
       <div v-if="file" class="file-info">{{ file.name }}</div>
@@ -44,7 +46,7 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import { useTokenStore, useUserAvatarStore } from "@/store/userstoken";
-import { UploadFilled } from '@element-plus/icons-vue'; // 确保已安装Element Plus和相关图标
+
 
 const input = ref('');
 const num = ref("1");
@@ -104,6 +106,25 @@ const handleFileUpload = (event: Event) => {
     file.value = target.files[0];
   }
 };
+
+const showChatHistory = () => {
+  // 显示聊天历史逻辑
+  console.log("显示聊天历史");
+};
+
+const startNewChat = () => {
+  // 新建聊天逻辑
+  console.log("新建聊天");
+  messages.value = [];
+  file.value = null;
+};
+
+const readDocument = () => {
+  // 阅读此文档逻辑
+  console.log("阅读此文档");
+  const blob = new Blob([document.documentElement.outerHTML], { type: 'text/html' });
+  file.value = new File([blob], "document.html", { type: 'text/html' });
+};
 </script>
 
 <style scoped>
@@ -114,17 +135,25 @@ const handleFileUpload = (event: Event) => {
   width: 100%; /* 让聊天界面占满整个页面宽度 */
 }
 
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #ffffff;
+}.img{
+  width: 40%;
+}
+
 .image-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   flex: 1; /* 占据剩余的空间 */
-  .img{
-    width: 40%;
-  }
 }
-
+.button-container img {
+  width:10%;
+}
 .message-container {
   flex: 1; /* 消息区域占据剩余的空间 */
   overflow-y: auto; /* 如果消息过多，自动显示滚动条 */
@@ -137,6 +166,8 @@ const handleFileUpload = (event: Event) => {
   align-items: center;
   padding: 10px;
   background-color: #ffffff;
+  margin-bottom: 10%;
+  margin-right: 10%;
 }
 
 .message-wrapper {

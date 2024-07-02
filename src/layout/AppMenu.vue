@@ -1,31 +1,32 @@
 <script setup>
 import { ref } from 'vue';
-
 import AppMenuItem from '@/layout/AppMenuItem.vue';
 
+// 定义图标路径
+const pptIcon = new URL('@/assets/PPT2.svg', import.meta.url).href;
+const pdfIcon = new URL('@/assets/PDF3.svg', import.meta.url).href;
+const mindmapIcon = new URL('@/assets/mind-map.svg', import.meta.url).href;
+const wordIcon = new URL('@/assets/Word2.svg', import.meta.url).href;
 const model = ref([
     {
         label: 'Home',
         items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/dashboard' }]
     },
-
     {
-        label: 'Get Started',
+        label: '开始',
         items: [
             {
-                label: 'Documentation',
-                icon: 'pi pi-fw pi-question',
-                
-
+                label: '文档',
+                icon: 'pi pi-fw pi-file',
                 items: [
                     {
                         label: 'word',
-                        icon: 'pi pi-fw pi-sign-in',
+                        icon: wordIcon,
                         to: '/doc'
                     },
                     {
                         label: 'ppt',
-                        icon: 'pi pi-fw pi-times-circle',
+                        icon: pptIcon,
                         to: '/ppt'
                     },
                     {
@@ -35,12 +36,12 @@ const model = ref([
                     },
                     {
                         label: 'pdf',
-                        icon: 'pi pi-fw pi-times-circle',
+                        icon: pdfIcon,
                         to: '/pdf'
                     },
                     {
                         label: 'mindmap',
-                        icon: 'pi pi-fw pi-times-circle',
+                        icon: mindmapIcon,
                         to: '/mindmap'
                     },
                     {
@@ -50,7 +51,7 @@ const model = ref([
                     },
                     {
                         label: 'paint',
-                        icon: 'pi pi-fw pi-times-circle',
+                        icon: 'pi pi-fw pi-pencil',
                         to: '/drawing'
                     },
                 ]
@@ -62,7 +63,7 @@ const model = ref([
 
 <template>
     <ul class="layout-menu">
-        <template v-for="(item, i) in model" :key="item">
+        <template v-for="(item, i) in model" :key="item.label">
             <app-menu-item v-if="!item.separator" :item="item" :index="i"></app-menu-item>
             <li v-if="item.separator" class="menu-separator"></li>
         </template>
