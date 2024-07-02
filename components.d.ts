@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AiSidebar: typeof import('./src/components/AI/AiSidebar.vue')['default']
+    BlockViewer: typeof import('./src/components/BlockViewer.vue')['default']
     Bread: typeof import('./src/components/Bread.vue')['default']
     Chat: typeof import('./src/components/AI/Chat.vue')['default']
     Editor: typeof import('./src/components/ppt/editor.vue')['default']

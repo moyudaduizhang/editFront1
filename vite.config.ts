@@ -8,15 +8,11 @@ import IconsResolver from 'unplugin-icons/resolver'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import {ElementPlusResolver} from 'unplugin-vue-components/resolvers'
-import veauryVitePlugins from 'veaury/vite/index.js'
 
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
-        //vue(),
-        veauryVitePlugins({
-            type: 'vue'
-          })
+        vue(),
         AutoImport({
             resolvers: [
                 ElementPlusResolver(),
@@ -45,9 +41,13 @@ export default defineConfig({
             symbolId: 'icon-[dir]-[name]',
         })
     ],
+    define: {
+        'process.env': {}
+      },
     resolve: {
         alias: {
             '@': path.resolve(__dirname, './src')
+            
         }
     },
     css: {

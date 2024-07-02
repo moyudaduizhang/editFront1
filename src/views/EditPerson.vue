@@ -1,10 +1,8 @@
 <template>
   <div class="container">
-   
     <div class="flex items-center">
       <el-avatar class="mr-3" :size="250" :src="avatarUrl" @click="openFileDialog" />
-      <span style="margin-left: -200px;margin-right: 200px;margin-top:-60px;">点击头像以编辑</span>
-      <!-- 隐藏的文件输入框 -->
+      <span class="edit-avatar-hint">点击头像以编辑</span>
       <input type="file" ref="fileInput" @change="handleFileChange" style="display: none;" />
       <div class="form-container">
         <form @submit.prevent="handleSubmit">
@@ -43,9 +41,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-import { useTokenStore,useUserAvatarStore } from '@/store/userstoken';
-
-const onBack = () => {};
+import { useTokenStore, useUserAvatarStore } from '@/store/userstoken';
 
 const defaultValues = {
   account: '默认账号',
@@ -64,7 +60,7 @@ const phone = ref(defaultValues.phone);
 const token = ref(defaultValues.token);
 const nickname = ref(defaultValues.pet_name);
 const avatarUrl = ref(defaultValues.avatar);
-const isEditing = ref(true);
+const isEditing = ref(false); // 初始设为不可编辑
 const store = useTokenStore();
 const avatarStore = useUserAvatarStore();
 const fileInput = ref<HTMLInputElement | null>(null);
@@ -72,7 +68,7 @@ const fileInput = ref<HTMLInputElement | null>(null);
 const fetchPersonalPageData = async () => {
   try {
     console.log("访问个人信息展示界面，更新数据");
-    const response = await axios.post('http://127.0.0.1:5000/personal_page', { user: store.token.access_token });
+    const response = await axios.post('http://132df498.r16.cpolar.top/personal_page', { user: store.token.access_token });
     if (response.data.success === 'true' && response.data.data.length > 0) {
       const data = response.data.data[0];
       account.value = data.account ?? defaultValues.account;
@@ -81,7 +77,7 @@ const fetchPersonalPageData = async () => {
       phone.value = data.phone ?? defaultValues.phone;
       token.value = data.token ?? defaultValues.token;
       nickname.value = data.pet_name ?? defaultValues.pet_name;
-     // avatarUrl.value = data.avatar ?? defaultValues.avatar;
+      avatarUrl.value = data.avatar ?? defaultValues.avatar;
     } else {
       alert(`获取数据失败: ${response.data.message}`);
     }
@@ -100,7 +96,7 @@ const updatePersonalPageData = async () => {
       token: token.value,
       pet_name: nickname.value
     };
-    const response = await axios.post('http://127.0.0.1:5000/person_page_show', updatedData);
+    const response = await axios.post('http://132df498.r16.cpolar.top/person_page_show', updatedData);
     if (response.data.success === 'true') {
       alert('用户信息更新成功');
       isEditing.value = false;
@@ -121,16 +117,15 @@ const handleFileChange = async () => {
   formData.append('user', store.token.access_token);
 
   try {
-    const response = await axios.post('http://127.0.0.1:5000/upload_avatar', formData, {
+    const response = await axios.post('http://132df498.r16.cpolar.top/upload_avatar', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
-      
     });
     if (response.data.success === 'true') {
       alert('头像上传成功');
-      avatarUrl.value = response.data.avatar_url; // 更新头像 URL
-      avatarStore.setAvatarUrl(response.data.avatar_url); // 更新全局头像 URL
+      avatarUrl.value = response.data.avatar_url;
+      avatarStore.setAvatarUrl(response.data.avatar_url);
       console.log('头像 URL 更新为：', response.data.avatar_url);
     } else {
       alert(`头像上传失败: ${response.data.message}`);
@@ -162,19 +157,26 @@ onMounted(() => {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  height: 100vh;
   text-align: center;
   background-color: #f9f9f9;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   border-radius: 15px;
   font-family: 'Arial', sans-serif;
-  border: 1px solid #ccc; /* 设置边框 */
-  border-radius: 50px; /* 设置圆角 */
+  border: 1px solid #ccc;
+  background: url('@/assets/bg2.jpg') no-repeat center center/cover;
 }
 
 .flex {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.edit-avatar-hint {
+  margin-left: -200px;
+  margin-right: 200px;
+  margin-top: -60px;
 }
 
 .form-container {
@@ -232,6 +234,6 @@ button:first-of-type:hover {
 
 .el-avatar {
   cursor: pointer;
-  margin-top: -400px; /* 调整为你希望的高度 */
+  margin-top: -400px;
 }
 </style>

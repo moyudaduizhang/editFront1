@@ -1,6 +1,6 @@
 <template>
   <transition name="slide">
-    <div v-if="isVisible" class="sidebar fixed top-0 right-0 h-full bg-white shadow-lg border-l border-gray-300 z-50" 
+    <div v-if="isVisible" class="sidebar fixed height-500 top-10 right-0 h-full bg-white shadow-lg border-l border-gray-300 z-50" 
          :style="{ width: sidebarWidth + 'px' }" 
          ref="sidebar">
       <div class="flex justify-between items-center bg-gray-100 p-2 border-b border-gray-300">

@@ -6,7 +6,7 @@
         <h2 style="margin-left: 10px">智能文档</h2>
       </a>
 
-      <router-link to="/" class="el-menu-item">
+      <router-link to="/dashboard" class="el-menu-item">
         <el-icon style="font-size: 200px"><HomeFilled /></el-icon
         ><span>开始</span>
       </router-link>

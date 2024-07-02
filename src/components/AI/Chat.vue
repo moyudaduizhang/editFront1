@@ -22,6 +22,12 @@
       </div>
     </div>
     <div class="input-container">
+      <!-- PDF 上传图标按钮 -->
+      <el-button @click="triggerFileUpload">
+        <el-icon><UploadFilled /></el-icon>
+      </el-button>
+      <!-- 隐藏的文件输入框 -->
+      <input ref="fileInput" type="file" @change="handleFileUpload" style="display: none;" />
       <el-input 
         v-model="input" 
         type="textarea" 
@@ -29,6 +35,7 @@
         placeholder="输入以聊天" 
         @keypress="handleKeyPress" 
       />
+      <div v-if="file" class="file-info">{{ file.name }}</div>
     </div>
   </div>
 </template>
@@ -37,12 +44,16 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import { useTokenStore, useUserAvatarStore } from "@/store/userstoken";
+import { UploadFilled } from '@element-plus/icons-vue'; // 确保已安装Element Plus和相关图标
 
 const input = ref('');
 const num = ref("1");
 const messages = ref<{ sender: string, content: string }[]>([]);
 const avatarstore = useUserAvatarStore();
 const aiAvatar = 'path/to/ai/avatar.png'; // AI头像路径
+
+const file = ref<File | null>(null);
+const fileInput = ref<HTMLInputElement | null>(null); // 确保 fileInput 被正确引用
 
 const sendMessage = () => {
   if (input.value.trim() === '') return;
@@ -54,10 +65,13 @@ const sendMessage = () => {
   formData.append("username", "123456");
   formData.append("number", num.value);
   formData.append("cont", input.value);
+  if (file.value) {
+    formData.append("file", file.value);
+  }
 
   axios({
     method: 'post',
-    url: "http://3b6b09fb.r20.cpolar.top/getAI",
+    url: "http://63d5fa47.r21.cpolar.top/getAI",
     data: formData,
   }).then(res => {
     messages.value.push({ sender: 'ai', content: res.data.answer });
@@ -66,14 +80,28 @@ const sendMessage = () => {
     console.error("请求错误: ", error);
   });
 
-  // 发送完成后清空输入框内容
+  // 发送完成后清空输入框内容和文件信息
   input.value = '';
+  file.value = null;
 };
 
 const handleKeyPress = (event: KeyboardEvent) => {
   if (event.key === 'Enter' && !event.shiftKey) {
     event.preventDefault(); // 阻止默认的换行行为
     sendMessage();
+  }
+};
+
+const triggerFileUpload = () => {
+  if (fileInput.value) {
+    fileInput.value.click();
+  }
+};
+
+const handleFileUpload = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  if (target.files && target.files.length > 0) {
+    file.value = target.files[0];
   }
 };
 </script>
@@ -155,5 +183,11 @@ const handleKeyPress = (event: KeyboardEvent) => {
 
 .message-content {
   white-space: pre-wrap; /* 保留空白字符 */
+}
+
+.file-info {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #888;
 }
 </style>

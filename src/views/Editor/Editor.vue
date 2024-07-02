@@ -39,7 +39,7 @@ documentName.value = route.query.documentName || '';
 
 onMounted(() => {
   if (documentName.value) {
-    axios.post('http://127.0.0.1:5000/get_document', { name: documentName.value, user: store.token.access_token })
+    axios.post('http://132df498.r16.cpolar.top/get_document', { name: documentName.value, user: store.token.access_token })
       .then((response) => {
         if (response.data.content) {
           valueHtml.value = response.data.content;
@@ -66,7 +66,31 @@ onBeforeUnmount(() => {
 const handleCreated = (editor) => {
   editorRef.value = editor;
 };
-
+const saveDocument = () => {
+  if (!documentName.value) {
+    alert("请填写文档名称");
+    return;
+  }
+  axios.post('http://132df498.r16.cpolar.top/upload_file', {
+    name: documentName.value,
+    content: valueHtml.value,
+    user: store.token.access_token
+  })
+  .then((response) => {
+    alert('文档保存成功!');
+    console.log(response.data);
+  })
+  .catch((error) => {
+    if (error.response) {
+      console.error('服务器返回错误:', error.response.data);
+      alert('保存文档出错: ' + error.response.data.message);
+    } else if (error.request) {
+      console.error('请求发送失败:', error.request);
+    } else {
+      console.error('请求错误:', error.message);
+    }
+  });
+};
 </script>
 
 <style>

@@ -18,10 +18,12 @@
       </span>
 
       <template #dropdown>
+        
         <el-dropdown-menu>
           <el-dropdown-item @click="$router.push({ name: 'person' })">
             <el-icon><User /></el-icon>个人主页
           </el-dropdown-item>
+
           <el-dropdown-item @click="logoutbutton">
             <el-icon><CloseBold /></el-icon>退出登录
           </el-dropdown-item>
