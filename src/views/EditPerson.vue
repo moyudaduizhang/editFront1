@@ -68,7 +68,7 @@ const fileInput = ref<HTMLInputElement | null>(null);
 const fetchPersonalPageData = async () => {
   try {
     console.log("访问个人信息展示界面，更新数据");
-    const response = await axios.post('http://132df498.r16.cpolar.top/personal_page', { user: store.token.access_token });
+    const response = await axios.post('http://127.0.0.1:5000/personal_page', { user: store.token.access_token });
     if (response.data.success === 'true' && response.data.data.length > 0) {
       const data = response.data.data[0];
       account.value = data.account ?? defaultValues.account;
@@ -96,7 +96,7 @@ const updatePersonalPageData = async () => {
       token: token.value,
       pet_name: nickname.value
     };
-    const response = await axios.post('http://132df498.r16.cpolar.top/person_page_show', updatedData);
+    const response = await axios.post('http://127.0.0.1:5000/person_page_show', updatedData);
     if (response.data.success === 'true') {
       alert('用户信息更新成功');
       isEditing.value = false;
@@ -117,7 +117,7 @@ const handleFileChange = async () => {
   formData.append('user', store.token.access_token);
 
   try {
-    const response = await axios.post('http://132df498.r16.cpolar.top/upload_avatar', formData, {
+    const response = await axios.post('http://127.0.0.1:5000/upload_avatar', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }

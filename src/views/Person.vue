@@ -69,7 +69,7 @@ const activeName = ref('first');
 
 const fetchPersonalPageData = async () => {
   try {
-    const response = await axios.post('http://132df498.r16.cpolar.top/personal_page', { user: store.token.access_token });
+    const response = await axios.post('http://127.0.0.1:5000/personal_page', { user: store.token.access_token });
     if (response.data.success === 'true' && response.data.data.length > 0) {
       const data = response.data.data[0];
       account.value = data.account ?? defaultValues.account;

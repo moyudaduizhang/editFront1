@@ -39,7 +39,7 @@ documentName.value = route.query.documentName || '';
 
 onMounted(() => {
   if (documentName.value) {
-    axios.post('http://132df498.r16.cpolar.top/get_document', { name: documentName.value, user: store.token.access_token })
+    axios.post('http://127.0.0.1:5000/get_document', { name: documentName.value, user: store.token.access_token })
       .then((response) => {
         if (response.data.content) {
           valueHtml.value = response.data.content;
@@ -71,10 +71,11 @@ const saveDocument = () => {
     alert("请填写文档名称");
     return;
   }
-  axios.post('http://132df498.r16.cpolar.top/upload_file', {
+  axios.post('http://127.0.0.1:5000/upload_file', {
     name: documentName.value,
     content: valueHtml.value,
-    user: store.token.access_token
+    user: store.token.access_token,
+    sorts: 'word'
   })
   .then((response) => {
     alert('文档保存成功!');

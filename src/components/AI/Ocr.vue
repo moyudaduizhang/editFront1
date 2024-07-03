@@ -43,7 +43,7 @@ const uploadRequest = (options: any) => {
 
   axios({
     method: 'post',
-    url: "http://3b6b09fb.r20.cpolar.top/getAI",
+    url: "http://127.0.0.1:5000/getAI",
     data: formData,
   }).then(res => {
     aiResponse.value = res.data.answer;
