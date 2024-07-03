@@ -1,4 +1,4 @@
-i<template>
+<template>
   <div class="chat-container">
     <!-- 添加条件渲染，当没有消息时显示图片 -->
     <div v-if="messages.length === 0" class="image-container">
@@ -17,7 +17,10 @@ i<template>
           <span class="sender-name">{{ message.sender === 'user' ? '用户' : 'AI' }}</span>
         </div>
         <div :class="['message-bubble', message.sender]">
-          <div class="message-content">{{ message.content }}</div>
+          <div class="message-content">
+            <div v-if="message.type === 'text'">{{ message.content }}</div>
+            <img v-if="message.type === 'image'" :src="message.content" alt="Generated Image" />
+          </div>
         </div>
       </div>
     </div>
@@ -26,7 +29,9 @@ i<template>
      <img src="@/assets/新聊天.svg" @click="startNewChat" />
      <img src="@/assets/阅读.svg"  @click="readDocument" />
      <img src="@/assets/已上传文件.svg"  @click="triggerFileUpload" />
+     <img src="@/assets/文生图.svg" @click="generateImage" />
     </div>
+    <div v-if="file" class="file-info">{{ file.name }}</div>
     <div class="input-container">
       <!-- 隐藏的文件输入框 -->
       <input ref="fileInput" type="file" @change="handleFileUpload" style="display: none;" />
@@ -37,7 +42,6 @@ i<template>
         placeholder="输入聊天..." 
         @keypress="handleKeyPress" 
       />
-      <div v-if="file" class="file-info">{{ file.name }}</div>
     </div>
   </div>
 </template>
@@ -47,10 +51,9 @@ import { ref } from 'vue';
 import axios from 'axios';
 import { useTokenStore, useUserAvatarStore } from "@/store/userstoken";
 
-
 const input = ref('');
 const num = ref("1");
-const messages = ref<{ sender: string, content: string }[]>([]);
+const messages = ref<{ sender: string, content: string, type: string }[]>([]);
 const avatarstore = useUserAvatarStore();
 const aiAvatar = 'path/to/ai/avatar.png'; // AI头像路径
 
@@ -61,7 +64,7 @@ const sendMessage = () => {
   if (input.value.trim() === '') return;
 
   // 本地显示发送的消息
-  messages.value.push({ sender: 'user', content: input.value });
+  messages.value.push({ sender: 'user', content: input.value, type: 'text' });
 
   let formData = new FormData();
   formData.append("username", "123456");
@@ -76,7 +79,7 @@ const sendMessage = () => {
     url: "http://127.0.0.1:5000/getAI",
     data: formData,
   }).then(res => {
-    messages.value.push({ sender: 'ai', content: res.data.answer });
+    messages.value.push({ sender: 'ai', content: res.data.answer, type: 'text' });
     console.log(res.data.answer);
   }).catch(error => {
     console.error("请求错误: ", error);
@@ -125,6 +128,27 @@ const readDocument = () => {
   const blob = new Blob([document.documentElement.outerHTML], { type: 'text/html' });
   file.value = new File([blob], "document.html", { type: 'text/html' });
 };
+
+const generateImage = () => {
+  if (input.value.trim() === '') return;
+
+  // 本地显示发送的消息
+  messages.value.push({ sender: 'user', content: input.value, type: 'text' });
+
+  axios({
+    method: 'post',
+    url: "http://127.0.0.1:5000/wordtopic",
+    data: { prompt: input.value },
+  }).then(res => {
+    messages.value.push({ sender: 'ai', content: res.data.imageUrl, type: 'image' });
+    console.log(res.data.imageUrl);
+  }).catch(error => {
+    console.error("请求错误: ", error);
+  });
+
+  // 发送完成后清空输入框内容
+  input.value = '';
+};
 </script>
 
 <style scoped>
@@ -140,7 +164,9 @@ const readDocument = () => {
   justify-content: space-between;
   padding: 10px;
   background-color: #ffffff;
-}.img{
+}
+
+.img {
   width: 40%;
 }
 
@@ -151,9 +177,11 @@ const readDocument = () => {
   justify-content: center;
   flex: 1; /* 占据剩余的空间 */
 }
+
 .button-container img {
-  width:10%;
+  width: 10%;
 }
+
 .message-container {
   flex: 1; /* 消息区域占据剩余的空间 */
   overflow-y: auto; /* 如果消息过多，自动显示滚动条 */

@@ -73,6 +73,11 @@ const router = createRouter({
           name:"Editdraw",
           component:()=>import("@/views/Editor/draw.vue"),
         },
+        {
+          path:"/knowledge",
+          name:"knowledge",
+          component:()=>import("@/views/knowledge.vue"),
+        }
       ],
     },
     
@@ -106,6 +111,7 @@ const router = createRouter({
       name: "ErrorPage",
       component: () => import("@/views/404.vue"),
     },
+        
   ],
 });
 

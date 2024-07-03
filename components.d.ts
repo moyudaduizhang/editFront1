@@ -55,6 +55,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     Slider: typeof import('./src/components/ppt/slider.vue')['default']
     Translate: typeof import('./src/components/AI/Translate.vue')['default']
+    Vtoc: typeof import('./src/components/AI/vtoc.vue')['default']
     Write: typeof import('./src/components/AI/Write.vue')['default']
   }
   export interface ComponentCustomProperties {

@@ -16,7 +16,7 @@ const model = ref([
         label: '开始',
         items: [
             {
-                label: '文档',
+                label: '创建文档',
                 icon: 'pi pi-fw pi-file',
                 items: [
                     {
@@ -56,6 +56,11 @@ const model = ref([
                     },
                 ]
             },
+            {
+                label:'知识库',
+                icon: 'pi pi-fw pi-file',
+                to: '/knowledge'
+            }
         ]
     }
 ]);

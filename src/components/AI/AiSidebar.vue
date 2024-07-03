@@ -13,6 +13,7 @@
           <Translate v-if="istranslatevisible"/>
           <Ocr v-if="isocrvisible"/>
           <Write v-if="iswritevisible"/>
+          <vtoc v-if="isvtocvisible"/>
       </div>
       
         <div class="flex flex-col fixed-right">
@@ -20,8 +21,8 @@
           <img src="@/assets/translate1.svg" class="ocr" @click="showTranslate"/>
           <img src="@/assets/ocr.svg" class="ocr" @click="showOcr"/>
           <img src="@/assets/write.svg" class="ocr" @click="showWrite"/>
-          <img src="@/assets/Pdf.svg" class="ocr" @click="polish"/>
-          <img src="@/assets/语音转文字.svg" class="ocr" @click="polish"/>
+          
+          <img src="@/assets/语音转文字.svg" class="ocr" @click="showvtoc"/>
         </div>
       </div>
     </div>
@@ -35,10 +36,12 @@ import Chat from "./Chat.vue"
 import Ocr from "./Ocr.vue"
 import Translate from "./Translate.vue"
 import Write from "./Write.vue"
+import vtoc from "./vtoc.vue"
 const ischatvisible = ref(true)
 const istranslatevisible = ref(false)
 const isocrvisible = ref(false)
 const iswritevisible = ref(false)
+const isvtocvisible = ref(false)
 const props = defineProps({
   isVisible: Boolean
 });
@@ -54,6 +57,7 @@ const showChat = () => {
   istranslatevisible.value = false;
   isocrvisible.value = false;
   iswritevisible.value = false;
+  isvtocvisible.value = false;
 };
 
 const showTranslate = () => {
@@ -61,6 +65,7 @@ const showTranslate = () => {
   istranslatevisible.value = true;
   isocrvisible.value = false;
   iswritevisible.value = false;
+  isvtocvisible.value = false;
 };
 
 const showOcr = () => {
@@ -68,12 +73,21 @@ const showOcr = () => {
   istranslatevisible.value = false;
   isocrvisible.value = true;
   iswritevisible.value = false;
+  isvtocvisible.value = false;
 };
 const showWrite = () => {
   ischatvisible.value = false;
   istranslatevisible.value = false;
   isocrvisible.value = false;
   iswritevisible.value = true;
+  isvtocvisible.value = false;
+};
+const showvtoc = () => {
+  ischatvisible.value = false;
+  istranslatevisible.value = false;
+  isocrvisible.value = false;
+  iswritevisible.value = false;
+  isvtocvisible.value = true;
 };
 </script>
 
