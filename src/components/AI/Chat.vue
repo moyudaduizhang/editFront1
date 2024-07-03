@@ -140,8 +140,15 @@ const generateImage = () => {
     url: "http://127.0.0.1:5000/wordtopic",
     data: { prompt: input.value },
   }).then(res => {
-    messages.value.push({ sender: 'ai', content: res.data.imageUrl, type: 'image' });
-    console.log(res.data.imageUrl);
+    // 假设后端返回的图片URL是完整的
+    const imageUrl = res.data;
+    
+    // 如果后端返回的图片URL不完整，这里可以构造完整的URL
+    // const baseUrl = 'http://example.com'; // 后端提供的图片URL的基础部分
+    // const fullImageUrl = `${baseUrl}/${imageUrl}`;
+
+    messages.value.push({ sender: 'ai', content: imageUrl, type: 'image' });
+    console.log(res.data);
   }).catch(error => {
     console.error("请求错误: ", error);
   });
@@ -149,6 +156,7 @@ const generateImage = () => {
   // 发送完成后清空输入框内容
   input.value = '';
 };
+
 </script>
 
 <style scoped>

@@ -8,30 +8,31 @@
         <form @submit.prevent="handleSubmit">
           <div class="form-group">
             <label for="account">账号</label>
-            <input id="account" v-model="account" type="text" readonly required />
+            <input id="account" v-model="formData.account" type="text" readonly required />
           </div>
           <div class="form-group">
             <label for="password">密码</label>
-            <input id="password" v-model="password" type="text" readonly required />
+            <input id="password" v-model="formData.password" type="password" readonly required />
           </div>
           <div class="form-group">
             <label for="email">邮箱</label>
-            <input id="email" v-model="email" type="email" :readonly="!isEditing" required />
+            <input id="email" v-model="formData.email" type="email" :readonly="!isEditing" required />
           </div>
           <div class="form-group">
             <label for="phone">手机号</label>
-            <input id="phone" v-model="phone" type="tel" :readonly="!isEditing" required />
+            <input id="phone" v-model="formData.phone" type="tel" :readonly="!isEditing" required />
           </div>
           <div class="form-group">
             <label for="token">百度秘钥token</label>
-            <input id="token" v-model="token" type="text" :readonly="!isEditing" required />
+            <input id="token" v-model="formData.token" type="text" :readonly="!isEditing" required />
           </div>
           <div class="form-group">
             <label for="nickname">昵称</label>
-            <input id="nickname" v-model="nickname" type="text" :readonly="!isEditing" required />
+            <input id="nickname" v-model="formData.nickname" type="text" :readonly="!isEditing" required />
           </div>
-          <button type="button" @click="cancelEdit">取消修改</button>
-          <button type="submit">保存修改</button>
+          <button v-if="!isEditing" type="button" @click="startEdit">编辑</button>
+          <button v-if="isEditing" type="button" @click="cancelEdit">取消修改</button>
+          <button v-if="isEditing" type="submit">保存修改</button>
         </form>
       </div>
     </div>
@@ -53,12 +54,15 @@ const defaultValues = {
   avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
 };
 
-const account = ref(defaultValues.account);
-const password = ref(defaultValues.password);
-const email = ref(defaultValues.email);
-const phone = ref(defaultValues.phone);
-const token = ref(defaultValues.token);
-const nickname = ref(defaultValues.pet_name);
+const formData = ref({
+  account: defaultValues.account,
+  password: defaultValues.password,
+  email: defaultValues.email,
+  phone: defaultValues.phone,
+  token: defaultValues.token,
+  nickname: defaultValues.pet_name
+});
+
 const avatarUrl = ref(defaultValues.avatar);
 const isEditing = ref(false); // 初始设为不可编辑
 const store = useTokenStore();
@@ -71,12 +75,12 @@ const fetchPersonalPageData = async () => {
     const response = await axios.post('http://127.0.0.1:5000/personal_page', { user: store.token.access_token });
     if (response.data.success === 'true' && response.data.data.length > 0) {
       const data = response.data.data[0];
-      account.value = data.account ?? defaultValues.account;
-      password.value = data.password ?? defaultValues.password;
-      email.value = data.email ?? defaultValues.email;
-      phone.value = data.phone ?? defaultValues.phone;
-      token.value = data.token ?? defaultValues.token;
-      nickname.value = data.pet_name ?? defaultValues.pet_name;
+      formData.value.account = data.account ?? defaultValues.account;
+      formData.value.password = data.password ?? defaultValues.password;
+      formData.value.email = data.email ?? defaultValues.email;
+      formData.value.phone = data.phone ?? defaultValues.phone;
+      formData.value.token = data.token ?? defaultValues.token;
+      formData.value.nickname = data.pet_name ?? defaultValues.pet_name;
       avatarUrl.value = data.avatar ?? defaultValues.avatar;
     } else {
       alert(`获取数据失败: ${response.data.message}`);
@@ -90,11 +94,11 @@ const updatePersonalPageData = async () => {
   try {
     console.log("更新用户信息");
     const updatedData = {
-      account: account.value,
-      email: email.value,
-      phone: phone.value,
-      token: token.value,
-      pet_name: nickname.value
+      account: formData.value.account,
+      email: formData.value.email,
+      phone: formData.value.phone,
+      token: formData.value.token,
+      pet_name: formData.value.nickname
     };
     const response = await axios.post('http://127.0.0.1:5000/person_page_show', updatedData);
     if (response.data.success === 'true') {
@@ -139,12 +143,17 @@ const openFileDialog = () => {
   fileInput.value?.click();
 };
 
-const handleSubmit = () => {
-  updatePersonalPageData();
+const startEdit = () => {
+  isEditing.value = true;
 };
 
 const cancelEdit = () => {
   isEditing.value = false;
+  fetchPersonalPageData(); // 取消编辑时重新加载数据
+};
+
+const handleSubmit = () => {
+  updatePersonalPageData();
 };
 
 onMounted(() => {
