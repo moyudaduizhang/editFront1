@@ -1,266 +1,96 @@
+<script setup>
+import { useLayout } from '@/layout/composables/layout';
+import { ref, computed, reactive } from 'vue';
+import { ElMessage } from 'element-plus';
+import AppConfig from '@/layout/AppConfig.vue';
+import { login } from '@/api/users';
+import { useRouter } from 'vue-router';
+import { useTokenStore,useUserAvatarStore } from '@/store/userstoken';
+
+const { layoutConfig } = useLayout();
+const checked = ref(false);
+const store = useTokenStore();
+const router = useRouter();
+const isLoading = ref(false);
+const formRef = ref(null); // 修改此处
+const avatar=useUserAvatarStore();
+const form = reactive({
+  user: 'admin',
+  password: '123456',
+});
+
+const logoUrl = computed(() => {
+  return `/layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
+});
+
+// 登录事件处理
+const onSubmit = async () => {
+  try {
+    isLoading.value = true;
+    await formRef.value?.validate();
+    const res = await login(form);
+    if (res.data.success == "false") {
+      ElMessage.error(res.data.message);
+      isLoading.value = false;
+      return;
+    }
+    store.saveToken(res.data.content);
+    ElMessage.success("登录成功");
+    router.push('/');
+  } catch (error) {
+    ElMessage.error(error.message || "登录失败");
+  } finally {
+    isLoading.value = false;
+  }
+};
+</script>
+
 <template>
-  <div class="out-container">
-    <div class="container">
-      <!-- 删去login-form -->
-      <el-form :rules="rules" :ref="formRef" :model="form" label-width="auto" > 
-       
+  <div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+    <div class="flex flex-column align-items-center justify-content-center">
+      <img :src="logoUrl" alt="Sakai logo" class="mb-5 w-6rem flex-shrink-0" />
+      <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
+        <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius: 53px">
+          <div class="text-center mb-5">
+            <img :src="`${avatar.avatarUrl}`" alt="Image" height="50" class="mb-3" />
+            <div class="text-900 text-3xl font-medium mb-3">欢迎, {{ form.user }}</div>
+            <span class="text-600 font-medium">登入</span>
+          </div>
 
-        <!-- <div class="small-background"></div> -->
-        <h1 class="form-title">用户登录</h1>
-
-        <div class="form-control">
-          <!-- <el-form-item prop="user"> -->
-            <input v-model="form.user" type="text" required/>
-            <label>
-              <span v-for="(letter, index) in splitLetters('账户')" :key="index" :style="{transitionDelay: letter.delay}">
-              {{ letter.char }}
-              </span>
-            </label>
-          <!-- </el-form-item> -->
+          <el-form :model="form" ref="formRef" label-width="auto">
+            <div class="form-control">
+              <label for="email1" class="block text-900 text-xl font-medium mb-2">账户</label>
+              <InputText id="email1" type="text" placeholder="Account" class="w-full md:w-30rem mb-5" style="padding: 1rem" v-model="form.user" />
+            </div>
+            <div class="form-control">
+              <label for="password1" class="block text-900 font-medium text-xl mb-2">密码</label>
+              <Password id="password1" v-model="form.password" placeholder="输入密码" :toggleMask="true" class="w-full mb-3" inputClass="w-full" :inputStyle="{ padding: '1rem' }" />
+            </div>
+            <div class="flex align-items-center justify-content-between mb-5 gap-5">
+              <div class="flex align-items-center">
+                <Checkbox v-model="checked" id="rememberme1" binary class="mr-2" />
+                <label for="rememberme1">记住我</label>
+              </div>
+              <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">忘记密码？</a>
+            </div>
+            <Button label="登录" class="w-full p-3 text-xl" :loading="isLoading" @click="onSubmit"></Button>
+          </el-form>
+          <a class="font-medium no-underline ml-2 text-right cursor-pointer" href="http://localhost:5173/register" style="color: var(--primary-color)">没有账户？点击注册</a>
         </div>
-
-        <div class="form-control">
-          <!-- <el-form-item label="密码" prop="password"> -->
-            <input v-model="form.password" type="password" required/>
-            <label>
-              <span v-for="(letter, index) in splitLetters('密码')" :key="index"
-                  :style="{transitionDelay: letter.delay}">
-              {{ letter.char }}
-            </span>
-            </label>
-          <!-- </el-form-item> -->
-        </div>
-
-        <el-form-item>
-          <el-button type="primary" @click="onSubmit" :loading="isLoading" class="btn">登录</el-button>
-        </el-form-item>
-
-        <el-form-item> 
-          <p class="text">没有账户？点击<a href="http://localhost:5173/register">注册</a></p>
-          <RouterLink to="/register">
-            <!-- <el-button  class="register-button">注册</el-button>  -->
-          </RouterLink>
-        </el-form-item>
-      </el-form>
+      </div>
     </div>
   </div>
+  <AppConfig simple />
 </template>
 
-  <script lang="ts" setup>
-  import { ElMessage, FormInstance, FormRules } from 'element-plus';
-  import { reactive,ref } from 'vue'
-  import {login} from '@/api/users'
-  import { useRouter } from 'vue-router'
-  import {useTokenStore} from '@/store/userstoken'
-  const store=useTokenStore()
-  const router=useRouter()
-  
-  // do not use same name with ref
-  const form = reactive({
-    user: 'admin',
-    password: '123456',
-  })
-  
-  //登录事件处理
-  const onSubmit = async() => {
-    isLoading.value=true
-    await formRef.value?.validate().catch((err)=>{
-        ElMessage.error("表单校验失败");
-        isLoading.value=false
-        throw err
-    })
-  //发送登录请求
-   const data=await login(form).then((res)=>{
-      if (res.data.success=="false"){
-        ElMessage.error("登录信息有误")
-        isLoading.value=false
-        throw new Error(res.data.message)
-      }
-      return res.data
-    })
-
-    console.log(data)
-    store.saveToken(data.content)
-    isLoading.value=false
-    ElMessage.success("登录成功")
-    router.push('/')
-    
-  }
-  //用户名和密码的格式验证
-  const rules=reactive<FormRules>({
-    user:[
-        {required:true,message:"请输入用户名",trigger:"blur"},
-        {min:6,max:18}
-        
-    ],
-    password:[
-        {required:true,message:"密码不能为空",trigger:"blur"},
-        {min:6,max:18}   
-    ]
-  })
-  const isLoading=ref(false)
-  const formRef=ref<FormInstance>()
-
-  //新添加
-  const splitLetters = (word) => {
-  return [...word].map((char, index) => ({
-    char,
-    delay: `${index * 35}ms`,
-  }))
-}
-  </script>
-
-
-<style lang="scss" scoped>
-//新增
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+<style scoped>
+.pi-eye {
+  transform: scale(1.6);
+  margin-right: 1rem;
 }
 
-.out-container{
-  width: 100%;
-  height: 100vh;
-  background: linear-gradient(144deg, rgba(255, 94, 249, 1) 19%, rgba(104, 185, 251, 1) 86%);
-  
+.pi-eye-slash {
+  transform: scale(1.6);
+  margin-right: 1rem;
 }
-.container {
-  //min-height: 100vh; /* 视口高度 */
-  //min-width: 100vw; /* 视口宽度 */
-  width: 500px;
-  height: 500px;
-  margin: 0 auto;
-  margin-top: 100px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* 水平居中 */
-  align-items: center; /* 垂直居中 */
-  //background: linear-gradient(144deg, rgba(255, 94, 249, 1) 19%, rgba(104, 185, 251, 1) 86%); /* 背景渐变 */
-  background: rgba(50, 46, 46, 0.4);
-  border-radius: 8px;
-  color: white; /* 文字颜色 */
-}
-// background: rgba(50, 46, 46, 0.4);
-
-/* 表单中标题属性 */
-.container h1 {
-  text-align: center;
-  margin-bottom: 30px;
-  font-family: '楷体', '微软雅黑';
-}
-
-/* 鼠标经过时字体颜色改变 */
-.container h1:hover {
-  background-image: linear-gradient(90deg, #673ab7, #e91e63);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-image: linear-gradient(90deg,
-  rgb(255, 167, 69),
-  rgb(254, 134, 159),
-  rgb(239, 122, 200),
-  rgb(160, 131, 237),
-  rgb(67, 174, 255),
-  rgb(160, 131, 237),
-  rgb(239, 122, 200),
-  rgb(254, 134, 159),
-  rgb(255, 167, 69));
-  background-size: 200%;
-  animation: streamer 3s linear infinite;
-}
-
-/* 下面注册旁的连接 */
-.container a {
-  text-decoration: none;
-  color: lightblue;
-}
-
-/* 字体颜色变化的动画 */
-@keyframes streamer {
-  0% {
-    background-position: 200%;
-  }
-
-  100% {
-    background-position: 0%;
-  }
-}
-
-/* 按钮的属性 */
-.btn {
-  cursor: pointer;
-  width: 100%;
-  background-color: lightblue;
-  padding: 15px;
-  border: 0;
-  font-size: 16px;
-  font-family: inherit;
-}
-
-/* 点击按钮时的属性 */
-.btn:focus {
-  outline: 0;
-}
-
-/* 点击按钮时的效果,缩小0.98 */
-.btn:active {
-  transform: scale(0.98);
-}
-
-
-.text {
-  margin-top: 30px;
-}
-
-/* 输入框所在容器的类 */
-.form-control {
-  width: 300px;
-  margin: 20px 0 40px;
-  position: relative;
-}
-
-.form-control input {
-  width: 100%;
-  background-color: transparent;
-  border: 0;
-  border-bottom: 2px solid white;
-  display: block;
-  padding: 15px 0;
-  font-size: 18px;
-  color: white;
-}
-
-/* 获取焦点时下边框变为蓝色 */
-.form-control input:focus {
-  outline: 0;
-  border-bottom-color: lightblue;
-}
-
-/*当输入框中有文字时，下边框还是蓝色  valid：检测input有没有填*/
-.form-control input:valid {
-  border-bottom-color: lightblue;
-}
-
-/* Email与password的属性 */
-.form-control label {
-  position: absolute;
-  left: 0;
-  top: 15px;
-}
-
-/* Email与password的动画效果 */
-.form-control label span {
-  display: inline-block;
-  font-size: 18px;
-  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-/* +选择器：选择除了自己之外的其它兄弟元素 */
-.form-control input:focus + label span,
-.form-control input:valid + label span {
-  transform: translateY(-30px);
-  color: lightblue;
-}
-
-</style> 
+</style>

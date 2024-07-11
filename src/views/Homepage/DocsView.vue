@@ -19,24 +19,25 @@
  
  <script setup lang="ts">
  import { onMounted, ref } from 'vue';
- import { getalldocs } from '@/api/doc';
+
  import { useRouter } from 'vue-router';
  import { useTokenStore } from '@/store/userstoken';
+import request from '@/utils/request';
 
- import axios from 'axios';
  const router1 = useRouter();
  const store = useTokenStore();
  const alldocs = ref([]);
  const fetchdocsdata = async () => {
    try {
-     const response = await axios.post('http://127.0.0.1:5000/show_file', { user: store.token.access_token });
+     const response = await request.post('/show_file', { user: store.token.access_token });
      if (response.data.success === 'true' && response.data.data.length > 0) {
        alldocs.value = response.data.data;
      } else {
        console.log(`获取数据失败: ${response.data.message}`);
      }
    } catch (error) {
-    console.log('发生错误: ' + error.message);
+    const err = error as Error;
+    console.log('发生错误: ' + err.message);
    }
  };
 // const fetchdocsdata = async () => {
@@ -52,7 +53,7 @@
 //   }
 // };
  
- const editDocument = (name) => {
+ const editDocument = (name:string) => {
    router1.push({ name: 'wangEditor', query: { documentName: name } });
  };
  

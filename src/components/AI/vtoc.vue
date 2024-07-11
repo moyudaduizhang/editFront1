@@ -29,6 +29,7 @@
   import { ref, onMounted } from 'vue';
   import axios from 'axios';
   import lamejs from 'lamejs';
+import  requestai  from '@/utils/requestai.ts';
   
   const transcribedText = ref('');
   const isRecording = ref(false);
@@ -113,10 +114,11 @@
   
   const uploadAudio = async (file) => {
     const formData = new FormData();
+    formData.append('username', "admin");
     formData.append('file', file);
   
     try {
-      const response = await axios.post('http://127.0.0.1:5000/vtoc', formData, {
+      const response = await requestai.post('/vtoc', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -182,8 +184,9 @@
   
   <style scoped>
   .speech-to-text {
-    max-width: 600px;
+    max-width: 250px;
     margin: 0 auto;
+    margin-right: 100px;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 10px;

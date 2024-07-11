@@ -39,7 +39,7 @@ export const login=(loginInfo:LoginInfo)=>{
 export const register=(registerInfo:RegisterInfo)=>{
     return request<RegisterResult>({
         method:"POST",
-        url:"/registuser",
+        url:"/register",
         //data:'user=${registerInfo.phone}&password=${registerInfo.password}&password2=${registerInfo.password2}'
         data:registerInfo
     })

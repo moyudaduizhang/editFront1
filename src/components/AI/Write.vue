@@ -40,9 +40,9 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
-import { ref } from 'vue';
 
+import { ref } from 'vue';
+import  requestai  from '@/utils/requestai.ts';
 const input = ref('');
 const num = ref("4");
 const aiResponse = ref('');
@@ -61,9 +61,9 @@ const sendMessage = () => {
   formData.append("tone", tone.value);
   formData.append("length", length.value);
   formData.append("language", language.value);
-  axios({
+  requestai({
     method: 'post',
-    url: "http://127.0.0.1:5000/getAI",
+    url: "/getpolish",
     data: formData,
   }).then(res => {
     aiResponse.value = res.data.answer;

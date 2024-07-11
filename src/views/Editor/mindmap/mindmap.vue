@@ -2,7 +2,6 @@
 import { ref, watch, onMounted, shallowRef } from "vue";
 import MindMap from "simple-mind-map";
 import THeme from "@/views/Editor/mindmap/components/Theme.vue";
-import Toolbar from "@/views/Editor/mindmap/components/Toolbar.vue";
 import Export from 'simple-mind-map/src/plugins/Export.js'
 import ExportXMind from 'simple-mind-map/src/plugins/ExportXMind.js'
 import ExportPDF from 'simple-mind-map/src/plugins/ExportPDF.js'
@@ -893,6 +892,8 @@ onMounted(() => {
 .mindMapDemo {
   width: 100%;
   position: relative;
+  margin-top: -30px;
+  height:730px;
 }
 
 #mindMapContainer {
@@ -900,7 +901,8 @@ onMounted(() => {
   left: 0;
   top: 0;
   width: 100%;
-  height: 800px;
+  height: 730px;
+  margin-top:0px;
 }
 
 #mindMapContainer * {

@@ -25,7 +25,8 @@ import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 import { useTokenStore } from '@/store/userstoken';
-
+import request from '@/utils/request';
+import { ElMessage } from 'element-plus';
 const input = ref('');
 const aiResponse = ref('');
 const isWindowVisible = ref(false);
@@ -33,13 +34,12 @@ const documentName = ref('');
 const editorRef = shallowRef();
 const valueHtml = ref('<p></p>');
 const store = useTokenStore();
-
 const route = useRoute();
 documentName.value = route.query.documentName || '';
 
 onMounted(() => {
   if (documentName.value) {
-    axios.post('http://127.0.0.1:5000/get_document', { name: documentName.value, user: store.token.access_token })
+    request.post('/get_document', { name: documentName.value, user: store.token.access_token })
       .then((response) => {
         if (response.data.content) {
           valueHtml.value = response.data.content;
@@ -71,20 +71,20 @@ const saveDocument = () => {
     alert("请填写文档名称");
     return;
   }
-  axios.post('http://127.0.0.1:5000/upload_file', {
+  request.post('/upload_file', {
     name: documentName.value,
     content: valueHtml.value,
     user: store.token.access_token,
     sorts: 'word'
   })
   .then((response) => {
-    alert('文档保存成功!');
+    ElMessage.success('文档保存成功!');
     console.log(response.data);
   })
   .catch((error) => {
     if (error.response) {
       console.error('服务器返回错误:', error.response.data);
-      alert('保存文档出错: ' + error.response.data.message);
+      ElMessage.error('保存文档出错: ' + error.response.data.message);
     } else if (error.request) {
       console.error('请求发送失败:', error.request);
     } else {

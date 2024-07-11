@@ -27,11 +27,10 @@
 <script setup lang="ts">
 import { UploadFilled } from '@element-plus/icons-vue'
 import { ref } from 'vue'
-import axios from 'axios'
-import { useTokenStore } from '@/store/userstoken'
 
+import   requestai  from '@/utils/requestai.ts'
 const aiResponse = ref('');
-const store = useTokenStore();
+
 
 const uploadRequest = (options: any) => {
   const file = options.file;
@@ -41,22 +40,18 @@ const uploadRequest = (options: any) => {
   formData.append("username", "admin");
   formData.append("cont", "");
 
-  axios({
+  requestai({
     method: 'post',
-    url: "http://127.0.0.1:5000/getAI",
+    url: "/getocr",
     data: formData,
   }).then(res => {
-    aiResponse.value = res.data.answer;
+    aiResponse.value = res.data.text;
     options.onSuccess(res.data, file);
-    console.log('后端返回的消息：', res.data.answer); // 打印后端返回的消息
+    console.log('后端返回的消息：', res.data.text); // 打印后端返回的消息
   }).catch(error => {
     console.error("请求错误: ", error);
     options.onError(error);
   });
 };
 
-const handleSuccess = (response: any, file: File) => {
-  console.log('上传成功:', response);
-  // sendfiled 已经在 uploadRequest 内部调用
-};
 </script>

@@ -16,6 +16,7 @@ import Block2 from './components/Block2.vue'
 import Block3 from './components/Block3.vue'
 import Block4 from './components/Block4.vue'
 import Block5 from './components/Block5.vue'
+import  "@/assets/iconfont/iconfont.css"
 </script>
 
 <style lang="less" scoped>

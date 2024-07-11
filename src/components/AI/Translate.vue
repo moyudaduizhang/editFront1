@@ -34,7 +34,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue'
-import axios from 'axios'
+import  requestai  from '@/utils/requestai.ts'
 const num = ref("2")
 const value1 = ref('')
 const value2 = ref('');
@@ -93,9 +93,9 @@ const sendMessage = () => {
   formData.append("language1", value1.value);
   formData.append("language2", value2.value);
   formData.append("cont", input.value);
-  axios({
+  requestai({
     method: 'post',
-    url: "http://127.0.0.1:5000/getAI",
+    url: "/gettranslate",
     data: formData,
   }).then(res => {
     aiResponse.value = res.data.answer;

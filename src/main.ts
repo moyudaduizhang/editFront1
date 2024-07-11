@@ -11,7 +11,7 @@ import 'virtual:svg-icons-register'
 import 'primevue/resources/primevue.min.css'; // Core CSS
 import 'primeicons/primeicons.css'; // Icons
 
-
+import '@vue-flow/core/dist/style.css';
 import PrimeVue from 'primevue/config';
 import AutoComplete from 'primevue/autocomplete';
 import Accordion from 'primevue/accordion';

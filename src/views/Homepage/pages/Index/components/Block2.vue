@@ -28,86 +28,87 @@
 import { ref } from 'vue'
 const dataList = ref([
   {
-    icon: 'iconstar',
+    icon: 'icon-shoucang',
     value: 'Github star数量0+'
   },
   {
-    icon: 'iconfork',
+    icon: 'icon-fenzhi',
     value: 'Github fork数量0+'
   },
   {
-    icon: 'iconteamwork',
+    icon: 'icon-user',
     value: '代码贡献者0+'
   }
 ])
 const functionList = ref([
   {
-    icon: 'iconjingzi',
+    // icon: 'iconjingzi',
+    icon: 'icon-ocr',
     name: 'OCR（光学字符识别）',
     value: '能够识别图片中的文字并转换为可编辑的文本格式。'
   },
   {
-    icon: 'iconjiegou',
+    icon: 'icon-xiaoxi-zhihui',
     name: '智能聊天',
     value: '集成了自然语言处理功能，可以进行智能对话和回答问题。'
   },
   {
-    icon: 'iconjianpan',
+    icon: 'icon-layers',
     name: '多模态RAG',
     value: '图片、音频、视频等多种格式的编辑和处理。'
   },
   {
-    icon: 'iconzitixiahuaxian',
+    icon: 'icon-yuyinshibie',
     name: '语音识别',
     value: '可以将语音输入转换为文本格式。'
   },
   {
-    icon: 'iconimage',
+    icon: 'icon-file',
     name: '多文档格式编辑',
     value: '支持多种文档格式的编辑和转换。'
   },
   {
-    icon: 'icongaikuozonglan',
+    icon: 'icon-layout',
     name: '智能排版',
     value: '自动调整文字和页面布局，提高文档的整体美观度'
   },
   {
-    icon: 'iconxiaolian',
+    icon: 'icon-run-up',
     name: '智能生成',
     value: '利用AI技术自动生成编辑内容，提高编辑效率。'
   },
   {
-    icon: 'iconchaolianjie',
+    icon: 'icon-jieban',
     name: '实时协同编辑',
     value: '支持多人同时在线编辑一个文档，能够实时同步各位编辑者的操作，提高团队协作效率。'
   },
   {
-    icon: 'iconflow-Mark',
+    icon: 'icon-good',
     name: '智能推荐',
     value: '根据用户的编辑历史和偏好，为用户推荐适合的文章、图片、视频等内容，提供编辑灵感。'
   },
   {
-    icon: 'iconbiaoqian',
+    icon: 'icon-warning-filling',
     name: '语法检查',
     value: '集成了语法检查功能，能够自动识别和纠正文本中的语法错误，提高文档的专业度和准确性。'
   },
   {
-    icon: 'iconlianjiexian',
+    icon: 'icon-file-open',
     name: '文件版本管理',
     value: '自动保存文件历史版本，支持用户查看、恢复、比对不同版本的文档，确保编辑过程的安全和有序性。'
   },
   {
-    icon: 'iconmouseL',
+    icon: 'icon-search',
     name: '智能搜索',
     value: '集成了智能搜索引擎，可以通过关键词快速定位文档中的内容，提高编辑效率和检索速度。'
   },
   {
-    icon: 'icondaohang',
+    icon: 'icon-tishi',
     name: '智能提醒',
     value: '根据用户设定的提醒时间和内容，智能编辑器能够及时提醒用户完成任务或者重要事件。'
   },
   {
-    icon: 'iconshezhi',
+    icon: 'icon-a-070_wendang-20',
     name: '自动备份',
     value: '定期自动备份用户编辑的文档，确保文档数据的安全性和可靠性，避免意外数据丢失。'
   }

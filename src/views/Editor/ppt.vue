@@ -37,7 +37,7 @@ export default defineComponent({
     onDocumentReady() {
       console.log("Document is loaded");
     },
-    onLoadComponentError(errorCode, errorDescription) {
+    onLoadComponentError(errorCode: any, errorDescription: any) {
       switch (errorCode) {
         case -1: // Unknown error loading component
           console.log(errorDescription);

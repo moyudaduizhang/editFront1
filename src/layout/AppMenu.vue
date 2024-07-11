@@ -7,6 +7,7 @@ const pptIcon = new URL('@/assets/PPT2.svg', import.meta.url).href;
 const pdfIcon = new URL('@/assets/PDF3.svg', import.meta.url).href;
 const mindmapIcon = new URL('@/assets/mind-map.svg', import.meta.url).href;
 const wordIcon = new URL('@/assets/Word2.svg', import.meta.url).href;
+const flowchartIcon = new URL('@/assets/流程图.svg', import.meta.url).href;
 const model = ref([
     {
         label: 'Home',
@@ -46,7 +47,7 @@ const model = ref([
                     },
                     {
                         label: 'flowchart',
-                        icon: 'pi pi-fw pi-times-circle',
+                        icon: flowchartIcon,
                         to: '/flowchart'
                     },
                     {

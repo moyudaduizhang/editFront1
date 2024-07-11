@@ -2,7 +2,9 @@ import axios from 'axios'
 
 const request = axios.create({
     //baseURL: 'http://39.97.218.60/',
-    baseURL: 'http://127.0.0.1:5000',
+    baseURL: 'http://edno93937032.vicp.fun',
     timeout: 5000
 })
+
 export default request
+

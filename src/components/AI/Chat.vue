@@ -12,7 +12,7 @@
           <el-avatar
             class="mr-3"
             :size="32"
-            :src="message.sender === 'user' ? avatarstore.avatarUrl : aiAvatar"
+            
           />
           <span class="sender-name">{{ message.sender === 'user' ? '用户' : 'AI' }}</span>
         </div>
@@ -48,14 +48,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import axios from 'axios';
-import { useTokenStore, useUserAvatarStore } from "@/store/userstoken";
-
+import requestai from '@/utils/requestai.ts'
+import { ElMessage } from 'element-plus';
 const input = ref('');
 const num = ref("1");
 const messages = ref<{ sender: string, content: string, type: string }[]>([]);
-const avatarstore = useUserAvatarStore();
-const aiAvatar = 'path/to/ai/avatar.png'; // AI头像路径
+
 
 const file = ref<File | null>(null);
 const fileInput = ref<HTMLInputElement | null>(null); // 确保 fileInput 被正确引用
@@ -73,19 +71,17 @@ const sendMessage = () => {
   if (file.value) {
     formData.append("file", file.value);
   }
-
-  axios({
+  requestai({
     method: 'post',
-    url: "http://127.0.0.1:5000/getAI",
+    url: "/getAI",
     data: formData,
   }).then(res => {
+    console.log(res.data);
     messages.value.push({ sender: 'ai', content: res.data.answer, type: 'text' });
     console.log(res.data.answer);
   }).catch(error => {
-    console.error("请求错误: ", error);
+    ElMessage.error("请求错误: ", error);
   });
-
-  // 发送完成后清空输入框内容和文件信息
   input.value = '';
   file.value = null;
 };
@@ -135,9 +131,9 @@ const generateImage = () => {
   // 本地显示发送的消息
   messages.value.push({ sender: 'user', content: input.value, type: 'text' });
 
-  axios({
+ requestai({
     method: 'post',
-    url: "http://127.0.0.1:5000/wordtopic",
+    url: "/wordtopic",
     data: { prompt: input.value },
   }).then(res => {
     // 假设后端返回的图片URL是完整的

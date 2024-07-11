@@ -1,7 +1,7 @@
 import {
   createRouter,
   createWebHistory,
-  type RouteRecordRaw,
+  
 } from "vue-router";
 import { useTokenStore } from "@/store/userstoken";
 
@@ -32,6 +32,16 @@ const router = createRouter({
           path: "/wangEditor",
           name: "wangEditor",
           component: () => import("@/views/Editor/Editor.vue"),
+        },
+        {
+          path: "/flowchart",
+          name: "flowchart",
+          component: () => import("@/views/temp/flowchart.vue"),
+        },
+        {
+          path: "/editflowchart",
+          name: "editflowchart",
+          component: () => import("@/views/Editor/flowchart/flowchart.vue"),
         },
         {
           path:"/drawing",
@@ -123,7 +133,7 @@ export function resetRouter() {
 }
 //每次路由位置发生变化时要做的事：验证token
 
- router.beforeEach((to, from, next) => {
+ router.beforeEach((to, _from, next) => {
        const store = useTokenStore();
 
        if (to.matched.some(record => record.meta.requiresAuth)) {

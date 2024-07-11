@@ -41,9 +41,10 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import axios from 'axios';
-import { useTokenStore, useUserAvatarStore } from '@/store/userstoken';
 
+import { useTokenStore, useUserAvatarStore } from '@/store/userstoken';
+import request from '@/utils/request.ts';
+import {ElMessage} from "element-plus"
 const defaultValues = {
   account: '默认账号',
   password: '默认密码',
@@ -60,7 +61,8 @@ const formData = ref({
   email: defaultValues.email,
   phone: defaultValues.phone,
   token: defaultValues.token,
-  nickname: defaultValues.pet_name
+  nickname: defaultValues.pet_name,
+
 });
 
 const avatarUrl = ref(defaultValues.avatar);
@@ -68,25 +70,27 @@ const isEditing = ref(false); // 初始设为不可编辑
 const store = useTokenStore();
 const avatarStore = useUserAvatarStore();
 const fileInput = ref<HTMLInputElement | null>(null);
-
 const fetchPersonalPageData = async () => {
   try {
     console.log("访问个人信息展示界面，更新数据");
-    const response = await axios.post('http://127.0.0.1:5000/personal_page', { user: store.token.access_token });
+    const response = await request.post('/personal_page', { user: store.token.access_token });
     if (response.data.success === 'true' && response.data.data.length > 0) {
       const data = response.data.data[0];
+      console.log("后端响应数据：",data);
       formData.value.account = data.account ?? defaultValues.account;
       formData.value.password = data.password ?? defaultValues.password;
       formData.value.email = data.email ?? defaultValues.email;
       formData.value.phone = data.phone ?? defaultValues.phone;
       formData.value.token = data.token ?? defaultValues.token;
       formData.value.nickname = data.pet_name ?? defaultValues.pet_name;
-      avatarUrl.value = data.avatar ?? defaultValues.avatar;
+      avatarUrl.value = data.url;
+      console.log('avatarUrl:', avatarUrl.value); // 输出 URL 以便调试
     } else {
-      alert(`获取数据失败: ${response.data.message}`);
+      ElMessage.error(`获取数据失败: ${response.data.message}`);
     }
   } catch (error) {
-    alert('发生错误: ' + error.message);
+    const err=error as Error;
+    ElMessage.error('发生错误: ' + err.message);
   }
 };
 
@@ -100,42 +104,50 @@ const updatePersonalPageData = async () => {
       token: formData.value.token,
       pet_name: formData.value.nickname
     };
-    const response = await axios.post('http://127.0.0.1:5000/person_page_show', updatedData);
+    const response = await request.post('/person_page_show', updatedData);
     if (response.data.success === 'true') {
-      alert('用户信息更新成功');
+      ElMessage.success('用户信息更新成功');
       isEditing.value = false;
       await fetchPersonalPageData();
     } else {
-      alert(`更新数据失败: ${response.data.message}`);
+      ElMessage.error(`更新数据失败: ${response.data.message}`);
     }
   } catch (error) {
-    alert('发生错误: ' + error.message);
+    const err=error as Error;
+    ElMessage.error('发生错误: ' + err.message);
   }
 };
 
 const handleFileChange = async () => {
-  if (!fileInput.value || !fileInput.value.files.length) return;
-  const file = fileInput.value.files[0];
+  
+  const file = fileInput.value?.files?.[0];
   const formData = new FormData();
+  if (file && file instanceof File) {
   formData.append('avatar', file);
+} else {
+  // 处理file为undefined或不是File类型的情况
+}
   formData.append('user', store.token.access_token);
 
   try {
-    const response = await axios.post('http://127.0.0.1:5000/upload_avatar', formData, {
+    const response = await request.post('/upload_avatar', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     });
     if (response.data.success === 'true') {
-      alert('头像上传成功');
-      avatarUrl.value = response.data.avatar_url;
-      avatarStore.setAvatarUrl(response.data.avatar_url);
-      console.log('头像 URL 更新为：', response.data.avatar_url);
+      ElMessage.success('头像上传成功');
+      avatarUrl.value = response.data.url;
+      avatarStore.setAvatarUrl(response.data.url);
+      console.log('头像 URL 更新为：', response.data.url);
     } else {
-      alert(`头像上传失败: ${response.data.message}`);
+      console.error('头像上传失败:', response.data);
+      ElMessage.error(`头像上传失败: ${response.data.message}`);
     }
   } catch (error) {
-    alert('发生错误: ' + error.message);
+    const err = error as Error;
+  
+    ElMessage.error('发生错误: ' + err.message);
   }
 };
 
@@ -166,7 +178,7 @@ onMounted(() => {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  height: 100vh;
+  height: 78vh;
   text-align: center;
   background-color: #f9f9f9;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);

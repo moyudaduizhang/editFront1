@@ -82,7 +82,7 @@ const filteredThemes = computed(() => {
 });
 
 const emit = defineEmits(["theme-selected"]);
-const selectTheme = (themeName) => {
+const selectTheme = (themeName: string) => {
   emit("theme-selected", themeName);
 };
 </script>

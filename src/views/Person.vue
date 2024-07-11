@@ -12,7 +12,7 @@
 
       <div :class="personClass">
         <div class="avatar-container">
-          <el-avatar :class="avatarClass" :src="`${avatarstore.avatarUrl}`" />
+          <el-avatar :class="avatarClass" :src="avatarUrl" />
           <div class="tags">
             <span class="text-large font-1000 mr-3">{{ nickname }}</span>
             <span class="text-sm mr-3" style="color: var(--el-text-color-regular)">{{ account }}</span>
@@ -41,12 +41,12 @@
 </template>
 
 <script setup lang="ts">
-import { ElNotification as notify } from 'element-plus';
+import { ElMessage } from 'element-plus';
 import { onMounted, ref } from 'vue';
 import type { TabsPaneContext } from 'element-plus';
 import { useTokenStore, useUserAvatarStore } from '@/store/userstoken';
-import axios from 'axios';
 
+import request from '@/utils/request.ts';
 const store = useTokenStore();
 const avatarstore = useUserAvatarStore();
 
@@ -57,8 +57,9 @@ const defaultValues = {
   phone: '1234567890',
   token: '默认Token',
   pet_name: 'test昵称',
+  avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
 };
-
+const avatarUrl = ref(defaultValues.avatar);
 const account = ref(defaultValues.account);
 const password = ref(defaultValues.password);
 const email = ref(defaultValues.email);
@@ -69,7 +70,7 @@ const activeName = ref('first');
 
 const fetchPersonalPageData = async () => {
   try {
-    const response = await axios.post('http://127.0.0.1:5000/personal_page', { user: store.token.access_token });
+    const response = await request.post('/personal_page', { user: store.token.access_token });
     if (response.data.success === 'true' && response.data.data.length > 0) {
       const data = response.data.data[0];
       account.value = data.account ?? defaultValues.account;
@@ -78,17 +79,18 @@ const fetchPersonalPageData = async () => {
       phone.value = data.phone ?? defaultValues.phone;
       token.value = data.token ?? defaultValues.token;
       nickname.value = data.pet_name ?? defaultValues.pet_name;
+      avatarUrl.value = data.url;
+      console.log(data);
     } else {
-      alert(`获取数据失败: ${response.data.message}`);
+      ElMessage.error(`获取数据失败: ${response.data.message}`);
     }
   } catch (error) {
-    alert('发生错误: ' + error.message);
+    const err = error as Error;
+    ElMessage.error('发生错误: ' + err.message);
   }
 };
 
-const onBack = () => {
-  notify('Back');
-};
+
 
 const personClass = ref('');
 const avatarClass = ref('');
