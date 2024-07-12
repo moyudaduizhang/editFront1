@@ -2,7 +2,7 @@ import {defineConfig} from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
 import {createSvgIconsPlugin} from 'vite-plugin-svg-icons'
-import UonCSS from 'unocss/vite'
+
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import AutoImport from 'unplugin-auto-import/vite'
@@ -11,6 +11,7 @@ import {ElementPlusResolver} from 'unplugin-vue-components/resolvers'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+    base:'/editFront1/',
     plugins: [
         vue(),
         AutoImport({
@@ -41,7 +42,7 @@ export default defineConfig({
             symbolId: 'icon-[dir]-[name]',
         })
     ],
-    base:'/editFront1/',
+    
     define: {
         'process.env': {}
       },

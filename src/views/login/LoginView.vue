@@ -20,7 +20,7 @@ const form = reactive({
 });
 
 const logoUrl = computed(() => {
-  return `/layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
+  return `/editFront1/layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
 });
 
 // 登录事件处理
