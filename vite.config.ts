@@ -41,7 +41,7 @@ export default defineConfig({
             symbolId: 'icon-[dir]-[name]',
         })
     ],
-    base:'./',
+    base:'/editFront1/',
     define: {
         'process.env': {}
       },
