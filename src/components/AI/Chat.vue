@@ -68,9 +68,25 @@ const sendMessage = () => {
   formData.append("username", "123456");
   formData.append("number", num.value);
   formData.append("cont", input.value);
+
   if (file.value) {
     formData.append("file", file.value);
+    requestai({
+    method: 'post',
+    url: "/mutilrag",
+    data: formData,
+  }).then(res => {
+    console.log(res.data);
+    messages.value.push({ sender: 'ai', content: res.data.answer, type: 'text' });
+    console.log(res.data.answer);
+  }).catch(error => {
+    ElMessage.error("请求错误: ", error);
+  });
+  input.value = '';
+  file.value = null;
   }
+
+else{
   requestai({
     method: 'post',
     url: "/getAI",
@@ -84,6 +100,8 @@ const sendMessage = () => {
   });
   input.value = '';
   file.value = null;
+}
+  
 };
 
 const handleKeyPress = (event: KeyboardEvent) => {
