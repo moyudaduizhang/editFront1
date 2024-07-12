@@ -97,7 +97,7 @@ const router = createRouter({
       component:()=>import("@/layout/AppLayout.vue")
     },
     {
-      path: "/",
+      path: "/editFront1",
       name: "Index",
       component: () => import("@/views/Homepage/pages/Index/Index.vue"),
     },
