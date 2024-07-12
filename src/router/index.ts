@@ -6,7 +6,7 @@ import {
 import { useTokenStore } from "@/store/userstoken";
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory("/editFront1/"),  // 这里指定你的仓库名称
   routes: [
     {
       path: "/dashboard",
