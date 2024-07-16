@@ -50,7 +50,6 @@
 import { ref } from 'vue';
 import requestai from '@/utils/requestai.ts'
 import { ElMessage } from 'element-plus';
-import axios from 'axios';
 const input = ref('');
 const num = ref("1");
 const messages = ref<{ sender: string, content: string, type: string }[]>([]);

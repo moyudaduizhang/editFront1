@@ -17,7 +17,11 @@ declare module '@/views/Homepage/pages/Index/Index.vue';
 declare module '@/views/login/LoginView.vue';
 declare module '@/views/404.vue';
 declare module 'simple-mind-map/src/plugins/Export.js';
- declare module "@/components/AI/AiSidebar.vue";
+declare module "@/components/AI/AiSidebar.vue";
+declare module '*.vue' {
+  import Vue from 'vue';
+  export default Vue;
+}
 declare module 'simple-mind-map/example/exampleData' {
     const exampleData: any;
     export default exampleData;

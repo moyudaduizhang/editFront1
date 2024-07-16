@@ -5,7 +5,7 @@
         <el-upload
           action="/upload"
           :on-success="handleUploadSuccess"
-          :before-upload="beforeUpload"
+          
           :data="uploadData"
           :headers="uploadHeaders"
           :show-file-list="false"
@@ -63,10 +63,7 @@ const editDocument = (name: string) => {
   router.push({ name: 'wangEditor', query: { documentName: name } });
 };
 
-const beforeUpload = (file: any) => {
-  // 在这里可以进行上传文件的验证
-  return true;
-};
+
 
 const uploadData = () => {
   return {
