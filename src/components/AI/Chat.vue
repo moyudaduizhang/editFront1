@@ -50,6 +50,7 @@
 import { ref } from 'vue';
 import requestai from '@/utils/requestai.ts'
 import { ElMessage } from 'element-plus';
+import axios from 'axios';
 const input = ref('');
 const num = ref("1");
 const messages = ref<{ sender: string, content: string, type: string }[]>([]);
@@ -57,6 +58,7 @@ const messages = ref<{ sender: string, content: string, type: string }[]>([]);
 
 const file = ref<File | null>(null);
 const fileInput = ref<HTMLInputElement | null>(null); // 确保 fileInput 被正确引用
+
 
 const sendMessage = () => {
   if (input.value.trim() === '') return;
@@ -209,6 +211,7 @@ const generateImage = () => {
   overflow-y: auto; /* 如果消息过多，自动显示滚动条 */
   padding: 10px;
   background-color: #f5f5f5;
+  
 }
 
 .input-container {
@@ -216,7 +219,7 @@ const generateImage = () => {
   align-items: center;
   padding: 10px;
   background-color: #ffffff;
-  margin-bottom: 10%;
+  margin-bottom: 20%;
   margin-right: 10%;
 }
 

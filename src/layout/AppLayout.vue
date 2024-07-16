@@ -78,11 +78,12 @@ const isOutsideClicked = (event) => {
             <app-footer></app-footer>
             
         </div>
-        <app-config></app-config>
+        
         <AiSidebar :isVisible="isSidebarVisible" @close="closeSidebar" />
     </div>
-    <div type="primary" @click="toggleSidebar" class="toggle-button">
-      <img src="@/assets/ai.svg" class="logo" />
+
+    <div type="primary" @click="toggleSidebar" class="toggle-button" >
+      <img src="@/assets/ai.svg" class="logo" v-show="!isSidebarVisible"/>
     </div>
     
     <Toast />
