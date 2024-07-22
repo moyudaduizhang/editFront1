@@ -18,6 +18,8 @@ declare module '@/views/login/LoginView.vue';
 declare module '@/views/404.vue';
 declare module 'simple-mind-map/src/plugins/Export.js';
 declare module "@/components/AI/AiSidebar.vue";
+declare module 'vue3-pdf'
+
 declare module '*.vue' {
   import Vue from 'vue';
   export default Vue;

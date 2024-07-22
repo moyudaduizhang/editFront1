@@ -42,12 +42,12 @@ const uploadRequest = (options: any) => {
 
   requestai({
     method: 'post',
-    url: "/getocr",
+    url: "/getAI",
     data: formData,
   }).then(res => {
-    aiResponse.value = res.data.text;
+    aiResponse.value = res.data.answer;
     options.onSuccess(res.data, file);
-    console.log('后端返回的消息：', res.data.text); // 打印后端返回的消息
+    console.log('后端返回的消息：', res.data.answer); // 打印后端返回的消息
   }).catch(error => {
     console.error("请求错误: ", error);
     options.onError(error);

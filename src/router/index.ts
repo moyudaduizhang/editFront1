@@ -14,10 +14,21 @@ const router = createRouter({
       meta: { requiresAuth: true },
       children: [
         {
-          path: "/dataset/:id",
+          path: "/dataset/:id/",
           name: "dataset",
           component: () => import("@/views/dataset.vue"),
+          props:true,
+        },
+        {
+          path:"/preview/:id/:dconame",
+          name:"Preview",
+          component:()=>import("@/views/preview.vue"),
           props:true
+        },
+        {
+          path: "/Chat_rag",
+          name: "chat",
+          component: () => import("@/components/AI/Chat_rag.vue"),
         },
         {
           path: "/doc",
@@ -126,7 +137,7 @@ const router = createRouter({
       name: "ErrorPage",
       component: () => import("@/views/404.vue"),
     },
-        
+    
   ],
 });
 
@@ -136,7 +147,7 @@ export function resetRouter() {
   router.replace({ path: "/login" });
   location.reload();
 }
-//每次路由位置发生变化时要做的事：验证token
+// 每次路由位置发生变化时要做的事：验证token
 
  router.beforeEach((to, _from, next) => {
        const store = useTokenStore();

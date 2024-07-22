@@ -5,6 +5,8 @@ import THeme from "@/views/Editor/mindmap/components/Theme.vue";
 import Export from 'simple-mind-map/src/plugins/Export.js'
 import ExportXMind from 'simple-mind-map/src/plugins/ExportXMind.js'
 import ExportPDF from 'simple-mind-map/src/plugins/ExportPDF.js'
+import requestdb from "@/utils/requestdb";   
+const words=ref('')                                                                                
 MindMap.usePlugin(ExportPDF)
 MindMap.usePlugin(Export)
 MindMap.usePlugin(ExportXMind)
@@ -515,6 +517,129 @@ const Exportpdf = () => {
   a.click()
 })
 };
+
+const oneByOneCreateAll = async() => {
+  console.log("123")
+  const dataList = [
+    {
+      data: {
+        text: '根节点',
+        uid: '1'
+      },
+      children: []
+    },
+    {
+      data: {
+        text: '根节点',
+        uid: '1'
+      },
+      children: [
+        {
+          data: {
+            text: '二级节点',
+            uid: '2'
+          },
+          children: []
+        }
+      ]
+    },
+    {
+      data: {
+        text: '根节点',
+        uid: '1'
+      },
+      children: [
+        {
+          data: {
+            text: '二级节点',
+            uid: '2'
+          },
+          children: []
+        },
+        {
+          data: {
+            text: '二级节点',
+            uid: '3'
+          },
+          children: []
+        }
+      ]
+    },
+    {
+      data: {
+        text: '根节点',
+        uid: '1'
+      },
+      children: [
+        {
+          data: {
+            text: '二级节点',
+            uid: '2'
+          },
+          children: [
+            {
+              data: {
+                text: '三级节点',
+                uid: '4'
+              },
+              children: []
+            }
+          ]
+        },
+        {
+          data: {
+            text: '二级节点',
+            uid: '3'
+          },
+          children: []
+        }
+      ]
+    }
+  ]
+  let index = 0
+  const run = () => {
+    if (index >= dataList.length) return
+    const cur = dataList[index]
+    if (index === 0) {
+      mindMap.setData(cur)
+      let waitUid = ''
+      mindMap.on('data_change_detail', (list) => {
+        const lastCreate = list.filter((item) => {
+          return item.action === 'create'
+        })[0]
+        if (lastCreate) {
+          const uid = lastCreate.data.data.uid
+          const node = mindMap.renderer.findNodeByUid(uid)
+          if (node) {
+            mindMap.renderer.moveNodeToCenter(node)
+          } else {
+            waitUid = uid
+          }
+        }
+      })
+      mindMap.on('node_tree_render_end', () =>{
+        if (waitUid) {
+          waitUid = ''
+          const node = mindMap.renderer.findNodeByUid(waitUid)
+          if (node) {
+            mindMap.renderer.moveNodeToCenter(node)
+          }
+        }
+      })
+    } else {
+      // mindMap.updateData(cur)
+      mindMap.renderer.setData(cur)
+      mindMap.render()
+      mindMap.command.addHistory()
+    }
+    setTimeout(() => {
+      index++
+      run()
+    }, 1000)
+  }
+  run()
+}
+
 onMounted(() => {
   mindMap = new MindMap({
     el: document.getElementById("mindMapContainer"),
@@ -602,6 +727,24 @@ onMounted(() => {
     <div id="mindMapContainer"></div>
 
     <div class="toolbar">
+
+      <el-popover
+    placement="bottom"
+    title="描述你想生成的样式"
+    :width="200"
+    trigger="click"
+    content="this is content, this is content, this is content"
+  >
+    <template #reference>
+      <el-button type="primary" @click.native.prevent>
+      AI
+    </el-button>
+    </template>
+    <div>
+    <el-input placeholder="请输入内容"   @keyup.enter="oneByOneCreateAll" v-model="words"></el-input>
+  </div>
+  </el-popover>
+
       <div class="toolbar-item" @click="back" v-if="!isStart">
         <el-icon><img src="@/assets/回退.svg" alt="切换主题" /></el-icon>
         <span>回退</span>

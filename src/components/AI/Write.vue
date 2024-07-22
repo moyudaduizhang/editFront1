@@ -63,7 +63,7 @@ const sendMessage = () => {
   formData.append("language", language.value);
   requestai({
     method: 'post',
-    url: "/getpolish",
+    url: "/getAI",
     data: formData,
   }).then(res => {
     aiResponse.value = res.data.answer;

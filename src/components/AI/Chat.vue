@@ -74,7 +74,7 @@ const sendMessage = () => {
     formData.append("file", file.value);
     requestai({
     method: 'post',
-    url: "/mutilrag",
+    url: "/getAI",
     data: formData,
   }).then(res => {
     console.log(res.data);
@@ -117,7 +117,7 @@ const triggerFileUpload = () => {
     fileInput.value.click();
   }
 };
-
+const emit = defineEmits(['show-pdf']);
 const handleFileUpload = (event: Event) => {
   const target = event.target as HTMLInputElement;
   if (target.files && target.files.length > 0) {

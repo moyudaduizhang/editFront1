@@ -176,8 +176,8 @@ const logoUrl = computed(() => {
                                 <div class="flex align-items-center justify-content-center bg-teal-200 mb-3" style="width: 3.5rem; height: 3.5rem; border-radius: 10px">
                                     <i class="pi pi-fw pi-shopping-cart text-2xl text-teal-700"></i>
                                 </div>
-                                <h5 class="mb-2 text-900">Ready to Use</h5>
-                                <span class="text-600">Mauris sit amet massa vitae.</span>
+                                <h5 class="mb-2 text-900">准备去使用</h5>
+                                <span class="text-600"></span>
                             </div>
                         </div>
                     </div>
@@ -190,8 +190,8 @@ const logoUrl = computed(() => {
                                 <div class="flex align-items-center justify-content-center bg-blue-200 mb-3" style="width: 3.5rem; height: 3.5rem; border-radius: 10px">
                                     <i class="pi pi-fw pi-globe text-2xl text-blue-700"></i>
                                 </div>
-                                <h5 class="mb-2 text-900">Modern Practices</h5>
-                                <span class="text-600">Elementum nibh tellus molestie nunc non.</span>
+                                <h5 class="mb-2 text-900">多模态rag</h5>
+                                <span class="text-600">支持多种文档格式存储检索</span>
                             </div>
                         </div>
                     </div>
@@ -215,10 +215,10 @@ const logoUrl = computed(() => {
                         style="border-radius: 20px; background: linear-gradient(0deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), radial-gradient(77.36% 256.97% at 77.36% 57.52%, #efe1af 0%, #c3dcfa 100%)"
                     >
                         <div class="flex flex-column justify-content-center align-items-center text-center px-3 py-3 md:py-0">
-                            <h3 class="text-gray-900 mb-2">Joséphine Miller</h3>
-                            <span class="text-gray-600 text-2xl">Peak Interactive</span>
+                            <h3 class="text-gray-900 mb-2">IT先疯队</h3>
+                            <span class="text-gray-600 text-2xl">长沙理工大学</span>
                             <p class="text-gray-900 sm:line-height-2 md:line-height-4 text-2xl mt-4" style="max-width: 800px">
-                                “Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.”
+                                基于大小模型的智能编辑器
                             </p>
                             <img src="/demo/images/landing/peak-logo.svg" class="mt-4" alt="Company logo" />
                         </div>
@@ -241,9 +241,9 @@ const logoUrl = computed(() => {
                         <div class="flex align-items-center justify-content-center bg-purple-200 align-self-center lg:align-self-end" style="width: 4.2rem; height: 4.2rem; border-radius: 10px">
                             <i class="pi pi-fw pi-mobile text-5xl text-purple-700"></i>
                         </div>
-                        <h2 class="line-height-1 text-900 text-4xl font-normal">多人协作</h2>
+                        <h2 class="line-height-1 text-900 text-4xl font-normal">多模态rag</h2>
                         <span class="text-700 text-2xl line-height-3 ml-0 md:ml-2" style="max-width: 650px"
-                            >支持多人同时编辑文档，实现高效协作。</span
+                            >支持存储多模态文件的知识库</span
                         >
                     </div>
                 </div>

@@ -3,12 +3,11 @@
     <template #header>
       <div style="display: flex;">
         <el-upload
-          action="/upload"
+          action="/create_words"
           :on-success="handleUploadSuccess"
-          
           :data="uploadData"
-          :headers="uploadHeaders"
           :show-file-list="false"
+          :http-request="customRequest"
         >
           <el-button type="primary">上传</el-button>
         </el-upload>
@@ -21,7 +20,6 @@
       <el-table-column prop="sorts" label="类型" align="center" />
       <el-table-column prop="address" label="操作" align="center">
         <template #default="{ row }">
-          <el-button @click="editDocument(row.name)">编辑</el-button>
           <el-button @click="previewChunkEffect(row.name)">预览分块效果</el-button>
           <el-button @click="deleteDocument(row.name)">删除</el-button>
         </template>
@@ -32,22 +30,19 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { useTokenStore } from '@/store/userstoken';
-import request from '@/utils/request';
+import { useRoute } from 'vue-router';
+import requestdb from '@/utils/requestdb';
 import { ElMessage } from 'element-plus';
+import router from '@/router';
+import Preview from './preview.vue'
 
 const route = useRoute();
-const router = useRouter();
-const store = useTokenStore();
-const alldocs = ref([
-  { date: '2023-05-01', name: '文档1', sorts: '文档' },
-]);
+const alldocs = ref([]);
 const id = ref(route.params.id);
 
 const fetchdocsdata = async () => {
   try {
-    const response = await request.post('/show_file', { user: store.token.access_token, id: id.value });
+    const response = await requestdb.post('/show_milvus', { user: 'admin', id: id.value });
     if (response.data.success === 'true' && response.data.data.length > 0) {
       alldocs.value = response.data.data;
     } else {
@@ -59,38 +54,50 @@ const fetchdocsdata = async () => {
   }
 };
 
-const editDocument = (name: string) => {
-  router.push({ name: 'wangEditor', query: { documentName: name } });
-};
-
-
-
-const uploadData = () => {
+const uploadData = (file: File) => {
   return {
-    user: store.token.access_token,
-    id: id.value,
+    username: 'admin',
+    ids: id.value,
+    times: new Date().toISOString(),
+    various: getFileType(file.name),
+    dconame: file.name,
   };
 };
 
-const uploadHeaders = {
-  Authorization: `Bearer ${store.token.access_token}`,
+const customRequest = async (option: any) => {
+  const formData = new FormData();
+  formData.append('username', 'admin');
+  formData.append('ids', id.value);
+  formData.append('times', new Date().toISOString());
+  formData.append('various', getFileType(option.file.name)); 
+  formData.append('dconame', option.file.name); 
+  formData.append('doc', option.file);
+
+  try {
+    const response = await requestdb.post(option.action, formData);
+    if (response.data.success == 'true') {
+      option.onSuccess(response.data, option.file);
+    } else {
+      option.onError(new Error(response.data.message));
+    }
+  } catch (error) {
+    option.onError(error);
+  }
 };
+
 const previewChunkEffect = (name: string) => {
-  // 这里是预览分块效果的占位函数，具体实现需要您根据实际情况编写
   ElMessage.info(`预览分块效果：${name}`);
-  // 可以在这里调用 rag 系统的文本分块逻辑
+  router.push({ name: 'Preview', params: { id: id.value, dconame: name } });
 };
+
 const deleteDocument = (name: string) => {
-  // 删除文档的逻辑
   ElMessage.info(`删除文档：${name}`);
-  // 实际删除逻辑需要您根据后端接口编写
 };
 
 onMounted(() => {
   fetchdocsdata();
 });
 
-// Helper function to get file type
 const getFileType = (fileName: string) => {
   const extension = fileName.split('.').pop()?.toLowerCase();
   switch (extension) {
@@ -105,20 +112,21 @@ const getFileType = (fileName: string) => {
       return 'Excel 文件';
     case 'pdf':
       return 'PDF 文件';
+    case 'jpg':
+      return 'jpg 文件';
     default:
       return '未知文件类型';
   }
 };
 
-// Modify handleUploadSuccess to add file type
 const handleUploadSuccess = (response: any, file: any) => {
-  if (response.success === 'true') {
+  if (response.success) {
     ElMessage.success('上传成功');
     const fileType = getFileType(file.name);
     alldocs.value.push({
       date: new Date().toISOString().split('T')[0],
       name: file.name,
-      sorts: fileType
+      sorts: fileType,
     });
   } else {
     console.log(`上传失败: ${response.message}`);

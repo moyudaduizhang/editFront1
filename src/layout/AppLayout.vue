@@ -7,7 +7,7 @@ import AppConfig from '@/layout/AppConfig.vue';
 import { useLayout } from '@/layout/composables/layout.js';
 import AiSidebar from "@/components/AI/AiSidebar.vue";
 const { layoutConfig, layoutState, isSidebarActive } = useLayout();
-
+ // 用于存储PDF文件的URL
 const outsideClickListener = ref(null);
 
 const isSidebarVisible = ref(false);
@@ -63,6 +63,7 @@ const isOutsideClicked = (event) => {
 
     return !(sidebarEl.isSameNode(event.target) || sidebarEl.contains(event.target) || topbarEl.isSameNode(event.target) || topbarEl.contains(event.target));
 };
+
 </script>
 
 <template>
@@ -71,6 +72,7 @@ const isOutsideClicked = (event) => {
         <div class="layout-sidebar">
             <app-sidebar></app-sidebar>
         </div>
+        
         <div class="layout-main-container">
             <div class="layout-main">
                 <router-view></router-view>
@@ -96,6 +98,8 @@ const isOutsideClicked = (event) => {
   right: 20px;
   z-index: 100;
 }
+// 新增PDF容器的样式
+
 .logo {
   display: flex;
   align-items: center;

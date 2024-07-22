@@ -137,9 +137,9 @@ const handleFileChange = async () => {
     });
     if (response.data.success === 'true') {
       ElMessage.success('头像上传成功');
-      avatarUrl.value = response.data.url;
-      avatarStore.setAvatarUrl(response.data.url);
-      console.log('头像 URL 更新为：', response.data.url);
+      avatarUrl.value = response.data.avatar_url;
+      avatarStore.setAvatarUrl(response.data.avatar_url);
+      console.log('头像 URL 更新为：', response.data.avatar_url);
     } else {
       console.error('头像上传失败:', response.data);
       ElMessage.error(`头像上传失败: ${response.data.message}`);

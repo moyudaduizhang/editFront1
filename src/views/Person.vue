@@ -79,8 +79,8 @@ const fetchPersonalPageData = async () => {
       phone.value = data.phone ?? defaultValues.phone;
       token.value = data.token ?? defaultValues.token;
       nickname.value = data.pet_name ?? defaultValues.pet_name;
-      avatarUrl.value = data.url;
-      console.log(data);
+      avatarUrl.value = response.data.url;
+      console.log('avatarUrl:', response.data.url);
     } else {
       ElMessage.error(`获取数据失败: ${response.data.message}`);
     }

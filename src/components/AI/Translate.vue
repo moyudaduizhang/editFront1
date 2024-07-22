@@ -95,7 +95,7 @@ const sendMessage = () => {
   formData.append("cont", input.value);
   requestai({
     method: 'post',
-    url: "/gettranslate",
+    url: "/getAI",
     data: formData,
   }).then(res => {
     aiResponse.value = res.data.answer;

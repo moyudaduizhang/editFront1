@@ -42,15 +42,18 @@
   </div>
 </template>
 
-<script setup>
-import { ref, computed } from 'vue';
-import { ElCard, ElInput, ElDialog, ElButton } from 'element-plus';
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue';
+import { ElCard, ElInput, ElDialog, ElButton, ElMessage } from 'element-plus';
 import 'element-plus/dist/index.css';
 import { useRouter } from 'vue-router';
 
+import { useTokenStore } from '@/store/userstoken';
+import requestdb from '@/utils/requestdb';
+const store = useTokenStore();
 // 模拟数据
 const icons = ref([
-  { id: 1, name: '蓝灰色简历', imgSrc: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' },
+  { id: 1, name: '示例知识库', imgSrc: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' },
   // 添加更多图标数据
 ]);
 
@@ -65,23 +68,60 @@ const router = useRouter();
 const dialogVisible = ref(false);
 const newRepoName = ref('');
 
-const showDialog = () => {
-  dialogVisible.value = true;
-};
-
-const createNewRepo = () => {
+const fetchdocsdata = async () => {
+   try {
+     const response = await requestdb.post('/show_filesss', { user: 'admin' });
+     if (response.data.success === 'true' && response.data.data.length > 0) {
+      icons.value = response.data.data;
+     } else {
+       console.log(`获取数据失败: ${response.data.message}`);
+     }
+   } catch (error) {
+    const err = error as Error;
+    console.log('发生错误: ' + err.message);
+   }
+ };
+const createNewRepo = async () => {
   if (newRepoName.value) {
-    const newId = icons.value.length ? icons.value[icons.value.length - 1].id + 1 : 1;
+    const newId = icons.value.length>0 ? icons.value[icons.value.length - 1].id + 1 : 1;
     icons.value.push({ id: newId, name: newRepoName.value, imgSrc: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' });
+    console.log(newId)
+    const username = 'admin';  // 替换为获取实际输入的方法
+    const ids = newId; // 假设newRepoName.value就是ids
+    const kname=newRepoName.value;
+    const formData = new FormData();
+    formData.append('username', username);
+    formData.append('ids', ids.toString());
+    formData.append('kname', kname);
+    try {
+      const response = await requestdb.post('/create_milvus', formData);
+      if (response.data.success) {
+        ElMessage.success(response.data.message);
+        console.log(response.data.path);
+      } else {
+        ElMessage.success(response.data.message);
+      }
+    } catch (error) {
+      console.error('Request failed:', error);
+      if (error.response) {
+        ElMessage.error('Request failed: ' + error.response.data.message);
+      } else {
+        ElMessage.error('Network error');
+      }
+    }
+
     newRepoName.value = '';
     dialogVisible.value = false;
-    router.push(`/dataset/${newId}`);
   }
 };
 
 const goToDocs = (id) => {
   router.push(`/dataset/${id}`);
 };
+
+onMounted(() => {
+  fetchdocsdata();
+});
 </script>
 
 <style scoped>
