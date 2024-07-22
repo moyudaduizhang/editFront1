@@ -62,7 +62,7 @@
   const newMessage = ref('');
   
   const file = ref<File | null>(null);
-  const fileInput = ref<HTMLInputElement | null>(null);
+  // const fileInput = ref<HTMLInputElement | null>(null);
 const selectItem = async (id: number) => {
     selectedItem.value = id;
     const formdata=new FormData();
@@ -85,7 +85,7 @@ const selectItem = async (id: number) => {
   
     let formData = new FormData();
     formData.append("username", "admin");
-    formData.append("number", 1);
+    formData.append("number", '1');
     formData.append("cont", newMessage.value);
 
     newMessage.value = '';

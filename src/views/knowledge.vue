@@ -70,7 +70,7 @@ const newRepoName = ref('');
 
 const fetchdocsdata = async () => {
    try {
-     const response = await requestdb.post('/show_filesss', { user: 'admin' });
+     const response = await requestdb.post('/show_filesss', { user: store.token.access_token });
      if (response.data.success === 'true' && response.data.data.length > 0) {
       icons.value = response.data.data;
      } else {
@@ -101,7 +101,7 @@ const createNewRepo = async () => {
       } else {
         ElMessage.success(response.data.message);
       }
-    } catch (error) {
+    } catch (error:any) {
       console.error('Request failed:', error);
       if (error.response) {
         ElMessage.error('Request failed: ' + error.response.data.message);
@@ -115,7 +115,7 @@ const createNewRepo = async () => {
   }
 };
 
-const goToDocs = (id) => {
+const goToDocs = (id:any) => {
   router.push(`/dataset/${id}`);
 };
 

@@ -31,6 +31,11 @@ const router = createRouter({
           component: () => import("@/components/AI/Chat_rag.vue"),
         },
         {
+          path:"/excel",
+          name:"excel",
+          component:()=>import("@/views/Editor/word/index.vue")
+        },
+        {
           path: "/doc",
           name: "doctemp",
           component: () => import("@/views/temp/Doc.vue"),

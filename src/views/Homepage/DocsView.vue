@@ -25,10 +25,11 @@
 import requestfile from '@/utils/requestfile.ts';
  const router1 = useRouter();
  const store = useTokenStore();
+ 
  const alldocs = ref([]);
  const fetchdocsdata = async () => {
    try {
-     const response = await requestfile.post('/show_file', { user: 'admin' });
+     const response = await requestfile.post('/show_file', { user: store.token.access_token });
      if (response.data.success === 'true' && response.data.data.length > 0) {
        alldocs.value = response.data.data;
      } else {

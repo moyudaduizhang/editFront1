@@ -34,10 +34,14 @@ import { useRoute } from 'vue-router';
 import requestdb from '@/utils/requestdb';
 import { ElMessage } from 'element-plus';
 import router from '@/router';
-import Preview from './preview.vue'
+interface Document {
+  date: string;
+  name: any;
+  sorts: string;
+}
 
 const route = useRoute();
-const alldocs = ref([]);
+const alldocs = ref<Array<Document>>([]);
 const id = ref(route.params.id);
 
 const fetchdocsdata = async () => {
@@ -67,7 +71,7 @@ const uploadData = (file: File) => {
 const customRequest = async (option: any) => {
   const formData = new FormData();
   formData.append('username', 'admin');
-  formData.append('ids', id.value);
+  formData.append('ids', id.value.toString());
   formData.append('times', new Date().toISOString());
   formData.append('various', getFileType(option.file.name)); 
   formData.append('dconame', option.file.name); 
