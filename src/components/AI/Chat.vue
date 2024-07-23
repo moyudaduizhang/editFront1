@@ -66,7 +66,7 @@ const sendMessage = () => {
   messages.value.push({ sender: 'user', content: input.value, type: 'text' });
 
   let formData = new FormData();
-  formData.append("username", "123456");
+  formData.append("username", "admin");
   formData.append("number", num.value);
   formData.append("cont", input.value);
 

@@ -517,9 +517,11 @@ const Exportpdf = () => {
   a.click()
 })
 };
-
+import requestai from "@/utils/requestai";
 const oneByOneCreateAll = async() => {
   console.log("123")
+  // const response=requestai.post('/mindmap_change',{words:"test"})
+  //  console.log(response.data)
   const dataList = [
     {
       data: {
@@ -596,6 +598,7 @@ const oneByOneCreateAll = async() => {
       ]
     }
   ]
+  
   let index = 0
   const run = () => {
     if (index >= dataList.length) return
