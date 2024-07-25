@@ -61,6 +61,7 @@ export default defineConfig({
     },
     server: {
         host: '0.0.0.0',
+       
         proxy: {
             '/api': {
                 // '/api'是代理标识，用于告诉node，url前面是/api的就是使用代理的

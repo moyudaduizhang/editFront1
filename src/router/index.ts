@@ -153,21 +153,21 @@ export function resetRouter() {
 }
 // 每次路由位置发生变化时要做的事：验证token
 
-//  router.beforeEach((to, _from, next) => {
-//        const store = useTokenStore();
+ router.beforeEach((to, _from, next) => {
+       const store = useTokenStore();
 
-//        if (to.matched.some(record => record.meta.requiresAuth)) {
-//          console.log(store.token.access_token )
-//          if (!store.token.access_token ) {
+       if (to.matched.some(record => record.meta.requiresAuth)) {
+         console.log(store.token.access_token )
+         if (!store.token.access_token ) {
 
-//              next({ name: 'login', query: { redirect: to.fullPath } });
-//          }
-//          else {next();
+             next({ name: 'login', query: { redirect: to.fullPath } });
+         }
+         else {next();
 
-//          }
-//        }
+         }
+       }
 
-//          next();
+         next();
 
-//      });
+     });
 export default router;

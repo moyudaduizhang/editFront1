@@ -26,21 +26,6 @@ const model = ref([
                         to: '/doc'
                     },
                     {
-                        label: 'ppt',
-                        icon: pptIcon,
-                        to: '/ppt'
-                    },
-                    {
-                        label: 'excel',
-                        icon: 'pi pi-fw pi-lock',
-                        to: '/excel'
-                    },
-                    {
-                        label: 'pdf',
-                        icon: pdfIcon,
-                        to: '/pdf'
-                    },
-                    {
                         label: 'mindmap',
                         icon: mindmapIcon,
                         to: '/mindmap'
@@ -61,6 +46,11 @@ const model = ref([
                 label:'知识库',
                 icon: 'pi pi-fw pi-file',
                 to: '/knowledge'
+            },
+            {
+                label:'AI',
+                icon: 'pi pi-fw pi-file',
+                to: '/chat_rag'
             }
         ]
     }

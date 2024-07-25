@@ -17,20 +17,20 @@
     <div class="history">
       <h3>聊天历史记录</h3>
       <ul>
-        <li v-for="history in chatHistory" :key="history.id">
-          {{ history.summary }}
+        <li v-for="history in chatHistory" :key="history.id" @click="toggleSelectchat(history)">
+          聊天历史记录ID： {{  history }}
         </li>
       </ul>
     </div>
 
     <div class="chat-area">
       <div class="messages">
-        <div v-for="message in messages" :key="message.id" class="message">
+        <div v-for="message in messages" :key="message.id" :class="['message', message.sender === 'user' ? 'user-message' : 'ai-message']">
           <div class="message-header">
             <el-avatar class="mr-3" :src="message.avatar" :size="32" />
             <span class="sender-name">{{ message.sender === 'user' ? '用户' : 'AI' }}</span>
           </div>
-          {{ message.text }}
+          <div class="message-content">{{ message.text }}</div>
           <div v-if="message.sender === 'user' && isLoading" class="loading">
             加载中...
           </div>
@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted,reactive } from 'vue';
 import requestdb from '@/utils/requestdb.ts';
 import requestai from '@/utils/requestai.ts';
 import request from '@/utils/request.ts';
@@ -94,8 +94,9 @@ const fetchUserAvatar = async () => {
       console.log(`获取用户头像失败: ${response.data.message}`);
       return '';
     }
-  } catch (error) {
-    console.log('发生错误: ' + error.message);
+  } catch (error:any) {
+    
+    console.log(`发生错误: ${error.message}`);
     return '';
   }
 };
@@ -107,6 +108,11 @@ const toggleSelectItem = (id: number) => {
   } else {
     selectedItems.value.splice(index, 1);
   }
+};
+
+const toggleSelectchat = async (id: any) => {
+  const response = await requestdb.post('/show_his', { username: 'admin', session_id: id.toString() });
+  messages.value = response.data.data;
 };
 
 const sendMessage = async () => {
@@ -130,26 +136,40 @@ const sendMessage = async () => {
 
   try {
     let response;
+    const aiMessage = reactive({ id: Date.now(), text: '', sender: 'AI', avatar: AI_AVATAR });
+    messages.value.push(aiMessage);
 
     if (selectedItems.value.length > 0) {
-      response = await requestdb.post('/index_milvus', formData);
-      console.log('Index Milvus Response:', response.data);
-    } else {
-      response = await requestai.post('/getAI', formData);
-      console.log('AI Response:', response.data);
+      const response = await fetch('https://23893a6d.r23.cpolar.top/multimodels/index_milvus', {
+        method: 'POST',
+        body: formData,
+      });
+      
+     if(response.body){ const reader = response.body.getReader();
+      const decoder = new TextDecoder('utf-8');
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+          break;
+        }
+        aiMessage.text += decoder.decode(value);
+      }
+      console.log('数据库响应:', response);}
     }
-
-    messages.value.push({ id: Date.now(), text: response.data.answer, sender: 'AI', avatar: AI_AVATAR });
-
-    // 添加到聊天历史记录
-    chatHistory.value.push({ id: Date.now(), summary: newMessage.value });
+     else {
+      response = await requestai.post('/getAI', formData);
+      console.log('无知识库ai响应:', response.data);
+      aiMessage.text = response.data.answer;
+    }
   } catch (error) {
     ElMessage.error('请求错误: ' + error);
+    console.log("请求错误：" + error);
   } finally {
     newMessage.value = '';
     isLoading.value = false;
   }
 };
+
 
 const fetchdocsdata = async () => {
   try {
@@ -159,7 +179,21 @@ const fetchdocsdata = async () => {
     } else {
       console.log(`获取数据失败: ${response.data.message}`);
     }
-  } catch (error) {
+  } catch (error:any) {
+    console.log('发生错误: ' + error.message);
+  }
+};
+
+const fetchChatHistory = async () => {
+  try {
+    const response = await request.post('/multimodels/show_session', { username: 'admin' });
+    if (response.data.success === 'true') {
+      chatHistory.value = response.data.data;
+      console.log(response.data.data);
+    } else {
+      console.log(`获取聊天历史记录失败: ${response.data.message}`);
+    }
+  } catch (error:any) {
     console.log('发生错误: ' + error.message);
   }
 };
@@ -167,69 +201,89 @@ const fetchdocsdata = async () => {
 onMounted(() => {
   fetchdocsdata();
   fetchUserAvatar();
+  fetchChatHistory();
 });
 </script>
 
 <style scoped>
 .chat-app {
   display: flex;
-  height: 100%;
+  height: 79vh;
+  background-color: #f5f5f5;
+  font-family: Arial, sans-serif;
 }
 
-.sidebar {
-  width: 200px;
-  border-right: 1px solid #ccc;
+.sidebar, .history {
+  width: 250px;
+  border-right: 1px solid #e0e0e0;
+  background-color: #ffffff;
+  padding: 20px;
 }
 
-.sidebar ul {
+.sidebar h3, .history h3 {
+  font-size: 18px;
+  color: #333333;
+  margin-bottom: 20px;
+}
+
+.sidebar ul, .history ul {
   list-style-type: none;
   padding: 0;
 }
 
-.sidebar li {
+.sidebar li, .history li {
   padding: 10px;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.sidebar li.selected {
+.sidebar li.selected, .history li:hover {
   background-color: #007bff;
   color: white;
-}
-
-.history {
-  width: 200px;
-  border-right: 1px solid #ccc;
-  padding: 10px;
-}
-
-.history ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.history li {
-  padding: 10px;
-  cursor: pointer;
+  border-radius: 4px;
 }
 
 .chat-area {
   flex: 1;
   display: flex;
   flex-direction: column;
+  background-color: #ffffff;
 }
 
 .messages {
   flex: 1;
-  padding: 10px;
+  padding: 20px;
   overflow-y: auto;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .message {
-  padding: 5px;
-  margin: 5px 0;
+  margin-bottom: 20px;
+}
+
+.message-header {
+  display: flex;
+  align-items: center;
+}
+
+.sender-name {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.message-content {
+  padding: 10px;
   background-color: #f1f1f1;
-  border-radius: 5px;
+  border-radius: 8px;
+  max-width: 70%;
+}
+
+.user-message .message-content {
+  background-color: #d1eaff;
+}
+
+.ai-message .message-content {
+  background-color: #f1f1f1;
 }
 
 .loading {
@@ -240,16 +294,29 @@ onMounted(() => {
 
 .input-area {
   display: flex;
-  padding: 10px;
+  padding: 20px;
+  background-color: #ffffff;
 }
 
 .input-area input {
   flex: 1;
-  padding: 5px;
+  padding: 10px;
   margin-right: 10px;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
 }
 
 .input-area button {
-  padding: 5px 10px;
+  padding: 10px 20px;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.input-area button:hover {
+  background-color: #0056b3;
 }
 </style>
