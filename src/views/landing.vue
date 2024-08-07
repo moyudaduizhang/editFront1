@@ -205,7 +205,7 @@ const logoUrl = computed(() => {
                                     <i class="pi pi-fw pi-eye text-2xl text-purple-700"></i>
                                 </div>
                                 <h5 class="mb-2 text-900">隐私</h5>
-                                <span class="text-600">Neque egestas congue quisque.</span>
+                                <span class="text-600"></span>
                             </div>
                         </div>
                     </div>
@@ -285,19 +285,19 @@ const logoUrl = computed(() => {
                             <ul class="my-5 list-none p-0 flex text-900 flex-column">
                                 <li class="py-2">
                                     <i class="pi pi-fw pi-check text-xl text-cyan-500 mr-2"></i>
-                                    <span class="text-xl line-height-3">Responsive Layout</span>
+                                    <span class="text-xl line-height-3">响应式布局</span>
                                 </li>
                                 <li class="py-2">
                                     <i class="pi pi-fw pi-check text-xl text-cyan-500 mr-2"></i>
-                                    <span class="text-xl line-height-3">Unlimited Push Messages</span>
+                                    <span class="text-xl line-height-3">每日50次AI对话</span>
                                 </li>
                                 <li class="py-2">
                                     <i class="pi pi-fw pi-check text-xl text-cyan-500 mr-2"></i>
-                                    <span class="text-xl line-height-3">50 Support Ticket</span>
+                                    <span class="text-xl line-height-3">云端存储文件数100+</span>
                                 </li>
                                 <li class="py-2">
                                     <i class="pi pi-fw pi-check text-xl text-cyan-500 mr-2"></i>
-                                    <span class="text-xl line-height-3">Free Shipping</span>
+                                    <span class="text-xl line-height-3"></span>
                                 </li>
                             </ul>
                         </div>
@@ -316,19 +316,19 @@ const logoUrl = computed(() => {
                             <ul class="my-5 list-none p-0 flex text-900 flex-column">
                                 <li class="py-2">
                                     <i class="pi pi-fw pi-check text-xl text-cyan-500 mr-2"></i>
-                                    <span class="text-xl line-height-3">Responsive Layout</span>
+                                    <span class="text-xl line-height-3">响应式布局</span>
                                 </li>
                                 <li class="py-2">
                                     <i class="pi pi-fw pi-check text-xl text-cyan-500 mr-2"></i>
-                                    <span class="text-xl line-height-3">Unlimited Push Messages</span>
+                                    <span class="text-xl line-height-3">AI无限token额度</span>
                                 </li>
                                 <li class="py-2">
                                     <i class="pi pi-fw pi-check text-xl text-cyan-500 mr-2"></i>
-                                    <span class="text-xl line-height-3">50 Support Ticket</span>
+                                    <span class="text-xl line-height-3">云端存储文件数10000+</span>
                                 </li>
                                 <li class="py-2">
                                     <i class="pi pi-fw pi-check text-xl text-cyan-500 mr-2"></i>
-                                    <span class="text-xl line-height-3">Free Shipping</span>
+                                    <span class="text-xl line-height-3"></span>
                                 </li>
                             </ul>
                         </div>
@@ -351,15 +351,15 @@ const logoUrl = computed(() => {
                                 </li>
                                 <li class="py-2">
                                     <i class="pi pi-fw pi-check text-xl text-cyan-500 mr-2"></i>
-                                    <span class="text-xl line-height-3">无限推送消息</span>
+                                    <span class="text-xl line-height-3">AI无限token额度</span>
                                 </li>
                                 <li class="py-2">
                                     <i class="pi pi-fw pi-check text-xl text-cyan-500 mr-2"></i>
-                                    <span class="text-xl line-height-3">50 Support Ticket</span>
+                                    <span class="text-xl line-height-3">云端存储文件数10000+</span>
                                 </li>
                                 <li class="py-2">
                                     <i class="pi pi-fw pi-check text-xl text-cyan-500 mr-2"></i>
-                                    <span class="text-xl line-height-3">Free Shipping</span>
+                                    <span class="text-xl line-height-3">专属客服定制您的需求</span>
                                 </li>
                             </ul>
                         </div>

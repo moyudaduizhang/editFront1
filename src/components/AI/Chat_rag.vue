@@ -140,7 +140,7 @@ const sendMessage = async () => {
     messages.value.push(aiMessage);
 
     if (selectedItems.value.length > 0) {
-      const response = await fetch('https://attap.cpolar.top/multimodels/index_milvus', {
+      const response = await fetch('http://127.0.0.1:5000/multimodels/index_milvus', {
         method: 'POST',
         body: formData,
       });

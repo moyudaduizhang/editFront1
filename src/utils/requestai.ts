@@ -1,6 +1,6 @@
 import axios from 'axios'
 const requestai=axios.create({
-    baseURL: 'https://attap.cpolar.top/AI',
+    baseURL: 'http://127.0.0.1:5000/AI',
     timeout: 50000
 })
 export default requestai

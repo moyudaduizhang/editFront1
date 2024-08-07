@@ -14,7 +14,7 @@
       </div>
     </template>
 
-    <el-table :data="alldocs" border style="width: auto; display: flex;">
+    <el-table v-show="!loading" :data="alldocs" border style="width: auto; display: flex;">
       <el-table-column prop="date" label="修改日期" width="180" align="center" />
       <el-table-column prop="name" label="名称" width="400" align="center" />
       <el-table-column prop="sorts" label="类型" align="center" />
@@ -25,6 +25,7 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-skeleton :loading="loading" :rows="5" animated />
   </el-card>
 </template>
 
@@ -34,6 +35,7 @@ import { useRoute } from 'vue-router';
 import requestdb from '@/utils/requestdb';
 import { ElMessage } from 'element-plus';
 import router from '@/router';
+const loading=ref(true);
 interface Document {
   date: string;
   name: any;
@@ -55,6 +57,10 @@ const fetchdocsdata = async () => {
   } catch (error) {
     const err = error as Error;
     console.log('发生错误: ' + err.message);
+  }finally {
+    setTimeout(() => {
+      loading.value = false;
+    }, 1000);  // 保证骨架屏至少显示1秒
   }
 };
 
@@ -100,6 +106,7 @@ const deleteDocument = (name: string) => {
 
 onMounted(() => {
   fetchdocsdata();
+  
 });
 
 const getFileType = (fileName: string) => {
